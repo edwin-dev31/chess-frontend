@@ -1,0 +1,137 @@
+{
+  "players": [
+    {
+      "id": 1,
+      "username": "edwin_dev",
+      "rating": 1200,
+      "country": "ES",
+      "joinDate": "2024-01-01",
+      "gamesPlayed": 47,
+      "wins": 30,
+      "losses": 12,
+      "draws": 5,
+      "peakRating": 1285,
+      "currentStreak": 3,
+      "achievements": [
+        {
+          "id": 1,
+          "title": "Primera Victoria",
+          "description": "Ganaste tu primera partida",
+          "unlockedDate": "2024-01-15",
+          "type": "milestone"
+        },
+        {
+          "id": 2,
+          "title": "Racha de 3",
+          "description": "Ganaste 3 partidas consecutivas",
+          "unlockedDate": "2024-01-14",
+          "type": "streak"
+        }
+      ]
+    }
+  ],
+  "games": [
+    {
+      "id": 1,
+      "whitePlayer": "edwin_dev",
+      "blackPlayer": "ChessMaster2024",
+      "whiteRating": 1200,
+      "blackRating": 1250,
+      "result": "1-0",
+      "timeControl": "10+0",
+      "date": "2024-01-15T14:30:00Z",
+      "moves": [
+        "e4", "e5", "Nf3", "Nc6", "Bc4", "Bc5", "O-O", "Nf6",
+        "d3", "d6", "Bg5", "h6", "Bh4", "g5", "Bg3", "Nh5"
+      ],
+      "opening": "Apertura Italiana",
+      "accuracy": {
+        "white": 87,
+        "black": 82
+      },
+      "gameLength": 42
+    },
+    {
+      "id": 2,
+      "whitePlayer": "KnightRider",
+      "blackPlayer": "edwin_dev",
+      "whiteRating": 1180,
+      "blackRating": 1200,
+      "result": "1-0",
+      "timeControl": "15+10",
+      "date": "2024-01-14T16:45:00Z",
+      "moves": [
+        "e4", "c5", "Nf3", "d6", "d4", "cxd4", "Nxd4", "Nf6",
+        "Nc3", "a6", "Be3", "e6", "f3", "b5", "Qd2", "Bb7"
+      ],
+      "opening": "Defensa Siciliana",
+      "accuracy": {
+        "white": 91,
+        "black": 79
+      },
+      "gameLength": 38
+    }
+  ],
+  "tournaments": [
+    {
+      "id": 1,
+      "name": "Torneo Semanal Blitz",
+      "type": "blitz",
+      "timeControl": "5+0",
+      "startDate": "2024-01-20T18:00:00Z",
+      "endDate": "2024-01-21T22:00:00Z",
+      "participants": 128,
+      "prizePool": "500€",
+      "status": "upcoming"
+    }
+  ],
+  "leaderboard": [
+    {
+      "rank": 1,
+      "username": "GrandMaster2024",
+      "rating": 2450,
+      "country": "RU",
+      "gamesPlayed": 234
+    },
+    {
+      "rank": 2,
+      "username": "ChessWizard",
+      "rating": 2380,
+      "country": "US",
+      "gamesPlayed": 189
+    },
+    {
+      "rank": 3,
+      "username": "KnightMoves",
+      "rating": 2340,
+      "country": "DE",
+      "gamesPlayed": 156
+    }
+  ],
+  "puzzles": [
+    {
+      "id": 1,
+      "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 4",
+      "solution": ["Bxf7+", "Kxf7", "Ng5+"],
+      "theme": "fork",
+      "difficulty": "intermediate",
+      "rating": 1200
+    }
+  ],
+  "openings": [
+    {
+      "name": "Apertura Italiana",
+      "eco": "C50",
+      "moves": ["e4", "e5", "Nf3", "Nc6", "Bc4"],
+      "description": "Una apertura clásica que desarrolla rápidamente las piezas",
+      "popularity": 85
+    },
+    {
+      "name": "Defensa Siciliana",
+      "eco": "B20",
+      "moves": ["e4", "c5"],
+      "description": "La defensa más popular contra 1.e4",
+      "popularity": 92
+    }
+  ]
+}
