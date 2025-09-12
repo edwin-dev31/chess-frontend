@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 
 const ChessBoard = ({ board, onSquareClick, selectedSquare, lastMove }) => {
+  console.log(lastMove, selectedSquare)
   const pieceSymbols = {
     'white': {
       'king': '♔',
@@ -34,21 +35,26 @@ const ChessBoard = ({ board, onSquareClick, selectedSquare, lastMove }) => {
 
   const isLightSquare = (row, col) => (row + col) % 2 === 0;
 
+  const handleSquareClick = (row, col) => {
+    console.log(`Square clicked: (${8 - row}, ${col + 1})`);
+    onSquareClick(row, col);
+  };
+
   return (
-    <div className="grid grid-cols-8 gap-0 w-96 h-96 border-4 border-amber-800 rounded-lg overflow-hidden">
+    <div className="grid grid-cols-8 gap-0 w-full h-full aspect-square border-4 border-amber-800 rounded-lg overflow-hidden">
       {board.map((row, rowIndex) =>
         row.map((piece, colIndex) => (
           <motion.div
             key={`${rowIndex}-${colIndex}`}
             className={cn(
-              "chess-square w-12 h-12 flex items-center justify-center cursor-pointer relative",
-              isLightSquare(rowIndex, colIndex) 
-                ? "bg-amber-100" 
+              "chess-square flex items-center justify-center cursor-pointer relative aspect-square",
+              isLightSquare(rowIndex, colIndex)
+                ? "bg-amber-100"
                 : "bg-amber-800",
               isSquareSelected(rowIndex, colIndex) && "ring-4 ring-blue-400 ring-inset",
               isLastMove(rowIndex, colIndex) && "bg-yellow-300"
             )}
-            onClick={() => onSquareClick(rowIndex, colIndex)}
+            onClick={() => handleSquareClick(rowIndex, colIndex)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >

@@ -10,14 +10,14 @@ const GameControls = ({ onReset, gameState, className }) => {
   const handlePause = () => {
     toast({
       title: "🚧 Esta función aún no está implementada",
-      description: "¡Pero no te preocupes! Puedes solicitarla en tu próximo prompt! 🚀",
+      description: "¡Pero no te preocupes! 🚀",
     });
   };
 
   const handleResign = () => {
     toast({
       title: "🚧 Esta función aún no está implementada",
-      description: "¡Pero no te preocupes! Puedes solicitarla en tu próximo prompt! 🚀",
+      description: "¡Pero no te preocupes! 🚀",
     });
   };
 

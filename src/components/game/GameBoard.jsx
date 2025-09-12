@@ -10,7 +10,7 @@ import { useToast } from '../ui/use-toast';
 import ChangePieceModal from './ChangePieceModal';
 
 const GameBoard = () => {
-  const { gameState, makeMove, resetGame } = useChessGame();
+  const { gameState, makeMove, resetGame, loadFen } = useChessGame();
   const [selectedSquare, setSelectedSquare] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { toast } = useToast();
@@ -60,7 +60,7 @@ const GameBoard = () => {
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.5 }}
-            className="w-full max-w-[70vh] aspect-square chess-board-bg p-2 rounded-md"
+            className="w-full max-w-[60vh] aspect-square chess-board-bg rounded-md"
           >
             <ChessBoard
               board={gameState.board}
@@ -71,8 +71,8 @@ const GameBoard = () => {
           </motion.div>
           <div className="flex items-center justify-between w-full max-w-[70vh] mt-2">
             <Button onClick={() => setIsModalOpen(true)} variant="link" className="text-slate-300 hover:text-white">
-              Change piece
-            </Button>
+                Change piece
+              </Button>
             <div className="flex items-center space-x-2 bg-slate-800 px-4 py-1.5 rounded-md text-white">
               <Clock className="w-5 h-5" />
               <span className="font-mono text-lg">{gameState.players[gameState.currentPlayer]?.timeLeft}</span>
