@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "esnext",
+    "jsx": "react-jsx",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": false, // CRÍTICO para la migración gradual
+    // "checkJs": true, // Opcional, para que TypeScript revise archivos JavaScript y reporte errores
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": false, // Inicialmente, para una migración más suave; se habilitará a true al final
+    "noEmit": true, // Si el bundler se encarga de la transpilación, como Vite o Webpack con ts-loader
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    // "paths" y "baseUrl": Configurar alias de importación si se usan en el proyecto JS.
+    "skipLibCheck": true, // Skip type checking of all declaration files (*.d.ts).
+    "moduleResolution": "bundler"
+  },
+  "include": ["src/**/*.ts", "src/**/*.tsx", "src/**/*.js", "src/**/*.jsx"],
+  "exclude": ["node_modules", "dist", "build"]
+}
