@@ -89,16 +89,8 @@ import { apiRoutes } from '../constants/apiRoutes';
 import { apiHelper } from '../apiHelper';
 
 const GAME_ID = 1;
+const token = localStorage.getItem('token')
 
-const playerTokens = {
-  white: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJheUBnbWFpbC5jb20iLCJpZCI6MiwidXNlcm5hbWUiOiJzYXJheSIsImlhdCI6MTc1NzcxMzY5OSwiZXhwIjoxNzU3NzE3Mjk5fQ.4Xf1jvweuO70x3bmzYLOOps0YbzUwfZSNAyoaZ_VwL4',
-  black: 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJzYXJheUBnbWFpbC5jb20iLCJpZCI6MiwidXNlcm5hbWUiOiJzYXJheSIsImlhdCI6MTc1NzcxMzY5OSwiZXhwIjoxNzU3NzE3Mjk5fQ.4Xf1jvweuO70x3bmzYLOOps0YbzUwfZSNAyoaZ_VwL4'
-};
-
-const playerIds = {
-  white: 1,
-  black: 2
-};
 
 export const useChessGame = () => {
   const [gameState, setGameState] = useState<GameState>(JSON.parse(JSON.stringify(initialGameState)));
@@ -108,7 +100,7 @@ export const useChessGame = () => {
       try {
         const data: { fen: string } = await apiHelper<{ fen: string }>(apiRoutes.game.fen(GAME_ID), {
           headers: {
-            'Authorization': `Bearer ${playerTokens.white}`
+            'Authorization': `Bearer ${token}`
           }
         });
         loadFen(data.fen);
@@ -131,14 +123,13 @@ export const useChessGame = () => {
     const fromSquare = `${files[fromCol]}${ranks[fromRow]}`;
     const toSquare = `${files[toCol]}${ranks[toRow]}`;
 
-    const playerId = playerIds[gameState.currentPlayer];
-    const token = playerTokens[gameState.currentPlayer];
 
     try {
-      await apiHelper<any>(apiRoutes.game.makeMove(playerId), {
+      console.log("this are the datas", fromSquare, "  ", toSquare)
+      await apiHelper<any>(apiRoutes.game.makeMove(GAME_ID), {
         method: 'POST',
         token: token,
-        body: { gameId: GAME_ID, fromSquare: fromSquare, toSquare: toSquare }
+        body: {  fromSquare: fromSquare, toSquare: toSquare }
       });
 
       const data: { fen: string } = await apiHelper<{ fen: string }>(apiRoutes.game.fen(GAME_ID));

@@ -1,4 +1,4 @@
- import React, { useState } from 'react';
+ import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Header from '../layout/Header';
 import Sidebar from '../layout/Sidebar';
@@ -6,7 +6,8 @@ import GameBoard from '../game/GameBoard';
 import PlayerProfile from '../player/PlayerProfile';
 import GameHistory from '../game/GameHistory';
 import Settings from '../settings/Settings';
-
+import useAuth from '../../lib/hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 export type ActiveView = 'game' | 'profile' | 'history' | 'settings';
 
 const ChessApp = () => {
