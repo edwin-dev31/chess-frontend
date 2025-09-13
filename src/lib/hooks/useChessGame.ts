@@ -132,7 +132,9 @@ export const useChessGame = () => {
         body: {  fromSquare: fromSquare, toSquare: toSquare }
       });
 
-      const data: { fen: string } = await apiHelper<{ fen: string }>(apiRoutes.game.fen(GAME_ID));
+      const data: { fen: string } = await apiHelper<{ fen: string }>(apiRoutes.game.fen(GAME_ID),{
+        token: token,
+      });
       loadFen(data.fen);
 
     } catch (error) {

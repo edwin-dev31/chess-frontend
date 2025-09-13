@@ -1,4 +1,4 @@
- import React from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 import { Board, Piece, PieceColor } from  '../../lib/hooks/useChessGame';
@@ -21,7 +21,12 @@ interface ChessBoardProps {
 }
 
 const ChessBoard: React.FC<ChessBoardProps> = ({ board, onSquareClick, selectedSquare, lastMove }) => {
-  console.log(lastMove, selectedSquare)
+  const playerColor = localStorage.getItem("color") || "white";
+  const isBlack = playerColor === "black";
+
+  // Vista orientada para el jugador
+  const orientedBoard = isBlack ? [...board].reverse().map(row => [...row].reverse()) : board;
+
   const pieceSymbols: Record<PieceColor, Record<Piece['type'], string>> = {
     'white': {
       'king': '♔',
@@ -37,30 +42,41 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ board, onSquareClick, selectedS
       'rook': '♜',
       'bishop': '♝',
       'knight': '♞',
-      'pawn': '♟'
+      'pawn': '♟️'
     }
   };
 
+  // 🔑 Normaliza coordenadas según el color
+  const getOriginalCoordinates = (rowIndex: number, colIndex: number) => {
+    if (isBlack) {
+      return { row: 7 - rowIndex, col: 7 - colIndex };
+    }
+    return { row: rowIndex, col: colIndex };
+  };
+
   const isSquareSelected = (row: number, col: number): boolean => {
-    return selectedSquare && selectedSquare.row === row && selectedSquare.col === col;
+    const originalCoords = getOriginalCoordinates(row, col);
+    return selectedSquare && selectedSquare.row === originalCoords.row && selectedSquare.col === originalCoords.col;
   };
 
   const isLastMove = (row: number, col: number): boolean => {
     if (!lastMove) return false;
-    return (lastMove.from.row === row && lastMove.from.col === col) ||
-           (lastMove.to.row === row && lastMove.to.col === col);
+    const originalCoords = getOriginalCoordinates(row, col);
+    return (lastMove.from.row === originalCoords.row && lastMove.from.col === originalCoords.col) ||
+           (lastMove.to.row === originalCoords.row && lastMove.to.col === originalCoords.col);
   };
 
   const isLightSquare = (row: number, col: number): boolean => (row + col) % 2 === 0;
 
   const handleSquareClick = (row: number, col: number) => {
-    console.log(`Square clicked: (${8 - row}, ${col + 1})`);
-    onSquareClick(row, col);
+    const { row: normRow, col: normCol } = getOriginalCoordinates(row, col);
+    console.log(`Square clicked: row=${normRow}, col=${normCol}`);
+    onSquareClick(normRow, normCol);
   };
 
   return (
     <div className="grid grid-cols-8 gap-0 w-full h-full aspect-square border-4 border-amber-800 rounded-lg overflow-hidden">
-      {board.map((row, rowIndex) =>
+      {orientedBoard.map((row, rowIndex) =>
         row.map((piece, colIndex) => (
           <motion.div
             key={`${rowIndex}-${colIndex}`}
@@ -79,6 +95,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ board, onSquareClick, selectedS
             {piece && (
               <motion.span
                 className="chess-piece select-none"
+                layout
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
                 transition={{ type: "spring", stiffness: 300 }}
@@ -90,12 +107,12 @@ const ChessBoard: React.FC<ChessBoardProps> = ({ board, onSquareClick, selectedS
             {/* Coordenadas del tablero */}
             {colIndex === 0 && (
               <span className="absolute left-1 top-1 text-xs font-bold opacity-60">
-                {8 - rowIndex}
+                {playerColor === 'white' ? 8 - rowIndex : rowIndex + 1}
               </span>
             )}
             {rowIndex === 7 && (
               <span className="absolute right-1 bottom-1 text-xs font-bold opacity-60">
-                {String.fromCharCode(97 + colIndex)}
+                {playerColor === 'white' ? String.fromCharCode(97 + colIndex) : String.fromCharCode(97 + (7 - colIndex))}
               </span>
             )}
           </motion.div>
