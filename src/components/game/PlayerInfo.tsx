@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { User } from 'lucide-react';
 import { cn } from '../../lib/utils';
-import { PlayerInfo as PlayerInfoType, Piece } from '../../hooks/useChessGame';
+import { PlayerInfo as PlayerInfoType, Piece } from  '../../lib/hooks/useChessGame';
 
 const pieceMap: Record<string, string> = {
     'pawn': '♙', 'knight': '♘', 'bishop': '♗', 'rook': '♖', 'queen': '♕', 'king': '♔'

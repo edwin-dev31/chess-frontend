@@ -4,7 +4,7 @@ import { Play, History, Info, Swords, Bot, Puzzle, Flag, Clock } from 'lucide-re
 import MoveHistory from './MoveHistory';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
-import { GameState } from '../../hooks/useChessGame';
+import { GameState } from '../../lib/hooks/useChessGame';
 
 interface GameTabsProps {
   gameState: GameState;

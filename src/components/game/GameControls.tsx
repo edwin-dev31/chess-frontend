@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { RotateCcw, Play, Pause, Flag } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
-import { GameState } from '../../hooks/useChessGame';
+import { GameState } from '../../lib/hooks/useChessGame';
 
 interface GameControlsProps {
   onReset: () => void;

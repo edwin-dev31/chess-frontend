@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
-import { ProfileSettings, AppearanceSettings, AudioSettings, GameSettings, AppSettings } from '../../hooks/useSettings';
+import { ProfileSettings, AppearanceSettings, AudioSettings, GameSettings, AppSettings } from  '../../lib/hooks/useSettings';
 
 type FieldType = 'text' | 'email' | 'select' | 'toggle' | 'range';
 

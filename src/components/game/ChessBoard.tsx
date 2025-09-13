@@ -1,7 +1,7 @@
  import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
-import { Board, Piece, PieceColor } from '../../hooks/useChessGame';
+import { Board, Piece, PieceColor } from  '../../lib/hooks/useChessGame';
 
 interface SelectedSquare {
   row: number;

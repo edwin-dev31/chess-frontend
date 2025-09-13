@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Trophy, TrendingUp, Target, Calendar } from 'lucide-react';
-import { usePlayerProfile, PlayerProfile as PlayerProfileType, PlayerStats } from '../../hooks/usePlayerProfile';
+import { usePlayerProfile, PlayerProfile as PlayerProfileType, PlayerStats } from '../../lib/hooks/usePlayerProfile';
 import StatsCard from './StatsCard';
 import SkillLevel from './SkillLevel';
 import RecentAchievements from './RecentAchievements';

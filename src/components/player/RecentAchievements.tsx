@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Award, Star, Zap } from 'lucide-react';
-import { Achievement } from '../../hooks/usePlayerProfile';
+import { Achievement } from '../../lib/hooks/usePlayerProfile';
 
 interface RecentAchievementsProps {
   achievements: Achievement[];

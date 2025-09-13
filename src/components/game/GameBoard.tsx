@@ -4,7 +4,7 @@ import { Clock, RefreshCw } from 'lucide-react';
 import ChessBoard from './ChessBoard';
 import PlayerInfo from './PlayerInfo';
 import GameTabs from './GameTabs';
-import { useChessGame, GameState, Piece, PieceColor } from '../../hooks/useChessGame';
+import { useChessGame, GameState, Piece, PieceColor } from '../../lib/hooks/useChessGame';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import ChangePieceModal from './ChangePieceModal';
@@ -31,12 +31,6 @@ const GameBoard = () => {
     }
   };
 
-  const handleNotImplemented = () => {
-    toast({
-      title: "🚧 Esta función aún no está implementada",
-      description: "¡Pero no te preocupes! Puedes solicitarla en tu próximo prompt! 🚀",
-    });
-  };
 
   return (
     <>
@@ -47,12 +41,7 @@ const GameBoard = () => {
               isCurrentTurn={gameState.currentPlayer === 'black'}
               capturedPieces={gameState.captured.white}
             />
-            <div className="hidden xl:flex flex-col items-center my-4">
-              <Button onClick={handleNotImplemented} variant="ghost" className="text-slate-400 hover:text-white">
-                <RefreshCw className="w-4 h-4 mr-2" />
-                Logout
-              </Button>
-            </div>
+
             <PlayerInfo 
               player={gameState.players.white}
               isCurrentTurn={gameState.currentPlayer === 'white'}

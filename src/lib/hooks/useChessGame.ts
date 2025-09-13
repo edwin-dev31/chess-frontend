@@ -85,7 +85,9 @@ const initialGameState: GameState = {
   }
 };
 
-const API_BASE_URL = 'http://localhost:1788/chess/api';
+import { apiRoutes } from '../constants/apiRoutes';
+import { apiHelper } from '../apiHelper';
+
 const GAME_ID = 1;
 
 const playerTokens = {
@@ -104,15 +106,11 @@ export const useChessGame = () => {
   useEffect(() => {
     const fetchGame = async () => {
       try {
-        const response = await fetch(`${API_BASE_URL}/games/${GAME_ID}/fen`, {
+        const data: { fen: string } = await apiHelper<{ fen: string }>(apiRoutes.game.fen(GAME_ID), {
           headers: {
             'Authorization': `Bearer ${playerTokens.white}`
           }
         });
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data: { fen: string } = await response.json();
         loadFen(data.fen);
       } catch (error) {
         console.error('Failed to fetch game:', error);
@@ -137,24 +135,13 @@ export const useChessGame = () => {
     const token = playerTokens[gameState.currentPlayer];
 
     try {
-      const moveResponse = await fetch(`${API_BASE_URL}/moves/${playerId}`, {
+      await apiHelper<any>(apiRoutes.game.makeMove(playerId), {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify({ gameId: GAME_ID, fromSquare: fromSquare, toSquare: toSquare })
+        token: token,
+        body: { gameId: GAME_ID, fromSquare: fromSquare, toSquare: toSquare }
       });
 
-      if (!moveResponse.ok) {
-        throw new Error('Move was not accepted by the server');
-      }
-
-      const fenResponse = await fetch(`${API_BASE_URL}/games/${GAME_ID}/fen`);
-      if (!fenResponse.ok) {
-        throw new Error('Network response was not ok after making a move');
-      }
-      const data: { fen: string } = await fenResponse.json();
+      const data: { fen: string } = await apiHelper<{ fen: string }>(apiRoutes.game.fen(GAME_ID));
       loadFen(data.fen);
 
     } catch (error) {
