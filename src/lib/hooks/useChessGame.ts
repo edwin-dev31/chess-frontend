@@ -87,83 +87,78 @@ const initialGameState: GameState = {
 
 import { apiRoutes } from '../constants/apiRoutes';
 import { apiHelper } from '../apiHelper';
-
+import { useChessSocket } from './useChessSocket';
+import { CreateMoveDTO } from '../types';
 const GAME_ID = 1;
 const token = localStorage.getItem('token')
 
 
 export const useChessGame = () => {
-  const [gameState, setGameState] = useState<GameState>(JSON.parse(JSON.stringify(initialGameState)));
 
-  useEffect(() => {
-    const fetchGame = async () => {
-      try {
-        const data: { fen: string } = await apiHelper<{ fen: string }>(apiRoutes.game.fen(GAME_ID), {
-          headers: {
-            'Authorization': `Bearer ${token}`
-          }
-        });
-        loadFen(data.fen);
-      } catch (error) {
-        console.error('Failed to fetch game:', error);
-      }
-    };
+  const [color, setColor] = useState<string | null>(null);
+  const [gameState, setGameState] = useState<GameState>(
+    JSON.parse(JSON.stringify(initialGameState))
+  );
 
-    fetchGame();
-  }, []);
+  const { sendMove, requestColor  } = useChessSocket({
+    gameId: GAME_ID,
+    onFenUpdate: (fen) => {
+      loadFen(fen);
+    },
+    onMove: (move) => {
+      console.log("♟️ Movimiento recibido vía socket:", move);
+      // No hacemos nada aquí porque el FEN actualizado llegará inmediatamente después
+    },
+    onColor: (c) => {
+      console.log("ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss", c)
+      setColor(c);
+    }
+  });
+  
 
-  const makeMove = async (fromRow: number, fromCol: number, toRow: number, toCol: number) => {
+  const makeMove = (fromRow: number, fromCol: number, toRow: number, toCol: number) => {
     const piece = gameState.board[fromRow][fromCol];
     if (!piece || piece.color !== gameState.currentPlayer) {
+      console.warn("Movimiento inválido: no hay pieza o no es tu turno");
       return;
     }
 
-    const files = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
-    const ranks = ['8', '7', '6', '5', '4', '3', '2', '1'];
+    const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
+    const ranks = ["8", "7", "6", "5", "4", "3", "2", "1"];
     const fromSquare = `${files[fromCol]}${ranks[fromRow]}`;
     const toSquare = `${files[toCol]}${ranks[toRow]}`;
 
+    const moveDto: CreateMoveDTO = { fromSquare, toSquare };
 
     try {
-      console.log("this are the datas", fromSquare, "  ", toSquare)
-      await apiHelper<any>(apiRoutes.game.makeMove(GAME_ID), {
-        method: 'POST',
-        token: token,
-        body: {  fromSquare: fromSquare, toSquare: toSquare }
-      });
-
-      const data: { fen: string } = await apiHelper<{ fen: string }>(apiRoutes.game.fen(GAME_ID),{
-        token: token,
-      });
-      loadFen(data.fen);
-
+      console.log("📤 Enviando movimiento:", moveDto);
+      sendMove(moveDto);
+      // 👇 No pedimos requestFen() porque ya llega automáticamente
     } catch (error) {
-      console.error('Failed to make move:', error);
+      console.error("❌ Error enviando movimiento:", error);
     }
   };
 
   const parseFenToBoard = (fen: string): Board => {
-    const fenBoard = fen.split(' ')[0];
+    const fenBoard = fen.split(" ")[0];
     const pieceMap: { [key: string]: Piece } = {
-      'r': { type: 'rook', color: 'black' }, 'n': { type: 'knight', color: 'black' },
-      'b': { type: 'bishop', color: 'black' }, 'q': { type: 'queen', color: 'black' },
-      'k': { type: 'king', color: 'black' }, 'p': { type: 'pawn', color: 'black' },
-      'R': { type: 'rook', color: 'white' }, 'N': { type: 'knight', color: 'white' },
-      'B': { type: 'bishop', color: 'white' }, 'Q': { type: 'queen', color: 'white' },
-      'K': { type: 'king', color: 'white' }, 'P': { type: 'pawn', color: 'white' }
+      r: { type: "rook", color: "black" }, n: { type: "knight", color: "black" },
+      b: { type: "bishop", color: "black" }, q: { type: "queen", color: "black" },
+      k: { type: "king", color: "black" }, p: { type: "pawn", color: "black" },
+      R: { type: "rook", color: "white" }, N: { type: "knight", color: "white" },
+      B: { type: "bishop", color: "white" }, Q: { type: "queen", color: "white" },
+      K: { type: "king", color: "white" }, P: { type: "pawn", color: "white" }
     };
 
     const board: Board = [];
-    const ranks = fenBoard.split('/');
+    const ranks = fenBoard.split("/");
     for (const rank of ranks) {
       const row: (Piece | null)[] = [];
       for (const char of rank) {
         if (isNaN(Number(char))) {
           row.push(pieceMap[char]);
         } else {
-          for (let i = 0; i < parseInt(char, 10); i++) {
-            row.push(null);
-          }
+          row.push(...Array(parseInt(char, 10)).fill(null));
         }
       }
       board.push(row);
@@ -173,25 +168,18 @@ export const useChessGame = () => {
 
   const loadFen = (fen: string) => {
     const newBoard = parseFenToBoard(fen);
-    const currentPlayer: PieceColor = fen.split(' ')[1] === 'w' ? 'white' : 'black';
+    const currentPlayer: PieceColor = fen.split(" ")[1] === "w" ? "white" : "black";
     setGameState(prev => ({
-      ...initialGameState,
+      ...prev,
       board: newBoard,
-      currentPlayer: currentPlayer,
-      moveHistory: [],
-      lastMove: null,
-      captured: { white: [], black: [] }
+      currentPlayer,
     }));
   };
 
-  const resetGame = () => {
-    setGameState(JSON.parse(JSON.stringify(initialGameState)));
-  };
+  useEffect(() => {
+    requestColor(); 
+  }, []);
 
-  return {
-    gameState,
-    makeMove,
-    resetGame,
-    loadFen
-  };
+  const getColor = () => color;
+  return { gameState, makeMove, loadFen, getColor };
 };

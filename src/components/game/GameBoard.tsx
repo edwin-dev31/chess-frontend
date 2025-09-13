@@ -15,7 +15,7 @@ interface SelectedSquare {
 }
 
 const GameBoard = () => {
-  const { gameState, makeMove, resetGame, loadFen } = useChessGame();
+  const { gameState, makeMove, resetGame, getColor, loadFen } = useChessGame();
   const [selectedSquare, setSelectedSquare] = useState<SelectedSquare | null>(null);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const { toast } = useToast();
@@ -25,6 +25,7 @@ const GameBoard = () => {
       const fromRow = selectedSquare.row;
       const fromCol = selectedSquare.col;
       makeMove(fromRow, fromCol, row, col);
+      getColor();
       setSelectedSquare(null);
     } else if (gameState.board[row][col]) {
       setSelectedSquare({ row, col });
@@ -47,6 +48,9 @@ const GameBoard = () => {
               isCurrentTurn={gameState.currentPlayer === 'white'}
               capturedPieces={gameState.captured.black}
             />
+            <span className="px-3 py-1 rounded-full text-white font-bold">
+              {getColor()?.toUpperCase()}
+            </span>
         </div>
 
         <div className="xl:col-span-6 flex flex-col items-center justify-center">

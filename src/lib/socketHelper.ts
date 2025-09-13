@@ -11,16 +11,17 @@ export const socketHelper = {
     const token = localStorage.getItem("token");
 
     console.log("token", token)
+  //  console.warn("Attempting to connect to WebSocket...");
     stompClient.connect(
       {
         Authorization: `Bearer ${token}`, 
       },
       () => {
-        console.log("✅ Connected to WebSocket");
+      //  console.log("✅ Connected to WebSocket");
         if (onConnect) onConnect();
       },
       (err) => {
-        console.error("❌ WebSocket error", err);
+       // console.error("❌ WebSocket error", err);
         if (onError) onError(err);
       }
     );
@@ -30,14 +31,14 @@ disconnect: () => {
   if (stompClient && stompClient.connected) {
     stompClient.disconnect(() => console.log("🔌 Disconnected"));
   } else {
-    console.log("⚠️ stompClient not connected, skip disconnect");
+   // console.log("⚠️ stompClient not connected, skip disconnect");
   }
   stompClient = null;
 },
 
 subscribe: (topic: string, callback: (message: any) => void) => {
   if (!stompClient || !stompClient.connected) {
-    console.warn("⚠️ stompClient not ready for subscribe");
+    //console.warn("⚠️ stompClient not ready for subscribe");
     return;
   }
   stompClient.subscribe(topic, (msg) => {
@@ -45,12 +46,17 @@ subscribe: (topic: string, callback: (message: any) => void) => {
   });
 },
 
-send: (destination: string, body: any) => {
+send: (destination: string, body: any, headers: Stomp.Headers = {}) => {
   if (!stompClient || !stompClient.connected) {
-    console.warn("⚠️ stompClient not ready for send");
     return;
   }
-  stompClient.send(destination, {}, JSON.stringify(body));
+  const token = localStorage.getItem("token");
+  stompClient.send(
+    destination,
+    { Authorization: `Bearer ${token}`, ...headers },
+    JSON.stringify(body)
+  );
 },
+
 
 };
