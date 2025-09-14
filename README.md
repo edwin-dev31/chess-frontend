@@ -46,19 +46,19 @@ The project has the following folder structure:
 └── ...
 ```
 
--   `src/components`: Contains the React components used in the application.
--   `src/data`: Contains mock data used in the application.
--   `src/hooks`: Contains custom React hooks.
--   `src/lib`: Contains utility functions.
--   `public`: Contains the public assets of the application.
+- `src/components`: Contains the React components used in the application.
+- `src/data`: Contains mock data used in the application.
+- `src/hooks`: Contains custom React hooks.
+- `src/lib`: Contains utility functions.
+- `public`: Contains the public assets of the application.
 
 ## Technologies Used
 
 The project is built using the following technologies:
 
--   [React](https://reactjs.org/)
--   [Vite](https://vitejs.dev/)
--   [Tailwind CSS](https://tailwindcss.com/)
--   [Radix UI](https://www.radix-ui.com/)
--   [Framer Motion](https://www.framer.com/motion/)
--   [Lucide React](https://lucide.dev/guide/packages/lucide-react)
+- [React](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Radix UI](https://www.radix-ui.com/)
+- [Framer Motion](https://www.framer.com/motion/)
+- [Lucide React](https://lucide.dev/guide/packages/lucide-react)

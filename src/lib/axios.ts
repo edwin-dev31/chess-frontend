@@ -1,8 +1,8 @@
-import axios from "axios";
-const BACKEND_URL = "http://localhost:1788/chess";
+import axios from 'axios';
+export const BACKEND_URL = 'http://localhost:1788/chess';
 
 const javaAPI = axios.create({
-  baseURL: BACKEND_URL,
+    baseURL: BACKEND_URL,
 });
 
 const javaOauth = `${BACKEND_URL}/oauth2/authorization`;

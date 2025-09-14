@@ -1,41 +1,41 @@
-import { javaAPI } from "./axios";
-import { AxiosRequestConfig } from "axios";
+import { javaAPI } from './axios';
+import { AxiosRequestConfig } from 'axios';
 
 interface RequestOptions extends AxiosRequestConfig {
-  token?: string;
-  body?: any;
+    token?: string;
+    body?: any;
 }
 
 export async function apiHelper<T>(
-  endpoint: string,
-  options?: RequestOptions
+    endpoint: string,
+    options?: RequestOptions
 ): Promise<T> {
-  const { token, headers, body, ...customConfig } = options || {};
+    const { token, headers, body, ...customConfig } = options || {};
 
-  const config: AxiosRequestConfig = {
-    url: endpoint,
-    ...customConfig,
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
-    data: body,
-  };
-
-  if (token) {
-    config.headers = {
-      ...config.headers,
-      Authorization: `Bearer ${token}`,
+    const config: AxiosRequestConfig = {
+        url: endpoint,
+        ...customConfig,
+        headers: {
+            'Content-Type': 'application/json',
+            ...headers,
+        },
+        data: body,
     };
-  }
 
-  try {
-    const response = await javaAPI.request<T>(config);
-    return response.data;
-  } catch (error: any) {
-    if (error.response) {
-      return Promise.reject(error.response.data);
+    if (token) {
+        config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${token}`,
+        };
     }
-    return Promise.reject(error);
-  }
+
+    try {
+        const response = await javaAPI.request<T>(config);
+        return response.data;
+    } catch (error: any) {
+        if (error.response) {
+            return Promise.reject(error.response.data);
+        }
+        return Promise.reject(error);
+    }
 }
