@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
-import { Board, Piece, PieceColor } from '../../lib/hooks/useChessGame.ts';
+import { Board, Piece, PieceColor } from '../../lib/types/Definitions';
 
 interface SelectedSquare {
     row: number;
@@ -29,7 +29,6 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     const playerColor = localStorage.getItem('color') || 'white';
     const isBlack = playerColor === 'black';
 
-    // Vista orientada para el jugador
     const orientedBoard = isBlack
         ? [...board].reverse().map((row) => [...row].reverse())
         : board;
@@ -53,7 +52,6 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
         },
     };
 
-    // 🔑 Normaliza coordenadas según el color
     const getOriginalCoordinates = (rowIndex: number, colIndex: number) => {
         if (isBlack) {
             return { row: 7 - rowIndex, col: 7 - colIndex };

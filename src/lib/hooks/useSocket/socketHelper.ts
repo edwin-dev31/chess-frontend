@@ -3,58 +3,118 @@ import Stomp from 'stompjs';
 import { BACKEND_URL } from '../../axios';
 
 let stompClient: Stomp.Client | null = null;
-let isConnected = false;
-let activeSubscribers = 0;
+let reconnectTimeout: NodeJS.Timeout | null = null;
+let currentReconnectInterval = 1000;
+const MAX_RECONNECT_INTERVAL = 30000;
+const RECONNECT_MULTIPLIER = 2;
+
+const resetReconnectInterval = () => {
+    currentReconnectInterval = 1000;
+};
+
+const scheduleReconnect = () => {
+    if (reconnectTimeout) clearTimeout(reconnectTimeout);
+
+    reconnectTimeout = setTimeout(() => {
+        console.log(
+            `Attempting to reconnect in ${currentReconnectInterval / 1000}s...`
+        );
+        socketHelper.connect();
+        currentReconnectInterval = Math.min(
+            currentReconnectInterval * RECONNECT_MULTIPLIER,
+            MAX_RECONNECT_INTERVAL
+        );
+    }, currentReconnectInterval);
+};
 
 export const socketHelper = {
-  connect: (onConnect?: () => void) => {
-    if (isConnected) return; // evita reconectar
+    connect: () => {
+        if (stompClient && stompClient.connected) {
+            console.log('✅ WebSocket already connected.');
+            resetReconnectInterval();
+            return;
+        }
 
-    const socket = new SockJS(`${BACKEND_URL}/ws`);
-    stompClient = Stomp.over(socket);
-    const token = localStorage.getItem('token');
+        if (stompClient) {
+            try {
+                stompClient.disconnect(() => {
+                    console.log(
+                        '🔌 Disconnected existing client before reconnecting.'
+                    );
+                    stompClient = null;
+                });
+            } catch (e) {
+                console.warn(
+                    'Could not disconnect existing client, it might be stale:',
+                    e
+                );
+                stompClient = null;
+            }
+        }
 
-    stompClient.connect(
-      { Authorization: `Bearer ${token}` },
-      () => {
-        isConnected = true;
-        if (onConnect) onConnect();
-      }
-    );
-  },
+        const socket = new SockJS(`${BACKEND_URL}/ws`);
+        stompClient = Stomp.over(socket);
+        const token = localStorage.getItem('token');
 
-  subscribe: (topic: string, callback: (msg: any) => void) => {
-    if (!stompClient || !isConnected) return;
-    activeSubscribers++;
+        stompClient.connect(
+            { Authorization: `Bearer ${token}` },
+            () => {
+                console.log('✅ WebSocket Connected');
+                resetReconnectInterval();
+                if (reconnectTimeout) clearTimeout(reconnectTimeout); // Clear any pending reconnect
+            },
+            (error: any) => {
+                console.error('❌ WebSocket connection error:', error);
+                stompClient = null;
+                scheduleReconnect(); // Schedule reconnect on error
+            }
+        );
+    },
 
-    const subscription = stompClient.subscribe(topic, (msg) => {
-      callback(JSON.parse(msg.body));
-    });
+    subscribe: (topic: string, callback: (msg: any) => void) => {
+        if (!stompClient || !stompClient.connected) {
+            console.warn(
+                `⚠️ Not connected to WebSocket, cannot subscribe to ${topic}`
+            );
+            return () => {};
+        }
 
-    // devolver función para desuscribirse
-    return () => {
-      subscription.unsubscribe();
-      activeSubscribers--;
-    };
-  },
+        const subscription = stompClient.subscribe(topic, (msg) => {
+            callback(JSON.parse(msg.body));
+        });
 
-  send: (destination: string, body: any, headers: Stomp.Headers = {}) => {
-    if (!stompClient || !isConnected) return;
-    const token = localStorage.getItem('token');
-    stompClient.send(destination, { Authorization: `Bearer ${token}`, ...headers }, JSON.stringify(body));
-  },
+        return () => {
+            subscription.unsubscribe();
+        };
+    },
 
-  disconnect: () => {
-    if (!isConnected) return;
-    // solo desconectar si no hay suscriptores activos
-    if (activeSubscribers === 0) {
-      stompClient?.disconnect(() => {
-        console.log('🔌 Disconnected');
-        isConnected = false;
-      });
-      stompClient = null;
-    } else {
-      console.log('⚠️ Hay suscriptores activos, no desconectando');
-    }
-  },
+    send: (destination: string, body: any, headers: Stomp.Headers = {}) => {
+        if (!stompClient || !stompClient.connected) {
+            console.warn('⚠️ Not connected to WebSocket, cannot send message.');
+            return;
+        }
+        const token = localStorage.getItem('token');
+        stompClient.send(
+            destination,
+            { Authorization: `Bearer ${token}`, ...headers },
+            JSON.stringify(body)
+        );
+    },
+
+    disconnect: () => {
+        if (reconnectTimeout) clearTimeout(reconnectTimeout);
+        if (stompClient && stompClient.connected) {
+            stompClient.disconnect(() => {
+                console.log('🔌 Disconnected');
+                stompClient = null;
+            });
+        } else {
+            console.log('⚠️ No active WebSocket connection to disconnect.');
+        }
+        resetReconnectInterval();
+    },
+
+    isConnected: () => {
+        return stompClient && stompClient.connected;
+    },
 };

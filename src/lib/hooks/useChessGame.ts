@@ -68,17 +68,14 @@ export const useChessGame = () => {
     const { sendMove, requestColor } = useChessSocket({
         gameId: GAME_ID,
         onFenUpdate: (fen) => {
+            console.log('FEN recibido vía socket:', fen); 
             loadFen(fen);
         },
         onMove: (move) => {
             console.log('♟️ Movimiento recibido vía socket:', move);
-            // No hacemos nada aquí porque el FEN actualizado llegará inmediatamente después
+           
         },
         onColor: (c) => {
-            console.log(
-                'ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss',
-                c
-            );
             setColor(c);
         },
     });
@@ -105,7 +102,6 @@ export const useChessGame = () => {
         try {
             console.log('📤 Enviando movimiento:', moveDto);
             sendMove(moveDto);
-            // 👇 No pedimos requestFen() porque ya llega automáticamente
         } catch (error) {
             console.error('❌ Error enviando movimiento:', error);
         }
