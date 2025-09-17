@@ -59,14 +59,14 @@ import { CreateMoveDTO } from '../types/CreateMoveDTO';
 const GAME_ID = 1;
 const token = localStorage.getItem('token');
 
-export const useChessGame = () => {
+export const useChessGame = (gameCode?: string) => {
     const [color, setColor] = useState<string | null>(null);
     const [gameState, setGameState] = useState<GameState>(
         JSON.parse(JSON.stringify(initialGameState))
     );
 
     const { sendMove, requestColor } = useChessSocket({
-        gameId: GAME_ID,
+        gameId: gameCode,
         onFenUpdate: (fen) => {
             console.log('FEN recibido vía socket:', fen); 
             loadFen(fen);
@@ -79,7 +79,6 @@ export const useChessGame = () => {
             setColor(c);
         },
     });
-
     const makeMove = (
         fromRow: number,
         fromCol: number,

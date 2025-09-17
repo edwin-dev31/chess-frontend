@@ -16,9 +16,12 @@ interface SelectedSquare {
     col: number;
 }
 
-const GameBoard = () => {
-    const { gameState, makeMove, resetGame, getColor, loadFen } =
-        useChessGame();
+interface GameBoardProps {
+    gameCode?: string;
+}
+
+const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
+    const { gameState, makeMove, resetGame, getColor, loadFen } = useChessGame(gameCode);
     const [selectedSquare, setSelectedSquare] = useState<SelectedSquare | null>(
         null
     );

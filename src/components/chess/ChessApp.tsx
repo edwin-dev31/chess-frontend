@@ -1,3 +1,4 @@
+import { useParams } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Header from '../layout/Header';
@@ -13,11 +14,12 @@ export type ActiveView = 'game' | 'profile' | 'history' | 'settings';
 const ChessApp = () => {
     const [activeView, setActiveView] = useState<ActiveView>('game');
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
+    const { code } = useParams<{ code: string }>();
 
     const renderContent = () => {
         switch (activeView) {
             case 'game':
-                return <GameBoard />;
+                return <GameBoard gameCode={code} />;
             case 'profile':
                 return <PlayerProfile />;
             case 'history':
@@ -25,7 +27,7 @@ const ChessApp = () => {
             case 'settings':
                 return <Settings />;
             default:
-                return <GameBoard />;
+                return <GameBoard gameCode={code} />;
         }
     };
 

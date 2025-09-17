@@ -1,26 +1,40 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { InvitationDto } from '../types/InvitationDto';
 import { socketHelper } from './useSocket/socketHelper';
 import { subscribeToNotifications } from './useSocket/notifications';
 
 export const useNotificationsSocket = () => {
     const [pendingInvitations, setPendingInvitations] = useState<InvitationDto[]>([]);
+    const [navigationTarget, setNavigationTarget] = useState<string | null>(null);
     const unsubscribeRef = useRef<(() => void) | null>(null);
+    const navigate = useNavigate();
 
+    // Effect to handle navigation when the target is set
+    useEffect(() => {
+        if (navigationTarget) {
+            navigate(navigationTarget);
+        }
+    }, [navigationTarget, navigate]);
+
+    // Effect to manage socket connection and subscriptions
     useEffect(() => {
         const handleNewInvitation = (invitation: InvitationDto) => {
-            alert("handleNewInvitation called with: " + JSON.stringify(invitation));
-            setPendingInvitations((prev) => {
-                if (invitation.status === 'PENDING') {
-                    // Avoid adding duplicates
-                    if (prev.find((i) => i.gameId === invitation.gameId)) {
+            if (invitation.status === 'ACCEPTED') {
+                localStorage.setItem('currentGameId', invitation.code);
+                setPendingInvitations((prev) => prev.filter((i) => i.code !== invitation.code));
+                // Set the navigation target instead of navigating directly
+                setNavigationTarget(`/game/${invitation.code}`);
+            } else if (invitation.status === 'PENDING') {
+                setPendingInvitations((prev) => {
+                    if (prev.find((i) => i.code === invitation.code)) {
                         return prev;
                     }
                     return [invitation, ...prev];
-                } else {
-                    return prev.filter((i) => i.gameId !== invitation.gameId);
-                }
-            });
+                });
+            } else { // REJECTED or other statuses
+                setPendingInvitations((prev) => prev.filter((i) => i.code !== invitation.code));
+            }
         };
 
         const checkConnection = () => {
@@ -35,7 +49,7 @@ export const useNotificationsSocket = () => {
 
         checkConnection();
 
-        const connectionCheckInterval = setInterval(checkConnection, 2000); // Check every 2 seconds
+        const connectionCheckInterval = setInterval(checkConnection, 2000);
 
         return () => {
             clearInterval(connectionCheckInterval);
@@ -45,7 +59,7 @@ export const useNotificationsSocket = () => {
             }
             socketHelper.disconnect();
         };
-    }, []);
+    }, []); // This effect should run only once to set up the socket
 
     return { pendingInvitations };
 };

@@ -39,6 +39,14 @@ const App: React.FC = () => {
                                 </ProtectedRoute>
                             }
                         />
+                        <Route
+                            path="/game/:code"
+                            element={
+                                <ProtectedRoute>
+                                    <ChessApp />
+                                </ProtectedRoute>
+                            }
+                        />
                     </Routes>
                 </motion.div>
                 <Toaster />
