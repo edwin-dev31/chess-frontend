@@ -80,7 +80,7 @@ export const socketHelper = {
         }
 
         const subscription = stompClient.subscribe(topic, (msg) => {
-            callback(JSON.parse(msg.body));
+            callback(msg);
         });
 
         return () => {

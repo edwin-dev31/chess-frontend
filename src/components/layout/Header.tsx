@@ -5,21 +5,18 @@ import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import { ActiveView } from '../chess/ChessApp';
 
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+
+import { useNotificationsSocket } from '../../lib/hooks/useNotificationsSocket';
+import { InvitationNotification } from '../notifications/InvitationNotification';
+
 interface HeaderProps {
     onMenuToggle: () => void;
     activeView: ActiveView;
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuToggle, activeView }) => {
-    const { toast } = useToast();
-
-    const handleNotifications = () => {
-        toast({
-            title: '🚧 Esta función aún no está implementada',
-            description:
-                '¡Pero no te preocupes! Puedes solicitarla en tu próximo prompt! 🚀',
-        });
-    };
+    const { pendingInvitations } = useNotificationsSocket();
 
     const getViewTitle = (): string => {
         switch (activeView) {
@@ -63,17 +60,35 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, activeView }) => {
                 </div>
 
                 <div className="flex items-center space-x-3">
-                    <Button
-                        variant="ghost"
-                        size="icon"
-                        onClick={handleNotifications}
-                        className="text-slate-300 hover:text-white hover:bg-slate-700 relative"
-                    >
-                        <Bell className="h-5 w-5" />
-                        <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] rounded-full h-4 w-4 flex items-center justify-center border-2 border-slate-800">
-                            3
-                        </span>
-                    </Button>
+                    <DropdownMenu.Root>
+                        <DropdownMenu.Trigger asChild>
+                            <Button
+                                variant="ghost"
+                                size="icon"
+                                className="text-slate-300 hover:text-white hover:bg-slate-700 relative"
+                            >
+                                <Bell className="h-5 w-5" />
+                                {pendingInvitations.length > 0 && (
+                                    <span className="absolute top-0 right-0 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                                        {pendingInvitations.length}
+                                    </span>
+                                )}
+                            </Button>
+                        </DropdownMenu.Trigger>
+                        <DropdownMenu.Portal>
+                            <DropdownMenu.Content
+                                className="w-80 bg-slate-800 border border-slate-700 rounded-md shadow-md p-1 text-white"
+                                sideOffset={5}
+                            >
+                                <DropdownMenu.Label className="px-2 py-1.5 text-sm font-semibold flex justify-between items-center">
+                                    <span>Game Invitations</span>
+                                    
+                                </DropdownMenu.Label>
+                                <DropdownMenu.Separator className="h-px bg-slate-700 my-1" />
+                                <InvitationNotification pendingInvitations={pendingInvitations} />
+                            </DropdownMenu.Content>
+                        </DropdownMenu.Portal>
+                    </DropdownMenu.Root>
 
                     <div className="flex items-center space-x-2 bg-slate-700/50 rounded-full pl-1 pr-3 py-1 border border-slate-600/70">
                         <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-800 rounded-full flex items-center justify-center ring-2 ring-slate-500">
