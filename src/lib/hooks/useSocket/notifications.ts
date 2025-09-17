@@ -9,10 +9,8 @@ export const subscribeToNotifications = (
   if (!callback) return;
 
   const unsubscribe = socketHelper.subscribe(NOTIFICATIONS_TOPIC, (msg) => {
-    alert("Message received in notifications.ts");
     try {
       const invitation: InvitationDto = JSON.parse(msg.body); 
-      alert("Received invitation: " + msg.body);
       callback(invitation);
     } catch (err) {
       console.error("Error parsing invitation:", err, msg);

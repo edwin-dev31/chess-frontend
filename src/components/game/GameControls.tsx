@@ -3,20 +3,28 @@ import { motion } from 'framer-motion';
 import { RotateCcw, Play, Pause, Flag } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
-import { GameState } from '../../lib/hooks/useChessGame.ts';
+
+import { useInvitePlayer } from '../../lib/hooks/useInvitation';
 
 interface GameControlsProps {
     onReset: () => void;
-    gameState: GameState;
     className?: string;
 }
 
 const GameControls: React.FC<GameControlsProps> = ({
     onReset,
-    gameState,
     className,
 }) => {
     const { toast } = useToast();
+    const { invitePlayer, loading, error } = useInvitePlayer();
+
+    const handleSendInvitation = () => {
+        invitePlayer(1, 2);
+        toast({
+            title: 'Invitation Sent',
+            description: 'An invitation has been sent to user 2 for game 1.',
+        });
+    };
 
     const handlePause = () => {
         toast({
@@ -64,6 +72,15 @@ const GameControls: React.FC<GameControlsProps> = ({
             >
                 <Flag className="h-4 w-4 mr-2" />
                 Rendirse
+            </Button>
+
+            <Button
+                onClick={handleSendInvitation}
+                variant="secondary"
+                disabled={loading}
+                className="bg-yellow-500 hover:bg-yellow-600"
+            >
+                Send Test Invitation
             </Button>
         </motion.div>
     );

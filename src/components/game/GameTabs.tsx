@@ -9,11 +9,13 @@ import {
     Puzzle,
     Flag,
     Clock,
+    Bug,
 } from 'lucide-react';
 import MoveHistory from './MoveHistory';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import { GameState } from '../../lib/hooks/useChessGame.ts';
+import GameControls from './GameControls';
 
 interface GameTabsProps {
     gameState: GameState;
@@ -37,7 +39,7 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
                 defaultValue="play"
                 className="w-full flex flex-col flex-grow"
             >
-                <TabsList className="grid w-full grid-cols-4 bg-slate-900/50">
+                <TabsList className="grid w-full grid-cols-5 bg-slate-900/50">
                     <TabsTrigger value="play">
                         <Play className="w-4 h-4" />
                     </TabsTrigger>
@@ -52,6 +54,9 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
                         onClick={handleNotImplemented}
                     >
                         <Puzzle className="w-4 h-4" />
+                    </TabsTrigger>
+                    <TabsTrigger value="debug">
+                        <Bug className="w-4 h-4" />
                     </TabsTrigger>
                 </TabsList>
 
@@ -250,6 +255,15 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
                                 </p>
                             </div>
                         </div>
+                    </div>
+                </TabsContent>
+
+                <TabsContent value="debug" className="flex-grow p-2">
+                    <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-white">
+                            Debug Controls
+                        </h3>
+                        <GameControls onReset={resetGame} gameState={gameState} />
                     </div>
                 </TabsContent>
             </Tabs>
