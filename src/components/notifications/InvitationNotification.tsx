@@ -6,9 +6,10 @@ import { InvitationDto } from '../../lib/types/InvitationDto';
 
 interface InvitationNotificationProps {
     pendingInvitations: InvitationDto[];
+    removeInvitation: (code: string) => void;
 }
 
-export const InvitationNotification: React.FC<InvitationNotificationProps> = ({ pendingInvitations }) => {
+export const InvitationNotification: React.FC<InvitationNotificationProps> = ({ pendingInvitations, removeInvitation }) => {
     const { acceptInvitation, loading: accepting } = useAcceptInvitation();
     const { rejectInvitation, loading: rejecting } = useRejectInvitation();
 
@@ -32,7 +33,10 @@ export const InvitationNotification: React.FC<InvitationNotificationProps> = ({ 
                                 <Button
                                     variant="secondary"
                                     size="sm"
-                                    onClick={() => acceptInvitation(invitation.fromUserId)}
+                                    onClick={() => {
+                                        removeInvitation(invitation.code);
+                                        acceptInvitation(invitation.fromUserId);
+                                    }}
                                     disabled={accepting || rejecting}
                                     className="bg-green-500/10 text-green-400 hover:bg-green-500/20 h-8 px-2"
                                 >
@@ -42,7 +46,10 @@ export const InvitationNotification: React.FC<InvitationNotificationProps> = ({ 
                                 <Button
                                     variant="destructive"
                                     size="sm"
-                                    onClick={() => rejectInvitation(invitation.fromUserId)}
+                                    onClick={() => {
+                                        removeInvitation(invitation.code);
+                                        rejectInvitation(invitation.fromUserId);
+                                    }}
                                     disabled={accepting || rejecting}
                                     className="bg-red-500/10 text-red-400 hover:bg-red-500/20 h-8 px-2"
                                 >

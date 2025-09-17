@@ -16,7 +16,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuToggle, activeView }) => {
-    const { pendingInvitations } = useNotificationsSocket();
+    const { pendingInvitations, removeInvitation } = useNotificationsSocket();
 
     const getViewTitle = (): string => {
         switch (activeView) {
@@ -85,7 +85,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, activeView }) => {
                                     
                                 </DropdownMenu.Label>
                                 <DropdownMenu.Separator className="h-px bg-slate-700 my-1" />
-                                <InvitationNotification pendingInvitations={pendingInvitations} />
+                                <InvitationNotification pendingInvitations={pendingInvitations} removeInvitation={removeInvitation} />
                             </DropdownMenu.Content>
                         </DropdownMenu.Portal>
                     </DropdownMenu.Root>

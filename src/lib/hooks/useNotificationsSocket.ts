@@ -20,20 +20,24 @@ export const useNotificationsSocket = () => {
     // Effect to manage socket connection and subscriptions
     useEffect(() => {
         const handleNewInvitation = (invitation: InvitationDto) => {
+            // Update the list of pending invitations based on the new status
+            setPendingInvitations(prev => {
+                // Always remove the old version of the invitation, if it exists
+                const filtered = prev.filter(i => i.code !== invitation.code);
+
+                // If the new status is PENDING, add it to the list
+                if (invitation.status === 'PENDING') {
+                    return [invitation, ...filtered];
+                }
+
+                // For ACCEPTED or REJECTED, just return the filtered list (effectively removing it)
+                return filtered;
+            });
+
+            // Handle the navigation side-effect for accepted invitations
             if (invitation.status === 'ACCEPTED') {
                 localStorage.setItem('currentGameId', invitation.code);
-                setPendingInvitations((prev) => prev.filter((i) => i.code !== invitation.code));
-                // Set the navigation target instead of navigating directly
                 setNavigationTarget(`/game/${invitation.code}`);
-            } else if (invitation.status === 'PENDING') {
-                setPendingInvitations((prev) => {
-                    if (prev.find((i) => i.code === invitation.code)) {
-                        return prev;
-                    }
-                    return [invitation, ...prev];
-                });
-            } else { // REJECTED or other statuses
-                setPendingInvitations((prev) => prev.filter((i) => i.code !== invitation.code));
             }
         };
 
@@ -61,5 +65,9 @@ export const useNotificationsSocket = () => {
         };
     }, []); // This effect should run only once to set up the socket
 
-    return { pendingInvitations };
+    const removeInvitation = (code: string) => {
+        setPendingInvitations(prev => prev.filter(i => i.code !== code));
+    };
+
+    return { pendingInvitations, removeInvitation };
 };
