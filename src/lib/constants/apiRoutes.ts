@@ -6,8 +6,8 @@ export const apiRoutes = {
         makeMove: (gameId: number) => `api/moves/${gameId}`,
     },
         invitation: {
-        invite: (gameId: number, toUserId: number) => `api/games/${gameId}/invite?toUserId=${toUserId}`,
-        accept: (gameId: number) => `api/games/${gameId}/accept`,
-        reject: (gameId: number) => `api/games/${gameId}/reject`,
+        invite: (toUserId: number) => `api/games/${toUserId}/invite`,
+        accept: (fromUserId: number) => `api/games/${fromUserId}/accept`,
+        reject: (fromUserId: number) => `api/games/${fromUserId}/reject`,
     }
 };

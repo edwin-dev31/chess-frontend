@@ -1,8 +1,10 @@
 export type InvitationStatus = 'PENDING' | 'ACCEPTED' | 'REJECTED';
 
 export interface InvitationDto {
-    gameId: number;
+    code: string;
     fromUserId: number;
+    fromUsername: string;
     toUserId: number;
+    toUsername: string;
     status: InvitationStatus;
 }

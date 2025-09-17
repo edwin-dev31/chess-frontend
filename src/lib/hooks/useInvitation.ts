@@ -8,7 +8,7 @@ const useInvitationAction = (action: InvitationAction) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
 
-    const performAction = async (gameId: number, toUserId?: number) => {
+    const performAction = async (fromUserId: number, toUserId?: number) => {
         setLoading(true);
         setError(null);
         const token = localStorage.getItem('token');
@@ -26,13 +26,13 @@ const useInvitationAction = (action: InvitationAction) => {
                     if (toUserId === undefined) {
                         throw new Error('toUserId is required for inviting a player.');
                     }
-                    url = apiRoutes.invitation.invite(gameId, toUserId);
+                    url = apiRoutes.invitation.invite(toUserId);
                     break;
                 case 'accept':
-                    url = apiRoutes.invitation.accept(gameId);
+                    url = apiRoutes.invitation.accept(fromUserId);
                     break;
                 case 'reject':
-                    url = apiRoutes.invitation.reject(gameId);
+                    url = apiRoutes.invitation.reject(fromUserId);
                     break;
                 default:
                     throw new Error('Invalid invitation action.');
@@ -65,12 +65,12 @@ export const useInvitePlayer = () => {
 
 export const useAcceptInvitation = () => {
     const { performAction, loading, error } = useInvitationAction('accept');
-    const acceptInvitation = (gameId: number) => performAction(gameId);
+    const acceptInvitation = (fromUserId: number) => performAction(fromUserId);
     return { acceptInvitation, loading, error };
 };
 
 export const useRejectInvitation = () => {
     const { performAction, loading, error } = useInvitationAction('reject');
-    const rejectInvitation = (gameId: number) => performAction(gameId);
+    const rejectInvitation = (fromUserId: number) => performAction(fromUserId);
     return { rejectInvitation, loading, error };
 };
