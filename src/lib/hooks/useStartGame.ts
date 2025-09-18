@@ -1,46 +1,42 @@
 import { useState } from 'react';
 import { apiRoutes } from '../constants/apiRoutes';
 import { useToast } from '../../components/ui/use-toast';
-import { apiHelper } from '../apiHelper';
-import { javaAPI } from '../axios';
+import { apiHelper } from '../helpers/apiHelper';
+import { useAuthStorage } from './useAuthStorage';
+
 export const useStartGame = () => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const { toast } = useToast();
+    const { token } = useAuthStorage();
 
     const startGame = async () => {
         const gameId = localStorage.getItem("currentGameId")
 
         setLoading(true);
-        setError(null);
-        const token = localStorage.getItem('token');
 
         if (!token) {
-            const msg = 'No se encontró el token de autenticación.';
-            setError(msg);
-            setLoading(false);
+            const msg = 'Authentication token not found.';
             toast({ title: '❌ Error', description: msg });
+            setLoading(false);
             return;
         }
 
         try {
             const url = apiRoutes.game.start(gameId);
             alert(url)
-            await javaAPI.post(url, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+            await apiHelper(url, {
+                method: 'POST',
+                token: token,
             });
           
 
             toast({
-                title: '✅ Partida iniciada',
-                description: '¡Que comience el juego! Los colores han sido asignados.',
+                title: '✅ Game Started',
+                description: 'The game has started! Colors have been assigned.',
             });
 
         } catch (err: any) {
-            const errorMessage = err.message || 'Error al iniciar la partida';
-            setError(errorMessage);
+            const errorMessage = err.message || 'Error starting the game';
             toast({
                 title: '❌ Error',
                 description: errorMessage,
@@ -50,5 +46,5 @@ export const useStartGame = () => {
         }
     };
 
-    return { startGame, loading, error };
+    return { startGame, loading };
 };

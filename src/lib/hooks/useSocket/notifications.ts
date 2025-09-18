@@ -1,4 +1,4 @@
-import { socketHelper } from './socketHelper';
+import { socketHelper } from '../../helpers/socketHelper';
 import { InvitationDto } from '../../types/InvitationDto';
 
 const NOTIFICATIONS_TOPIC = '/user/queue/invitations';

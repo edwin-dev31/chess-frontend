@@ -56,8 +56,6 @@ const initialGameState: GameState = {
 
 import { useChessSocket } from './useSocket/useChessSocket';
 import { CreateMoveDTO } from '../types/CreateMoveDTO';
-const GAME_ID = 1;
-const token = localStorage.getItem('token');
 
 export const useChessGame = (gameCode?: string) => {
     const [color, setColor] = useState<string | null>(null);

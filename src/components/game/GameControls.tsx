@@ -4,7 +4,7 @@ import { RotateCcw, Play, Pause, Flag } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 
-import { useInvitePlayer } from '../../lib/hooks/useInvitation';
+import { useInvitePlayer } from '../../lib/hooks/invitation/useInvitation';
 
 interface GameControlsProps {
     onReset: () => void;

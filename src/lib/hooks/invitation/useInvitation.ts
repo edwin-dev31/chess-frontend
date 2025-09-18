@@ -1,20 +1,21 @@
 import { useState } from 'react';
-import { javaAPI } from '../axios';
-import { apiRoutes } from '../constants/apiRoutes';
+import { apiRoutes } from '../../constants/apiRoutes';
+import { apiHelper } from '../../helpers/apiHelper';
+import { useAuthStorage } from '../useAuthStorage';
+import { useToast } from '../../../components/ui/use-toast';
 
 type InvitationAction = 'invite' | 'accept' | 'reject';
 
 const useInvitationAction = (action: InvitationAction) => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { token } = useAuthStorage();
+    const { toast } = useToast();
 
     const performAction = async (fromUserId: number, toUserId?: number) => {
         setLoading(true);
-        setError(null);
-        const token = localStorage.getItem('token');
 
         if (!token) {
-            setError('No authentication token found.');
+            toast({ title: '❌ Error', description: 'Authentication token not found.' });
             setLoading(false);
             return;
         }
@@ -38,39 +39,42 @@ const useInvitationAction = (action: InvitationAction) => {
                     throw new Error('Invalid invitation action.');
             }
 
-            await javaAPI.post(url, {}, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+            await apiHelper(url, {
+                method: 'POST',
+                token: token,
             });
 
-            if (action === 'accept' || action === 'reject') {
-               // removeInvitation(gameId);
-            }
+            // Optional: Add success toast here if needed
+            // toast({ title: '✅ Success', description: `Invitation ${action}ed successfully.` });
+
         } catch (err: any) {
-            setError(err.response?.data?.message || `Failed to ${action} invitation.`);
+            const errorMessage = err.message || `Failed to ${action} invitation.`;
+            toast({
+                title: '❌ Error',
+                description: errorMessage,
+            });
         } finally {
             setLoading(false);
         }
     };
 
-    return { performAction, loading, error };
+    return { performAction, loading };
 };
 
 export const useInvitePlayer = () => {
-    const { performAction, loading, error } = useInvitationAction('invite');
+    const { performAction, loading } = useInvitationAction('invite');
     const invitePlayer = (gameId: number, toUserId: number) => performAction(gameId, toUserId);
-    return { invitePlayer, loading, error };
+    return { invitePlayer, loading };
 };
 
 export const useAcceptInvitation = () => {
-    const { performAction, loading, error } = useInvitationAction('accept');
+    const { performAction, loading } = useInvitationAction('accept');
     const acceptInvitation = (fromUserId: number) => performAction(fromUserId);
-    return { acceptInvitation, loading, error };
+    return { acceptInvitation, loading };
 };
 
 export const useRejectInvitation = () => {
-    const { performAction, loading, error } = useInvitationAction('reject');
+    const { performAction, loading } = useInvitationAction('reject');
     const rejectInvitation = (fromUserId: number) => performAction(fromUserId);
-    return { rejectInvitation, loading, error };
+    return { rejectInvitation, loading };
 };

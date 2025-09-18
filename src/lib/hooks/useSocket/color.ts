@@ -1,4 +1,4 @@
-import { socketHelper } from './socketHelper';
+import { socketHelper } from '../../helpers/socketHelper';
 
 export const subscribeColor = (
     gameId: string,

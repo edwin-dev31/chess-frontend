@@ -1,6 +1,6 @@
 import SockJS from 'sockjs-client';
 import Stomp from 'stompjs';
-import { BACKEND_URL } from '../../axios';
+import { BACKEND_URL } from '../constants/axios';
 
 let stompClient: Stomp.Client | null = null;
 let reconnectTimeout: NodeJS.Timeout | null = null;

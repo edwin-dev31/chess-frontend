@@ -1,4 +1,4 @@
-import { socketHelper } from './socketHelper';
+import { socketHelper } from '../../helpers/socketHelper';
 import { CreateMoveDTO } from '../../types/CreateMoveDTO';
 
 export const subscribeMoves = (

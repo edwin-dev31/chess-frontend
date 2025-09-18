@@ -1,6 +1,6 @@
 import React from 'react';
 import { User, Check, X } from 'lucide-react';
-import { useAcceptInvitation, useRejectInvitation } from '../../lib/hooks/useInvitation';
+import { useAcceptInvitation, useRejectInvitation } from '../../lib/hooks/invitation/useInvitation';
 import { Button } from '../ui/button';
 import { InvitationDto } from '../../lib/types/InvitationDto';
 

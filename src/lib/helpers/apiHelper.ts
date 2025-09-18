@@ -1,4 +1,4 @@
-import { javaAPI } from './axios';
+import { javaAPI } from '../constants/axios';
 import { AxiosRequestConfig } from 'axios';
 
 interface RequestOptions extends AxiosRequestConfig {

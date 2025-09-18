@@ -7,7 +7,7 @@ import { ActiveView } from '../chess/ChessApp';
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
-import { useNotificationsSocket } from '../../lib/hooks/useNotificationsSocket';
+import { useNotificationsSocket } from '../../lib/hooks/invitation/useNotificationsSocket';
 import { InvitationNotification } from '../notifications/InvitationNotification';
 
 interface HeaderProps {

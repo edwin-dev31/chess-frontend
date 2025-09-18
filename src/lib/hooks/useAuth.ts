@@ -1,5 +1,7 @@
-import { useState, useEffect } from 'react';
-import { javaAPI } from '../axios';
+import { useState } from 'react';
+import { apiHelper } from '../helpers/apiHelper';
+import { useAuthStorage } from './useAuthStorage';
+import { useToast } from '../../components/ui/use-toast';
 
 interface AuthResponse {
     token: string;
@@ -12,17 +14,8 @@ interface AuthError {
 
 const useAuth = () => {
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
-    const [token, setToken] = useState<string | null>(
-        localStorage.getItem('token')
-    );
-
-    useEffect(() => {
-        const storedToken = localStorage.getItem('token');
-        if (storedToken) {
-            setToken(storedToken);
-        }
-    }, []);
+    const { token, setAuth, clearAuth } = useAuthStorage();
+    const { toast } = useToast();
 
     const isAuthenticated = !!token;
 
@@ -31,20 +24,20 @@ const useAuth = () => {
         password: string
     ): Promise<string | null> => {
         setLoading(true);
-        setError(null);
         try {
-            const response = await javaAPI.post<AuthResponse>('/auth/login', {
-                email,
-                password,
+            const response = await apiHelper<AuthResponse>('/auth/login', {
+                method: 'POST',
+                body: { email, password },
             });
-            localStorage.setItem('token', response.data.token);
-            setToken(response.data.token);
-            return response.data.token;
+            setAuth(response.token);
+            return response.token;
         } catch (err: any) {
-            setError(
-                err.response?.data?.message ||
-                    'Login failed. Please check your credentials.'
-            );
+            const authError: AuthError = err;
+            const errorMessage = authError.message || 'Login failed. Please check your credentials.';
+            toast({
+                title: '❌ Error',
+                description: errorMessage,
+            });
             return null;
         } finally {
             setLoading(false);
@@ -57,20 +50,20 @@ const useAuth = () => {
         password: string
     ): Promise<string | null> => {
         setLoading(true);
-        setError(null);
         try {
-            const response = await javaAPI.post<AuthResponse>(
+            const response = await apiHelper<AuthResponse>(
                 '/auth/register',
-                { username, email, password }
+                { method: 'POST', body: { username, email, password } }
             );
-            localStorage.setItem('token', response.data.token);
-            setToken(response.data.token);
-            return response.data.token;
+            setAuth(response.token);
+            return response.token;
         } catch (err: any) {
-            setError(
-                err.response?.data?.message ||
-                    'Registration failed. Please try again.'
-            );
+            const authError: AuthError = err;
+            const errorMessage = authError.message || 'Registration failed. Please try again.';
+            toast({
+                title: '❌ Error',
+                description: errorMessage,
+            });
             return null;
         } finally {
             setLoading(false);
@@ -78,11 +71,10 @@ const useAuth = () => {
     };
 
     const logout = () => {
-        localStorage.removeItem('token');
-        setToken(null);
+        clearAuth();
     };
 
-    return { login, register, logout, loading, error, token, isAuthenticated };
+    return { login, register, logout, loading, token, isAuthenticated };
 };
 
 export default useAuth;

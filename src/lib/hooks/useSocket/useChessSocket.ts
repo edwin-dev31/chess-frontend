@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { socketHelper } from './socketHelper';
+import { socketHelper } from '../../helpers/socketHelper';
 import { CreateMoveDTO } from '../../types/CreateMoveDTO';
 import { subscribeFen, requestFen } from './fen';
 import { subscribeMoves, sendMove as sendMoveHelper } from './moves';
@@ -29,7 +29,7 @@ export const useChessSocket = ({
         });
 
         return () => {
-            socketHelper.disconnect();
+            //socketHelper.disconnect();
         };
     }, [gameId, onFenUpdate, onMove, onColor]);
 
