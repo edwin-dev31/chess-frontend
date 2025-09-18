@@ -1,18 +1,17 @@
 import { socketHelper } from './socketHelper';
 
 export const subscribeColor = (
-    gameId: number,
+    gameId: string,
     onColor?: (color: any) => void
 ) => {
     if (!onColor) return;
 
     socketHelper.subscribe(`/topic/games/${gameId}/color`, (msg) => {
-        onColor(msg.color);
+        const body = JSON.parse(msg.body);
+        onColor(body.color);
     });
-
-    socketHelper.send(`/app/games/${gameId}/color`, {});
 };
 
-export const requestColor = (gameId: number) => {
+export const requestColor = (gameId: string) => {
     socketHelper.send(`/app/games/${gameId}/color`, {});
 };

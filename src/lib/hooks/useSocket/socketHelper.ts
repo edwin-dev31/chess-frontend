@@ -28,9 +28,10 @@ const scheduleReconnect = () => {
 };
 
 export const socketHelper = {
-    connect: () => {
+    connect: (onConnected?: () => void) => {
         if (stompClient && stompClient.connected) {
             console.log('✅ WebSocket already connected.');
+            if (onConnected) onConnected();
             resetReconnectInterval();
             return;
         }
@@ -60,6 +61,7 @@ export const socketHelper = {
             { Authorization: `Bearer ${token}` },
             () => {
                 console.log('✅ WebSocket Connected');
+                if (onConnected) onConnected();
                 resetReconnectInterval();
                 if (reconnectTimeout) clearTimeout(reconnectTimeout); // Clear any pending reconnect
             },

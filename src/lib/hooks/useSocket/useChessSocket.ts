@@ -6,7 +6,7 @@ import { subscribeMoves, sendMove as sendMoveHelper } from './moves';
 import { subscribeColor, requestColor as requestColorHelper } from './color';
 
 type UseChessSocketProps = {
-    gameId: number;
+    gameId: string;
     onFenUpdate?: (fen: string) => void;
     onMove?: (move: any) => void;
     onColor?: (color: any) => void;
@@ -23,6 +23,9 @@ export const useChessSocket = ({
             subscribeFen(gameId, onFenUpdate);
             subscribeMoves(gameId, onMove);
             subscribeColor(gameId, onColor);
+
+            requestFen(gameId);
+            requestColorHelper(gameId);
         });
 
         return () => {
