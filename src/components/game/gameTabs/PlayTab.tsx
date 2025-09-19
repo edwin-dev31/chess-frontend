@@ -1,12 +1,15 @@
 import React from 'react';
 import { Button } from '../../ui/button';
 import { Clock, Play, Puzzle, Bot } from 'lucide-react';
+import { useStartGame } from '../../../lib/hooks/useStartGame';
 
 interface PlayTabProps {
     handleNotImplemented: () => void;
 }
 
 const PlayTab: React.FC<PlayTabProps> = ({ handleNotImplemented }) => {
+    const { startGame } = useStartGame();
+
     return (
         <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Nueva Partida</h3>
@@ -46,10 +49,13 @@ const PlayTab: React.FC<PlayTabProps> = ({ handleNotImplemented }) => {
                 </div>
             </div>
 
-            <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={handleNotImplemented}>
-                <Play className="w-4 h-4 mr-2" />
-                Empezar Partida
+            <Button
+                className="w-full bg-blue-600 hover:bg-blue-700"
+                onClick={() => startGame()}
+            >
+                
             </Button>
+           
 
             <div className="space-y-2 pt-4 border-t border-slate-700">
                 <Button className="w-full justify-start" variant="ghost" onClick={handleNotImplemented}>

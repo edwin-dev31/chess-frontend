@@ -34,3 +34,5 @@ export interface GameState {
         black: Piece[];
     };
 }
+
+export type Color = 'WHITE' | 'BLACK';

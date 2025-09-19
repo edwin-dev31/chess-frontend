@@ -21,7 +21,7 @@ interface GameBoardProps {
 }
 
 const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
-    const { gameState, makeMove, resetGame, getColor, loadFen } = useChessGame(gameCode);
+    const { gameState, makeMove, getColor, loadFen } = useChessGame(gameCode);
     const [selectedSquare, setSelectedSquare] = useState<SelectedSquare | null>(
         null
     );
@@ -95,7 +95,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
                 </div>
 
                 <div className="xl:col-span-4 bg-slate-800 rounded-lg p-1">
-                    <GameTabs gameState={gameState} resetGame={resetGame} />
+                    <GameTabs gameState={gameState} resetGame={ ()=> {} } />
                 </div>
             </div>
             <ChangePieceModal

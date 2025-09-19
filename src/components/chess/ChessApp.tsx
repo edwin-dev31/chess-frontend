@@ -9,12 +9,15 @@ import GameHistory from '../game/GameHistory';
 import Settings from '../settings/Settings';
 import useAuth from '../../lib/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { useInitialColorSubscription } from '../../lib/hooks/useSocket/useGameStartSocket';
 export type ActiveView = 'game' | 'profile' | 'history' | 'settings';
+
 
 const ChessApp = () => {
     const [activeView, setActiveView] = useState<ActiveView>('game');
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
     const { code } = useParams<{ code: string }>();
+    useInitialColorSubscription();
 
     const renderContent = () => {
         switch (activeView) {

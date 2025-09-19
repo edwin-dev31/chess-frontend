@@ -2,7 +2,7 @@ import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Play, History, Info, Puzzle, Bug } from 'lucide-react';
 import { useToast } from '../ui/use-toast';
-import { GameState } from '../../lib/hooks/useChessGame';
+import { GameState } from '../../lib/types/Definitions';
 import PlayTab from './gameTabs/PlayTab';
 import MovesTab from './gameTabs/MovesTab';
 import GameInfoTab from './gameTabs/GameInfoTab';
