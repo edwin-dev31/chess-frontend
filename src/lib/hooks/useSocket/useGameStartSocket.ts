@@ -13,12 +13,11 @@ export const subscribeToInitialColor = (
     const unsubscribe = socketHelper.subscribe(INITIAL_COLOR_TOPIC, (message) => {
         try {
             const parsedBody = JSON.parse(message.body);
-            // Handles both { "color": "WHITE" } and "WHITE" as payload
             const color: Color = parsedBody.color || parsedBody;
-            
-            if (color === 'WHITE' || color === 'BLACK') {
-                console.log('Received initial color from server:', color);
+
+            if (color === Color.WHITE || color === Color.BLACK) {
                 callback(color);
+                unsubscribe();
             } else {
                 console.warn('Parsed color is not valid:', color);
             }
@@ -35,21 +34,18 @@ export const useInitialColorSubscription = () => {
     const unsubscribeRef = useRef<(() => void) | null>(null);
 
     useEffect(() => {
-        // Connect WebSocket when component mounts
         socketHelper.connect(() => {
-            // Subscribe only after connection is established
-            if (!unsubscribeRef.current) { // Ensure we don't subscribe multiple times
+            if (!unsubscribeRef.current) { 
                 unsubscribeRef.current = subscribeToInitialColor(saveColor);
             }
         });
 
         return () => {
-            // Disconnect WebSocket and unsubscribe when component unmounts
             if (unsubscribeRef.current) {
                 unsubscribeRef.current();
                 unsubscribeRef.current = null;
             }
-            socketHelper.disconnect(); // Disconnect the socket
+            socketHelper.disconnect(); 
         };
     }, [saveColor]);
 };

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '../../ui/button';
 import MoveHistory from '../MoveHistory';
-import { GameState } from '../../../lib/hooks/useChessGame';
+import { GameState } from '../../../lib/types/Definitions';
 import { Flag } from 'lucide-react';
 
 interface MovesTabProps {

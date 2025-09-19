@@ -4,7 +4,7 @@ import { Clock, RefreshCw } from 'lucide-react';
 import ChessBoard from './ChessBoard';
 import PlayerInfo from './PlayerInfo';
 import GameTabs from './GameTabs';
-import { GameState, Piece, PieceColor } from '../../lib/types/Definitions';
+import { GameState, Piece, Color } from '../../lib/types/Definitions';
 import { useChessGame } from '../../lib/hooks/useChessGame';
 
 import { Button } from '../ui/button';
@@ -46,13 +46,13 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
                 <div className="xl:col-span-2 flex flex-col justify-between items-center xl:items-start p-4 bg-slate-800 rounded-lg">
                     <PlayerInfo
                         player={gameState.players.black}
-                        isCurrentTurn={gameState.currentPlayer === 'black'}
+                        isCurrentTurn={gameState.currentPlayer ===  Color.BLACK}
                         capturedPieces={gameState.captured.white}
                     />
 
                     <PlayerInfo
                         player={gameState.players.white}
-                        isCurrentTurn={gameState.currentPlayer === 'white'}
+                        isCurrentTurn={gameState.currentPlayer === Color.WHITE}
                         capturedPieces={gameState.captured.black}
                     />
                     <span className="px-3 py-1 rounded-full text-white font-bold">

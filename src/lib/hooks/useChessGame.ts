@@ -1,39 +1,39 @@
 import { useState, useEffect } from 'react';
 
-import { Board, GameState, Piece, PieceColor } from '../types/Definitions';
+import { Board, Color, GameState, Piece } from '../types/Definitions';
 
 const initialBoard: Board = [
     [
-        { type: 'rook', color: 'black' },
-        { type: 'knight', color: 'black' },
-        { type: 'bishop', color: 'black' },
-        { type: 'queen', color: 'black' },
-        { type: 'king', color: 'black' },
-        { type: 'bishop', color: 'black' },
-        { type: 'knight', color: 'black' },
-        { type: 'rook', color: 'black' },
+        { type: 'rook', color: Color.BLACK },
+        { type: 'knight', color: Color.BLACK },
+        { type: 'bishop', color: Color.BLACK },
+        { type: 'queen', color: Color.BLACK },
+        { type: 'king', color: Color.BLACK },
+        { type: 'bishop', color: Color.BLACK },
+        { type: 'knight', color: Color.BLACK },
+        { type: 'rook', color: Color.BLACK },
     ],
-    Array(8).fill({ type: 'pawn', color: 'black' }),
+    Array(8).fill({ type: 'pawn', color: Color.BLACK }),
     Array(8).fill(null),
     Array(8).fill(null),
     Array(8).fill(null),
     Array(8).fill(null),
-    Array(8).fill({ type: 'pawn', color: 'white' }),
+    Array(8).fill({ type: 'pawn', color: Color.WHITE }),
     [
-        { type: 'rook', color: 'white' },
-        { type: 'knight', color: 'white' },
-        { type: 'bishop', color: 'white' },
-        { type: 'queen', color: 'white' },
-        { type: 'king', color: 'white' },
-        { type: 'bishop', color: 'white' },
-        { type: 'knight', color: 'white' },
-        { type: 'rook', color: 'white' },
+        { type: 'rook', color: Color.WHITE },
+        { type: 'knight', color: Color.WHITE },
+        { type: 'bishop', color: Color.WHITE },
+        { type: 'queen', color: Color.WHITE },
+        { type: 'king', color: Color.WHITE },
+        { type: 'bishop', color: Color.WHITE },
+        { type: 'knight', color: Color.WHITE },
+        { type: 'rook', color: Color.WHITE },
     ],
 ];
 
 const initialGameState: GameState = {
     board: initialBoard,
-    currentPlayer: 'white',
+    currentPlayer: Color.WHITE,
     moveHistory: [],
     lastMove: null,
     players: {
@@ -107,18 +107,18 @@ export const useChessGame = (gameCode?: string) => {
     const parseFenToBoard = (fen: string): Board => {
         const fenBoard = fen.split(' ')[0];
         const pieceMap: { [key: string]: Piece } = {
-            r: { type: 'rook', color: 'black' },
-            n: { type: 'knight', color: 'black' },
-            b: { type: 'bishop', color: 'black' },
-            q: { type: 'queen', color: 'black' },
-            k: { type: 'king', color: 'black' },
-            p: { type: 'pawn', color: 'black' },
-            R: { type: 'rook', color: 'white' },
-            N: { type: 'knight', color: 'white' },
-            B: { type: 'bishop', color: 'white' },
-            Q: { type: 'queen', color: 'white' },
-            K: { type: 'king', color: 'white' },
-            P: { type: 'pawn', color: 'white' },
+            r: { type: 'rook', color: Color.BLACK },
+            n: { type: 'knight', color: Color.BLACK },
+            b: { type: 'bishop', color: Color.BLACK },
+            q: { type: 'queen', color: Color.BLACK },
+            k: { type: 'king', color: Color.BLACK },
+            p: { type: 'pawn', color: Color.BLACK },
+            R: { type: 'rook', color: Color.WHITE },
+            N: { type: 'knight', color: Color.WHITE },
+            B: { type: 'bishop', color: Color.WHITE },
+            Q: { type: 'queen', color: Color.WHITE },
+            K: { type: 'king', color: Color.WHITE },
+            P: { type: 'pawn', color: Color.WHITE },
         };
 
         const board: Board = [];
@@ -139,8 +139,8 @@ export const useChessGame = (gameCode?: string) => {
 
     const loadFen = (fen: string) => {
         const newBoard = parseFenToBoard(fen);
-        const currentPlayer: PieceColor =
-            fen.split(' ')[1] === 'w' ? 'white' : 'black';
+        const currentPlayer: Color =
+            fen.split(' ')[1] === 'w' ? Color.WHITE : Color.BLACK;
         setGameState((prev) => ({
             ...prev,
             board: newBoard,

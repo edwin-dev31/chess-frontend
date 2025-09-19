@@ -1,6 +1,6 @@
 import React from 'react';
 import GameControls from '../GameControls';
-import { GameState } from '../../../lib/hooks/useChessGame';
+import { GameState } from '../../../lib/types/Definitions';
 
 interface DebugTabProps {
     gameState: GameState;

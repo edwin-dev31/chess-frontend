@@ -5,7 +5,8 @@ import { cn } from '../../lib/utils';
 import {
     PlayerInfo as PlayerInfoType,
     Piece,
-} from '../../lib/hooks/useChessGame.ts';
+    Color
+} from '../../lib/types/Definitions';
 
 const pieceMap: Record<string, string> = {
     pawn: '♙',
@@ -55,7 +56,7 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
                         key={index}
                         className="captured-piece"
                         style={{
-                            color: piece.color === 'white' ? '#FFF' : '#AAA',
+                            color: piece.color === Color.WHITE ? '#FFF' : '#AAA',
                         }}
                     >
                         {pieceMap[piece.type]}

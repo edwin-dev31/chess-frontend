@@ -1,23 +1,22 @@
 import { useState } from "react";
+import { Color } from "../types/Definitions";
 const COLOR_STORAGE_KEY = 'color';
 
-type PlayerColor = 'WHITE' | 'BLACK' | null;
-
 export const useColorStorage = () => {
-  const [color, setColor] = useState<PlayerColor>(() => {
+  const [color, setColor] = useState<Color | null>(() => {
     try {
       const storedColor = localStorage.getItem(COLOR_STORAGE_KEY);
-      return storedColor as PlayerColor;
+      return storedColor as Color | null;
     } catch (error) {
       console.error("Error reading color from localStorage:", error);
       return null;
     }
   });
 
-  const saveColor = (newColor: PlayerColor) => {
+  const saveColor = (newColor: Color | null) => {
     try {
       if (newColor) {
-        localStorage.setItem(COLOR_STORAGE_KEY, newColor.toLocaleLowerCase());
+        localStorage.setItem(COLOR_STORAGE_KEY, newColor);
       } else {
         localStorage.removeItem(COLOR_STORAGE_KEY);
       }

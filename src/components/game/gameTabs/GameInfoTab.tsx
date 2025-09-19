@@ -1,5 +1,5 @@
 import React from 'react';
-import { GameState } from '../../../lib/hooks/useChessGame';
+import { GameState } from '../../../lib/types/Definitions';
 
 interface GameInfoTabProps {
     gameState: GameState;

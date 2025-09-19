@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
-import { Board, Piece, PieceColor } from '../../lib/types/Definitions';
+import { Board, Piece, Color } from '../../lib/types/Definitions';
 
 interface SelectedSquare {
     row: number;
@@ -26,15 +26,15 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     selectedSquare,
     lastMove,
 }) => {
-    const playerColor = localStorage.getItem('color') || 'white';
-    const isBlack = playerColor === 'black';
+    const playerColor = localStorage.getItem('color') || Color.WHITE;
+    const isBlack = playerColor === Color.BLACK;
 
     const orientedBoard = isBlack
         ? [...board].reverse().map((row) => [...row].reverse())
         : board;
 
-    const pieceSymbols: Record<PieceColor, Record<Piece['type'], string>> = {
-        white: {
+    const pieceSymbols: Record<Color, Record<Piece['type'], string>> = {
+        [Color.WHITE]: {
             king: '♔',
             queen: '♕',
             rook: '♖',
@@ -42,7 +42,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
             knight: '♘',
             pawn: '♙',
         },
-        black: {
+        [Color.BLACK]: {
             king: '♚',
             queen: '♛',
             rook: '♜',
@@ -122,14 +122,14 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
                         {/* Coordenadas del tablero */}
                         {colIndex === 0 && (
                             <span className="absolute left-1 top-1 text-xs font-bold opacity-60">
-                                {playerColor === 'white'
+                                {playerColor === Color.WHITE
                                     ? 8 - rowIndex
                                     : rowIndex + 1}
                             </span>
                         )}
                         {rowIndex === 7 && (
                             <span className="absolute right-1 bottom-1 text-xs font-bold opacity-60">
-                                {playerColor === 'white'
+                                {playerColor === Color.WHITE
                                     ? String.fromCharCode(97 + colIndex)
                                     : String.fromCharCode(97 + (7 - colIndex))}
                             </span>
