@@ -8,6 +8,9 @@ let currentReconnectInterval = 1000;
 const MAX_RECONNECT_INTERVAL = 30000;
 const RECONNECT_MULTIPLIER = 2;
 
+const onConnectCallbacks: (() => void)[] = [];
+const onDisconnectCallbacks: (() => void)[] = [];
+
 const resetReconnectInterval = () => {
     currentReconnectInterval = 1000;
 };
@@ -32,6 +35,7 @@ export const socketHelper = {
         if (stompClient && stompClient.connected) {
             console.log('✅ WebSocket already connected.');
             if (onConnected) onConnected();
+            onConnectCallbacks.forEach(cb => cb());
             resetReconnectInterval();
             return;
         }
@@ -43,6 +47,7 @@ export const socketHelper = {
                         '🔌 Disconnected existing client before reconnecting.'
                     );
                     stompClient = null;
+                    onDisconnectCallbacks.forEach(cb => cb());
                 });
             } catch (e) {
                 console.warn(
@@ -50,6 +55,7 @@ export const socketHelper = {
                     e
                 );
                 stompClient = null;
+                onDisconnectCallbacks.forEach(cb => cb());
             }
         }
 
@@ -62,12 +68,14 @@ export const socketHelper = {
             () => {
                 console.log('✅ WebSocket Connected');
                 if (onConnected) onConnected();
+                onConnectCallbacks.forEach(cb => cb());
                 resetReconnectInterval();
                 if (reconnectTimeout) clearTimeout(reconnectTimeout); // Clear any pending reconnect
             },
             (error: any) => {
                 console.error('❌ WebSocket connection error:', error);
                 stompClient = null;
+                onDisconnectCallbacks.forEach(cb => cb());
                 scheduleReconnect(); // Schedule reconnect on error
             }
         );
@@ -109,6 +117,7 @@ export const socketHelper = {
             stompClient.disconnect(() => {
                 console.log('🔌 Disconnected');
                 stompClient = null;
+                onDisconnectCallbacks.forEach(cb => cb());
             });
         } else {
             console.log('⚠️ No active WebSocket connection to disconnect.');
@@ -118,5 +127,27 @@ export const socketHelper = {
 
     isConnected: () => {
         return stompClient && stompClient.connected;
+    },
+
+    onConnect: (callback: () => void) => {
+        onConnectCallbacks.push(callback);
+    },
+
+    offConnect: (callback: () => void) => {
+        const index = onConnectCallbacks.indexOf(callback);
+        if (index > -1) {
+            onConnectCallbacks.splice(index, 1);
+        }
+    },
+
+    onDisconnect: (callback: () => void) => {
+        onDisconnectCallbacks.push(callback);
+    },
+
+    offDisconnect: (callback: () => void) => {
+        const index = onDisconnectCallbacks.indexOf(callback);
+        if (index > -1) {
+            onDisconnectCallbacks.splice(index, 1);
+        }
     },
 };

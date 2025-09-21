@@ -9,7 +9,7 @@ const Register: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
-    const { register, loading, error } = useAuth();
+    const { register, loading } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -97,9 +97,6 @@ const Register: React.FC = () => {
                             />
                         </div>
                     </div>
-
-                    {/* Error */}
-                    {error && <p className="text-red-400 text-sm">{error}</p>}
 
                     {/* Submit */}
                     <motion.button

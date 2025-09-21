@@ -38,3 +38,9 @@ export enum Color {
     WHITE = 'WHITE',
     BLACK = 'BLACK',
 }
+
+export enum PlayerStatus {
+    ONLINE,
+    OFFLINE,
+    IN_GAME
+}

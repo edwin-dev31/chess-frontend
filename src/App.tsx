@@ -8,6 +8,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import LandingPage from './components/auth/LandingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import { OnlinePlayersProvider } from '@/components/chess/OnlinePlayersProvider';
 
 const App: React.FC = () => {
     return (
@@ -32,21 +33,27 @@ const App: React.FC = () => {
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
                         <Route
-                            path="/app/*"
-                            element={
-                                <ProtectedRoute>
-                                    <ChessApp />
-                                </ProtectedRoute>
-                            }
+                        path="/app/*"
+                        element={
+                            <OnlinePlayersProvider>
+                            <ProtectedRoute>
+                                <ChessApp />
+                            </ProtectedRoute>
+                            </OnlinePlayersProvider>
+                        }
                         />
+
                         <Route
-                            path="/game/:code"
-                            element={
-                                <ProtectedRoute>
-                                    <ChessApp />
-                                </ProtectedRoute>
-                            }
+                        path="/game/:code"
+                        element={
+                            <OnlinePlayersProvider>
+                            <ProtectedRoute>
+                                <ChessApp />
+                            </ProtectedRoute>
+                            </OnlinePlayersProvider>
+                        }
                         />
+
                     </Routes>
                 </motion.div>
                 <Toaster />

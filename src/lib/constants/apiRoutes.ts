@@ -1,12 +1,17 @@
 export const apiRoutes = {
     login: '/auth/login',
     register: '/auth/register',
+
+    player: {
+        profile: () => `api/players/profile`,
+    },
     game: {
         fen: (gameId: string) => `api/games/${gameId}/fen`,
         makeMove: (gameId: string) => `api/moves/${gameId}`,
         start: (gameId: string) => `api/games/${gameId}/start`,
     },
-        invitation: {
+    
+    invitation: {
         invite: (toUserId: number) => `api/games/${toUserId}/invite`,
         accept: (fromUserId: number) => `api/games/${fromUserId}/accept`,
         reject: (fromUserId: number) => `api/games/${fromUserId}/reject`,

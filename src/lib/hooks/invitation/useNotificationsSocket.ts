@@ -55,7 +55,7 @@ export const useNotificationsSocket = () => {
                 unsubscribeRef.current();
                 unsubscribeRef.current = null;
             }
-            socketHelper.disconnect();
+            // socketHelper.disconnect();
         };
     }, []);
 

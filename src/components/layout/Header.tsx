@@ -9,6 +9,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
 import { useNotificationsSocket } from '../../lib/hooks/invitation/useNotificationsSocket';
 import { InvitationNotification } from '../notifications/InvitationNotification';
+import { OnlinePlayersDropdown } from '../player/OnlinePlayersDropdown';
 
 interface HeaderProps {
     onMenuToggle: () => void;
@@ -60,6 +61,10 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, activeView }) => {
                 </div>
 
                 <div className="flex items-center space-x-3">
+                    {/* Online Players Dropdown */}
+                    <OnlinePlayersDropdown />
+
+                    {/* Notification Dropdown */}
                     <DropdownMenu.Root>
                         <DropdownMenu.Trigger asChild>
                             <Button
