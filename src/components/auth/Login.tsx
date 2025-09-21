@@ -91,23 +91,24 @@ const Login: React.FC = () => {
                     </motion.button>
                 </form>
 
-                <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                    <span className="w-full border-t border-blue-100" />
+                <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                        <div className="w-full border-t border-slate-700" />
                     </div>
-                    <div className="relative flex justify-center text-sm uppercase">
-                    <span className="bg-white px-4 text-blue-400 dark:bg-[#191919]">or</span>
+                    <div className="relative flex justify-center text-sm">
+                        <span className="bg-slate-800 px-2 text-slate-400">Or continue with</span>
                     </div>
                 </div>
+
                 <Button
                     variant="outline"
-                    className="w-full h-10 rounded-xl flex items-center justify-center space-x-2 "
+                    className="w-full bg-white text-gray-700 hover:bg-gray-400 rounded-xl"
                     onClick={() =>
                         (window.location.href = `${javaOauth}/google`)
                     }
                     >
-                    <FcGoogle className="w-4 h-4" />
-                    <span className="text-blue-900 dark:text-[#38b6ff]">Login with Google</span>
+                    <FcGoogle className="mr-2 h-4 w-4" />
+                    Login with Google
                 </Button>
 
                 {/* Footer */}
