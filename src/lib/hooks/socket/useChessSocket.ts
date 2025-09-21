@@ -1,9 +1,9 @@
 import { useEffect } from 'react';
 import { socketHelper } from '../../helpers/socketHelper';
 import { CreateMoveDTO } from '../../types/CreateMoveDTO';
-import { subscribeFen, requestFen } from './fen';
-import { subscribeMoves, sendMove as sendMoveHelper } from './moves';
-import { subscribeColor, requestColor as requestColorHelper } from './color';
+import { subscribeFen, requestFen } from './useSocketFen';
+import { subscribeMoves, sendMove as sendMoveHelper } from './useSocketMoves';
+import { subscribeColor, requestColor as requestColorHelper } from './useSocketColor';
 
 type UseChessSocketProps = {
     gameId: string;

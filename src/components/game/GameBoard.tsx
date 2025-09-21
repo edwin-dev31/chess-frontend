@@ -5,7 +5,7 @@ import ChessBoard from './ChessBoard';
 import PlayerInfo from './PlayerInfo';
 import GameTabs from './GameTabs';
 import { GameState, Piece, Color } from '../../lib/types/Definitions';
-import { useChessGame } from '../../lib/hooks/useChessGame';
+import { useChessGame } from '../../lib/hooks/game/useChessGame';
 
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';

@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import { apiRoutes } from '../constants/apiRoutes';
-import { useToast } from '../../components/ui/use-toast';
-import { apiHelper } from '../helpers/apiHelper';
-import { useAuthStorage } from './useAuthStorage';
+import { apiRoutes } from '../../constants/apiRoutes';
+import { useToast } from '../../../components/ui/use-toast';
+import { apiHelper } from '../../helpers/apiHelper';
+import { useAuthStorage } from '../auth/useAuthStorage';
 
 export const useStartGame = () => {
     const [loading, setLoading] = useState(false);

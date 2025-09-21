@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 
-import { Board, Color, GameState, Piece } from '../types/Definitions';
+import { useChessSocket } from '../socket/useChessSocket';
+import { CreateMoveDTO } from '../../types/CreateMoveDTO';
+import { Board, Color, GameState, Piece } from '../../types/Definitions';
 
 const initialBoard: Board = [
     [
@@ -53,9 +55,6 @@ const initialGameState: GameState = {
         black: [],
     },
 };
-
-import { useChessSocket } from './useSocket/useChessSocket';
-import { CreateMoveDTO } from '../types/CreateMoveDTO';
 
 export const useChessGame = (gameCode?: string) => {
     const [color, setColor] = useState<string | null>(null);

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock } from 'lucide-react';
-import useAuth from '../../lib/hooks/useAuth';
+import useAuth from '../../lib/hooks/auth/useAuth';
 
 const Register: React.FC = () => {
     const [username, setUsername] = useState('');

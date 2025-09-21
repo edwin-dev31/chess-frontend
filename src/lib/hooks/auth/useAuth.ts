@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { apiHelper } from '../helpers/apiHelper';
+import { apiHelper } from '../../helpers/apiHelper';
 import { useAuthStorage } from './useAuthStorage';
-import { useToast } from '../../components/ui/use-toast';
+import { useToast } from '../../../components/ui/use-toast';
 
 interface AuthResponse {
     token: string;

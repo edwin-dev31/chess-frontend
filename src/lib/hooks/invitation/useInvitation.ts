@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { apiRoutes } from '../../constants/apiRoutes';
 import { apiHelper } from '../../helpers/apiHelper';
-import { useAuthStorage } from '../useAuthStorage';
+import { useAuthStorage } from '../auth/useAuthStorage';
 import { useToast } from '../../../components/ui/use-toast';
 
 type InvitationAction = 'invite' | 'accept' | 'reject';

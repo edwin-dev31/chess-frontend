@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { SkillLevelType } from '../../components/player/SkillLevel';
+import { SkillLevelType } from '../../../components/player/SkillLevel';
 
 // Type Definitions
 type AchievementType = 'milestone' | 'streak' | 'activity';

@@ -7,9 +7,8 @@ import GameBoard from '../game/GameBoard';
 import PlayerProfile from '../player/PlayerProfile';
 import GameHistory from '../game/GameHistory';
 import Settings from '../settings/Settings';
-import useAuth from '../../lib/hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
-import { useInitialColorSubscription } from '../../lib/hooks/useSocket/useGameStartSocket';
+import { useInitialColorSubscription } from '../../lib/hooks/socket/useGameStartSocket';
 export type ActiveView = 'game' | 'profile' | 'history' | 'settings';
 
 

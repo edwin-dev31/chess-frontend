@@ -4,7 +4,7 @@ import { Save, User, Palette, Volume2, Globe } from 'lucide-react';
 import { Button } from '../ui/button';
 import { useToast } from '../ui/use-toast';
 import SettingsSection from './SettingsSection';
-import { useSettings, AppSettings } from '../../lib/hooks/useSettings';
+import { useSettings, AppSettings } from '../../lib/hooks/settings/useSettings';
 
 const Settings = () => {
     const { settings, updateSettings, loading } = useSettings();

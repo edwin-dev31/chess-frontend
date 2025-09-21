@@ -5,7 +5,7 @@ import {
     usePlayerProfile,
     PlayerProfile as PlayerProfileType,
     PlayerStats,
-} from '../../lib/hooks/usePlayerProfile';
+} from '../../lib/hooks/auth/usePlayerProfile';
 import StatsCard from './StatsCard';
 import SkillLevel from './SkillLevel';
 import RecentAchievements from './RecentAchievements';

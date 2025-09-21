@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Calendar, Trophy, Clock, User } from 'lucide-react';
-import { useGameHistory, GameRecord } from '../../lib/hooks/useGameHistory';
+import { useGameHistory, GameRecord } from '../../lib/hooks/game/useGameHistory';
 
 const GameHistory = () => {
     const { games, loading } = useGameHistory();

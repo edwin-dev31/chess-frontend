@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { socketHelper } from '../../helpers/socketHelper';
 import { Color } from '../../types/Definitions';
-import { useColorStorage } from '../useColorStorage';
+import { useColorStorage } from '../common/useColorStorage';
 
 const INITIAL_COLOR_TOPIC = '/user/queue/start';
 
