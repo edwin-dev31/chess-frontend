@@ -11,7 +11,7 @@ const useInvitationAction = (action: InvitationAction) => {
     const { token } = useAuthStorage();
     const { toast } = useToast();
 
-    const performAction = async (fromUserId: number, toUserId?: number) => {
+    const performAction = async (userId: number) => {
         setLoading(true);
 
         if (!token) {
@@ -24,16 +24,13 @@ const useInvitationAction = (action: InvitationAction) => {
             let url: string;
             switch (action) {
                 case 'invite':
-                    if (toUserId === undefined) {
-                        throw new Error('toUserId is required for inviting a player.');
-                    }
-                    url = apiRoutes.invitation.invite(toUserId);
+                    url = apiRoutes.invitation.invite(userId);
                     break;
                 case 'accept':
-                    url = apiRoutes.invitation.accept(fromUserId);
+                    url = apiRoutes.invitation.accept(userId);
                     break;
                 case 'reject':
-                    url = apiRoutes.invitation.reject(fromUserId);
+                    url = apiRoutes.invitation.reject(userId);
                     break;
                 default:
                     throw new Error('Invalid invitation action.');
@@ -63,7 +60,7 @@ const useInvitationAction = (action: InvitationAction) => {
 
 export const useInvitePlayer = () => {
     const { performAction, loading } = useInvitationAction('invite');
-    const invitePlayer = (gameId: number, toUserId: number) => performAction(gameId, toUserId);
+    const invitePlayer = (toUserId: number) => performAction(toUserId);
     return { invitePlayer, loading };
 };
 

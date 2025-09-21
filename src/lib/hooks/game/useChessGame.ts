@@ -40,7 +40,7 @@ const initialGameState: GameState = {
     lastMove: null,
     players: {
         white: {
-            name: 'edwin_dev',
+            name: 'edwin_zdev',
             rating: 1200,
             timeLeft: '10:00',
         },

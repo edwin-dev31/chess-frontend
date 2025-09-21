@@ -19,7 +19,7 @@ const GameControls: React.FC<GameControlsProps> = ({
     const { invitePlayer, loading, error } = useInvitePlayer();
 
     const handleSendInvitation = () => {
-        invitePlayer(1, 2);
+        invitePlayer(2);
         toast({
             title: 'Invitation Sent',
             description: 'An invitation has been sent to user 2 for game 1.',

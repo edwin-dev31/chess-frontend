@@ -1,4 +1,3 @@
-// src/lib/hooks/socket/useSubscribeOnline.ts
 import { useEffect, useState } from 'react';
 import { socketHelper } from '@/lib/helpers/socketHelper';
 import { PlayerOnlineDTO } from '@/lib/types/PlayerOnlineDTO';
@@ -23,11 +22,9 @@ export function useSubscribeOnline() {
 
     socketHelper.onConnect(handleConnect);
 
-    // Attempt to connect if not already connected
     if (!socketHelper.isConnected()) {
       socketHelper.connect();
     } else {
-      // If already connected, immediately subscribe
       handleConnect();
     }
 

@@ -38,7 +38,7 @@ export interface PlayerStats {
 
 // Simulación de datos del perfil del jugador
 const mockPlayerProfile: PlayerProfile = {
-    name: 'edwin_dev',
+    name: 'edwin_2dev',
     joinDate: 'Enero 2024',
     country: 'España',
     skillLevel: 'intermediate',

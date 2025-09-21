@@ -1,11 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Button } from '../ui/button';
-import { Circle } from 'lucide-react';
+import { Circle, Sword } from 'lucide-react';
 import { useOnlinePlayers } from '@/components/chess/OnlinePlayersProvider';
+import { useInvitePlayer } from '@/lib/hooks/invitation/useInvitation';
+import { useToast } from '../ui/use-toast';
 
 export const OnlinePlayersDropdown: React.FC = () => {
   const onlinePlayers = useOnlinePlayers();
+  const { invitePlayer, loading } = useInvitePlayer();
+  const { toast } = useToast();
+  const [invitingPlayerId, setInvitingPlayerId] = useState<number | null>(null);
+
+  const handleInvite = async (playerId: number, playerName: string) => {
+    setInvitingPlayerId(playerId);
+    try {
+      await invitePlayer(playerId);
+      toast({
+        title: 'Invitation Sent',
+        description: `Your challenge has been sent to ${playerName}.`,
+      });
+    } catch (error) {
+      // The useInvitePlayer hook should ideally handle and log the error
+      // but we can also show a toast here if needed.
+    }
+    setInvitingPlayerId(null);
+  };
   
   return (
     <DropdownMenu.Root>
@@ -44,10 +64,19 @@ export const OnlinePlayersDropdown: React.FC = () => {
               <DropdownMenu.Item
                 key={player.id}
                 className="px-2 py-1.5 text-sm hover:bg-slate-700 rounded-sm cursor-pointer flex items-center justify-between"
-                onSelect={() => alert(`Player ID: ${player.id}`)}
+                onSelect={(e) => e.preventDefault()} // Prevent closing the dropdown on item click
               >
                 <span>{player.username}</span>
-
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-auto px-2 py-1 text-xs text-slate-300 hover:bg-slate-600 hover:text-white"
+                  disabled={loading && invitingPlayerId === player.id}
+                  onClick={() => handleInvite(player.id, player.username)}
+                >
+                  <Sword className="h-3 w-3 mr-1" />
+                  Challenge
+                </Button>
               </DropdownMenu.Item>
             ))
           )}

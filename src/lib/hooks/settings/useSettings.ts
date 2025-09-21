@@ -39,7 +39,7 @@ export interface AppSettings {
 // Configuración por defecto
 const defaultSettings: AppSettings = {
     profile: {
-        displayName: 'edwin_dev',
+        displayName: 'edwin_3dev',
         email: 'edwin@example.com',
         country: 'España',
         publicProfile: true,

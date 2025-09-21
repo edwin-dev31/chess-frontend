@@ -11,6 +11,8 @@ import { useNotificationsSocket } from '../../lib/hooks/invitation/useNotificati
 import { InvitationNotification } from '../notifications/InvitationNotification';
 import { OnlinePlayersDropdown } from '../player/OnlinePlayersDropdown';
 
+import { useProfile } from '@/lib/hooks/player/useProfile';
+
 interface HeaderProps {
     onMenuToggle: () => void;
     activeView: ActiveView;
@@ -18,6 +20,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMenuToggle, activeView }) => {
     const { pendingInvitations, removeInvitation } = useNotificationsSocket();
+    const { profile, loading } = useProfile();
 
     const getViewTitle = (): string => {
         switch (activeView) {
@@ -61,7 +64,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, activeView }) => {
                 </div>
 
                 <div className="flex items-center space-x-3">
-                    {/* Online Players Dropdown */}
                     <OnlinePlayersDropdown />
 
                     {/* Notification Dropdown */}
@@ -97,11 +99,25 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, activeView }) => {
 
                     <div className="flex items-center space-x-2 bg-slate-700/50 rounded-full pl-1 pr-3 py-1 border border-slate-600/70">
                         <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-800 rounded-full flex items-center justify-center ring-2 ring-slate-500">
-                            <User className="h-4 w-4 text-white" />
+                            {loading ? (
+                                <User className="h-4 w-4 text-white" />
+                            ) : profile ? (
+                                <img src={profile.imageUrl} alt={profile.username} className="w-full h-full rounded-full object-cover" />
+                            ) : (
+                                <User className="h-4 w-4 text-white" />
+                            )}
                         </div>
-                        <div className="text-sm hidden sm:block">
-                            <p className="text-white font-medium">edwin_dev</p>
-                            <p className="text-slate-400 text-xs">1200 ELO</p>
+                        <div className="text-sm hidden sm:block w-28">
+                            {loading ? (
+                                <p className="text-white font-medium">Loading...</p>
+                            ) : profile ? (
+                                <>
+                                    <p className="text-white font-medium truncate">{profile.username}</p>
+                                    <p className="text-slate-400 text-xs">{profile.rating} ELO</p>
+                                </>
+                            ) : (
+                                <p className="text-white font-medium">Player</p>
+                            )}
                         </div>
                     </div>
                 </div>
