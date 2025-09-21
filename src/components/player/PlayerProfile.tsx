@@ -5,10 +5,10 @@ import {
     usePlayerProfile,
     PlayerProfile as PlayerProfileType,
     PlayerStats,
-} from '../../lib/hooks/auth/usePlayerProfile';
-import StatsCard from './StatsCard';
-import SkillLevel from './SkillLevel';
-import RecentAchievements from './RecentAchievements';
+} from '@/lib/hooks/auth/usePlayerProfile';
+import StatsCard from '@/components/player/StatsCard';
+import SkillLevel from '@/components/player/SkillLevel';
+import RecentAchievements from '@/components/player/RecentAchievements';
 
 const PlayerProfile = () => {
     const { profile, stats, loading } = usePlayerProfile();

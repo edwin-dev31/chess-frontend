@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 
-import { useChessSocket } from '../socket/useChessSocket';
-import { CreateMoveDTO } from '../../types/CreateMoveDTO';
-import { Board, Color, GameState, Piece } from '../../types/Definitions';
+import { useChessSocket } from '@/lib/hooks/socket/useChessSocket';
+import { CreateMoveDTO } from '@/lib/types/CreateMoveDTO';
+import { Board, Color, GameState, Piece } from '@/lib/types/Definitions';
 
 const initialBoard: Board = [
     [

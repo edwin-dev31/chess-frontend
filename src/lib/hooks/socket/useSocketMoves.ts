@@ -1,5 +1,5 @@
-import { socketHelper } from '../../helpers/socketHelper';
-import { CreateMoveDTO } from '../../types/CreateMoveDTO';
+import { socketHelper } from '@/lib/helpers/socketHelper';
+import { CreateMoveDTO } from '@/lib/types/CreateMoveDTO';
 
 export const subscribeMoves = (
     gameId: string,

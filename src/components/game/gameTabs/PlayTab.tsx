@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from '../../ui/button';
+import { Button } from '@/components/ui/button';
 import { Clock, Play, Puzzle, Bot } from 'lucide-react';
-import { useStartGame } from '../../../lib/hooks/game/useStartGame';
+import { useStartGame } from '@/lib/hooks/game/useStartGame';
 
 interface PlayTabProps {
     handleNotImplemented: () => void;

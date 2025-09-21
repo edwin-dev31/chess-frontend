@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, RefreshCw } from 'lucide-react';
-import ChessBoard from './ChessBoard';
-import PlayerInfo from './PlayerInfo';
-import GameTabs from './GameTabs';
-import { GameState, Piece, Color } from '../../lib/types/Definitions';
-import { useChessGame } from '../../lib/hooks/game/useChessGame';
+import ChessBoard from '@/components/game/ChessBoard';
+import PlayerInfo from '@/components/game/PlayerInfo';
+import GameTabs from '@/components/game/GameTabs';
+import { GameState, Piece, Color } from '@/lib/types/Definitions';
+import { useChessGame } from '@/lib/hooks/game/useChessGame';
 
-import { Button } from '../ui/button';
-import { useToast } from '../ui/use-toast';
-import ChangePieceModal from './ChangePieceModal';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+import ChangePieceModal from '@/components/game/ChangePieceModal';
 
 interface SelectedSquare {
     row: number;

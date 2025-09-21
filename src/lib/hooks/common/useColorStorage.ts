@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Color } from "../../types/Definitions";
+import { Color } from "@/lib/types/Definitions";
 const COLOR_STORAGE_KEY = 'color';
 
 export const useColorStorage = () => {

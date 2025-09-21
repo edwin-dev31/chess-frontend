@@ -1,14 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Button } from '../ui/button';
-import { useToast } from '../ui/use-toast';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
 import {
     ProfileSettings,
     AppearanceSettings,
     AudioSettings,
     GameSettings,
     AppSettings,
-} from '../../lib/hooks/useSettings';
+} from '@/lib/hooks/settings/useSettings';
 
 type FieldType = 'text' | 'email' | 'select' | 'toggle' | 'range';
 

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
-import { socketHelper } from '../../helpers/socketHelper';
-import { Color } from '../../types/Definitions';
-import { useColorStorage } from '../common/useColorStorage';
+import { socketHelper } from '@/lib/helpers/socketHelper';
+import { Color } from '@/lib/types/Definitions';
+import { useColorStorage } from '@/lib/hooks/common/useColorStorage';
 
 const INITIAL_COLOR_TOPIC = '/user/queue/start';
 
@@ -17,7 +17,7 @@ export const subscribeToInitialColor = (
 
             if (color === Color.WHITE || color === Color.BLACK) {
                 callback(color);
-                unsubscribe();
+               // unsubscribe();
             } else {
                 console.warn('Parsed color is not valid:', color);
             }
@@ -45,7 +45,7 @@ export const useInitialColorSubscription = () => {
                 unsubscribeRef.current();
                 unsubscribeRef.current = null;
             }
-            socketHelper.disconnect(); 
+            //socketHelper.disconnect(); 
         };
     }, [saveColor]);
 };

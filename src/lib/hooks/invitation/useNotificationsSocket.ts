@@ -1,8 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { InvitationDto } from '../../types/InvitationDto';
-import { socketHelper } from '../../helpers/socketHelper';
-import { subscribeToNotifications } from '../socket/notifications';
+import { InvitationDto } from '@/lib/types/InvitationDto';
+import { socketHelper } from '@/lib/helpers/socketHelper';
+import { subscribeToNotifications } from '@/lib/hooks/socket/notifications';
 
 export const useNotificationsSocket = () => {
     const [pendingInvitations, setPendingInvitations] = useState<InvitationDto[]>([]);

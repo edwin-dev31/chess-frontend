@@ -1,5 +1,5 @@
-import { socketHelper } from '../../helpers/socketHelper';
-import { InvitationDto } from '../../types/InvitationDto';
+import { socketHelper } from '@/lib/helpers/socketHelper';
+import { InvitationDto } from '@/lib/types/InvitationDto';
 
 const NOTIFICATIONS_TOPIC = '/user/queue/invitations';
 

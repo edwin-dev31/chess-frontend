@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Save, User, Palette, Volume2, Globe } from 'lucide-react';
-import { Button } from '../ui/button';
-import { useToast } from '../ui/use-toast';
-import SettingsSection from './SettingsSection';
-import { useSettings, AppSettings } from '../../lib/hooks/settings/useSettings';
+import { Button } from '@/components/ui/button';
+import { useToast } from '@/components/ui/use-toast';
+import SettingsSection from '@/components/settings/SettingsSection';
+import { useSettings, AppSettings } from '@/lib/hooks/settings/useSettings';
 
 const Settings = () => {
     const { settings, updateSettings, loading } = useSettings();
