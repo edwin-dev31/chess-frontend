@@ -3,6 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { Mail, Lock } from 'lucide-react';
 import useAuth from '@/lib/hooks/auth/useAuth';
+import { Button } from '../ui/button';
+import { FcGoogle } from "react-icons/fc";
+import { javaOauth } from '@/lib/constants/axios';
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -87,6 +90,25 @@ const Login: React.FC = () => {
                         {loading ? 'Logging in...' : 'Login'}
                     </motion.button>
                 </form>
+
+                <div className="relative">
+                    <div className="absolute inset-0 flex items-center">
+                    <span className="w-full border-t border-blue-100" />
+                    </div>
+                    <div className="relative flex justify-center text-sm uppercase">
+                    <span className="bg-white px-4 text-blue-400 dark:bg-[#191919]">or</span>
+                    </div>
+                </div>
+                <Button
+                    variant="outline"
+                    className="w-full h-10 rounded-xl flex items-center justify-center space-x-2 "
+                    onClick={() =>
+                        (window.location.href = `${javaOauth}/google`)
+                    }
+                    >
+                    <FcGoogle className="w-4 h-4" />
+                    <span className="text-blue-900 dark:text-[#38b6ff]">Login with Google</span>
+                </Button>
 
                 {/* Footer */}
                 <p className="mt-6 text-center text-sm text-slate-400">

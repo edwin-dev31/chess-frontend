@@ -9,7 +9,7 @@ import Register from './components/auth/Register';
 import LandingPage from './components/auth/LandingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { OnlinePlayersProvider } from '@/components/chess/OnlinePlayersProvider';
-
+import OAuthSuccess from './components/auth/OAuthSuccess';
 const App: React.FC = () => {
     return (
         <Router>
@@ -32,6 +32,7 @@ const App: React.FC = () => {
                         <Route path="/" element={<LandingPage />} />
                         <Route path="/login" element={<Login />} />
                         <Route path="/register" element={<Register />} />
+                        <Route path="/oauth2-success" element={<OAuthSuccess />} />
                         <Route
                         path="/app/*"
                         element={

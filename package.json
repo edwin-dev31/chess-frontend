@@ -27,6 +27,8 @@
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-helmet": "^6.1.0",
+        "react-hot-toast": "^2.6.0",
+        "react-icons": "^5.5.0",
         "react-router-dom": "^7.9.1",
         "stompjs": "^2.3.3",
         "tailwind-merge": "^1.14.0",
