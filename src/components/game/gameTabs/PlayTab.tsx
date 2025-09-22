@@ -53,7 +53,7 @@ const PlayTab: React.FC<PlayTabProps> = ({ handleNotImplemented }) => {
                 className="w-full bg-blue-600 hover:bg-blue-700"
                 onClick={() => startGame()}
             >
-                
+                Start game
             </Button>
            
 

@@ -12,9 +12,9 @@ export const subscribeToInitialColor = (
 
     const unsubscribe = socketHelper.subscribe(INITIAL_COLOR_TOPIC, (message) => {
         try {
-            const parsedBody = JSON.parse(message.body);
-            const color: Color = parsedBody.color || parsedBody;
-
+            alert("hola")
+            const color: Color = JSON.parse(message.body);
+            alert(color)
             if (color === Color.WHITE || color === Color.BLACK) {
                 callback(color);
                // unsubscribe();

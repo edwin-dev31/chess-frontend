@@ -11,7 +11,7 @@ export default function LandingPage() {
       <aside className="w-64 bg-slate-900/30 backdrop-blur-md flex flex-col p-4 justify-between border-r border-slate-700">
         <div>
           <div className="flex items-center gap-2 mb-8">
-            <img src="/logo.png" alt="Logo" className="w-8 h-8" />
+            <img src="/icon.png" alt="Logo" className="w-8 h-8" />
             <span className="font-bold text-xl">Chess</span>
           </div>
           <nav className="flex flex-col gap-4">

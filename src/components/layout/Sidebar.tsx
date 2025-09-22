@@ -8,11 +8,13 @@ import {
     History,
     Settings,
     Trophy,
-    Target,
+    LogOut
 } from 'lucide-react';
 import { Button } from '../ui/button';
-import { cn } from '../../lib/utils';
+import { cn } from '@/lib/utils';
 import { ActiveView } from '../chess/ChessApp';
+import useAuth from '@/lib/hooks/auth/useAuth';
+import { useNavigate } from 'react-router-dom';
 
 interface SidebarProps {
     isOpen: boolean;
@@ -39,6 +41,13 @@ const Sidebar: React.FC<SidebarProps> = ({
         { id: 'history', label: 'Historial', icon: History },
         { id: 'settings', label: 'Configuración', icon: Settings },
     ];
+    const { logout } = useAuth();
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/');
+    };
 
     return (
         <motion.aside
@@ -109,26 +118,22 @@ const Sidebar: React.FC<SidebarProps> = ({
                 </div>
             </nav>
 
-            {isOpen && (
-                <motion.div
-                    className="p-4 border-t border-slate-700"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
+            <div className="p-4 border-t border-slate-600">
+                <Button
+                    key="logout"
+                    className={cn(
+                        'w-full justify-start text-white',
+                        'bg-red-600 hover:bg-red-800 rounded-md',
+                        !isOpen && 'justify-center px-2'
+                    )}
+                    onClick={handleLogout}
                 >
-                    <div className="bg-gradient-to-r from-green-500 to-blue-600 rounded-lg p-3 text-white">
-                        <div className="flex items-center space-x-2 mb-2">
-                            <Target className="h-4 w-4" />
-                            <span className="font-medium">Objetivo Diario</span>
-                        </div>
-                        <div className="text-sm opacity-90">
-                            <p>3/5 partidas completadas</p>
-                            <div className="w-full bg-white/20 rounded-full h-2 mt-1">
-                                <div className="bg-white rounded-full h-2 w-3/5"></div>
-                            </div>
-                        </div>
-                    </div>
-                </motion.div>
-            )}
+                    <LogOut className="h-4 w-4" />
+                    {isOpen && (
+                        <span className="ml-2">Logout</span>
+                    )}
+                </Button>
+            </div>
         </motion.aside>
     );
 };

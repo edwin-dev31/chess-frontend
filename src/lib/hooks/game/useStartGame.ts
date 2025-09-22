@@ -28,7 +28,6 @@ export const useStartGame = () => {
                 method: 'POST',
                 token: token,
             });
-          
 
             toast({
                 title: '✅ Game Started',
