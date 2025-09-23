@@ -8,7 +8,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import LandingPage from './components/auth/LandingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
-import { OnlinePlayersProvider } from '@/components/chess/OnlinePlayersProvider';
+import { PlayerStatusProvider } from '@/lib/contexts/PlayerStatusContext';
 import OAuthSuccess from './components/auth/OAuthSuccess';
 const App: React.FC = () => {
     return (
@@ -28,34 +28,33 @@ const App: React.FC = () => {
                     transition={{ duration: 0.8 }}
                     className="relative"
                 >
-                    <Routes>
-                        <Route path="/" element={<LandingPage />} />
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                        <Route path="/oauth2-success" element={<OAuthSuccess />} />
-                        <Route
-                        path="/app/*"
-                        element={
-                            <OnlinePlayersProvider>
-                            <ProtectedRoute>
-                                <ChessApp />
-                            </ProtectedRoute>
-                            </OnlinePlayersProvider>
-                        }
-                        />
+                    <PlayerStatusProvider>
+                        <Routes>
+                            <Route path="/" element={<LandingPage />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                            <Route path="/oauth2-success" element={<OAuthSuccess />} />
+                            <Route
+                            path="/app/*"
+                            element={
+                                <ProtectedRoute>
+                                    <ChessApp />
+                                </ProtectedRoute>
+                            }
+                            />
 
-                        <Route
-                        path="/game/:code"
-                        element={
-                            <OnlinePlayersProvider>
-                            <ProtectedRoute>
-                                <ChessApp />
-                            </ProtectedRoute>
-                            </OnlinePlayersProvider>
-                        }
-                        />
+                            <Route
+                            path="/game/:code"
+                            element={
+                                <ProtectedRoute>
+                                    <ChessApp />
+                                </ProtectedRoute>
+                            }
+                            />
 
-                    </Routes>
+                        </Routes>
+                    </PlayerStatusProvider>
+
                 </motion.div>
                 <Toaster />
             </div>

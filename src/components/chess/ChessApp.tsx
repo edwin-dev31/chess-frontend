@@ -9,6 +9,7 @@ import GameHistory from '@/components/game/GameHistory';
 import Settings from '@/components/settings/Settings';
 import { useNavigate } from 'react-router-dom';
 import { useInitialColorSubscription } from '@/lib/hooks/socket/useGameStartSocket';
+import { usePlayerStatus } from '@/lib/contexts/PlayerStatusContext';
 export type ActiveView = 'game' | 'profile' | 'history' | 'settings';
 
 
@@ -17,6 +18,11 @@ const ChessApp = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
     const { code } = useParams<{ code: string }>();
     useInitialColorSubscription();
+    const { setOnline } = usePlayerStatus(); 
+
+    useEffect(() => {
+        setOnline(); 
+    }, [setOnline]);
 
     const renderContent = () => {
         switch (activeView) {

@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Button } from '../ui/button';
 import { Circle, Sword } from 'lucide-react';
-import { useOnlinePlayers } from '@/components/chess/OnlinePlayersProvider';
+import { usePlayerStatus } from '@/lib/contexts/PlayerStatusContext';
 import { useInvitePlayer } from '@/lib/hooks/invitation/useInvitation';
 import { useToast } from '../ui/use-toast';
 
 export const OnlinePlayersDropdown: React.FC = () => {
-  const onlinePlayers = useOnlinePlayers();
+  const { onlinePlayers } = usePlayerStatus();
   const { invitePlayer, loading } = useInvitePlayer();
   const { toast } = useToast();
   const [invitingPlayerId, setInvitingPlayerId] = useState<number | null>(null);
