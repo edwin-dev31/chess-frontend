@@ -1,63 +1,33 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { InvitationDto } from '@/lib/types/InvitationDto';
-import { socketHelper } from '@/lib/helpers/socketHelper';
-import { subscribeToNotifications } from '@/lib/hooks/socket/notifications';
+import { usePlayerStatus } from '@/lib/contexts/PlayerStatusContext';
 
 export const useNotificationsSocket = () => {
+    const { lastInvitation } = usePlayerStatus();
     const [pendingInvitations, setPendingInvitations] = useState<InvitationDto[]>([]);
-    const [navigationTarget, setNavigationTarget] = useState<string | null>(null);
-    const unsubscribeRef = useRef<(() => void) | null>(null);
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (navigationTarget) {
-            navigate(navigationTarget);
-        }
-    }, [navigationTarget, navigate]);
-
-    useEffect(() => {
-        const handleNewInvitation = (invitation: InvitationDto) => {
-            
+        if (lastInvitation) {
             setPendingInvitations(prev => {
-                const filtered = prev.filter(i => i.code !== invitation.code);
-
-                if (invitation.status === 'PENDING') {
-                    return [invitation, ...filtered];
+                const filtered = prev.filter(i => i.code !== lastInvitation.code);
+                if (lastInvitation.status === 'PENDING') {
+                    return [lastInvitation, ...filtered];
                 }
-
                 return filtered;
             });
 
-            if (invitation.status === 'ACCEPTED') {
-                localStorage.setItem('currentGameId', invitation.code);
-                setNavigationTarget(`/game/${invitation.code}`);
-            }
-        };
-
-        const checkConnection = () => {
-            if (socketHelper.isConnected()) {
-                if (!unsubscribeRef.current) {
-                    unsubscribeRef.current = subscribeToNotifications(handleNewInvitation);
+            if (lastInvitation.status === 'ACCEPTED') {
+                if (lastInvitation.code) {
+                    localStorage.setItem('currentGameId', lastInvitation.code);
+                    navigate(`/game/${lastInvitation.code}`);
+                } else {
+                    console.warn('useNotificationsSocket: Received ACCEPTED invitation with null code. Cannot navigate.', lastInvitation);
                 }
-            } else {
-                socketHelper.connect();
             }
-        };
-
-        checkConnection();
-
-        const connectionCheckInterval = setInterval(checkConnection, 2000);
-
-        return () => {
-            clearInterval(connectionCheckInterval);
-            if (unsubscribeRef.current) {
-                unsubscribeRef.current();
-                unsubscribeRef.current = null;
-            }
-            // socketHelper.disconnect();
-        };
-    }, []);
+        }
+    }, [lastInvitation, navigate]);
 
     const removeInvitation = (code: string) => {
         setPendingInvitations(prev => prev.filter(i => i.code !== code));

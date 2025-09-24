@@ -70,13 +70,13 @@ export const socketHelper = {
                 if (onConnected) onConnected();
                 onConnectCallbacks.forEach(cb => cb());
                 resetReconnectInterval();
-                if (reconnectTimeout) clearTimeout(reconnectTimeout); // Clear any pending reconnect
+                if (reconnectTimeout) clearTimeout(reconnectTimeout); 
             },
             (error: any) => {
                 console.error('❌ WebSocket connection error:', error);
                 stompClient = null;
                 onDisconnectCallbacks.forEach(cb => cb());
-                scheduleReconnect(); // Schedule reconnect on error
+                scheduleReconnect();
             }
         );
     },

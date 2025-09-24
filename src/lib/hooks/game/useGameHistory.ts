@@ -84,11 +84,9 @@ export const useGameHistory = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        // Simular carga de datos de la API
         const fetchGameHistory = async () => {
             setLoading(true);
 
-            // Simular delay de red
             await new Promise((resolve) => setTimeout(resolve, 1000));
 
             setGames(mockGameHistory);

@@ -18,6 +18,7 @@ interface ChessBoardProps {
     onSquareClick: (row: number, col: number) => void;
     selectedSquare: SelectedSquare | null;
     lastMove: LastMove | null;
+    playerColor: Color | null;
 }
 
 const ChessBoard: React.FC<ChessBoardProps> = ({
@@ -25,8 +26,8 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     onSquareClick,
     selectedSquare,
     lastMove,
+    playerColor, 
 }) => {
-    const playerColor = localStorage.getItem('color') || Color.WHITE;
     const isBlack = playerColor === Color.BLACK;
 
     const orientedBoard = isBlack
@@ -109,6 +110,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
                     >
                         {piece && (
                             <motion.span
+                                key={`${rowIndex}-${colIndex}-${piece.type}-${piece.color}`}
                                 className="chess-piece select-none"
                                 layout
                                 initial={{ scale: 0 }}

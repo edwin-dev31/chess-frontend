@@ -5,9 +5,9 @@ import { TrendingUp, TrendingDown } from 'lucide-react';
 interface StatsCardProps {
     title: string;
     value: string | number;
-    icon: React.ElementType; // For LucideIcon components
+    icon: React.ElementType; 
     color: 'blue' | 'green' | 'purple' | 'yellow';
-    trend?: number; // Optional
+    trend?: number;
 }
 
 const StatsCard: React.FC<StatsCardProps> = ({

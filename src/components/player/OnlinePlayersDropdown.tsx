@@ -21,8 +21,7 @@ export const OnlinePlayersDropdown: React.FC = () => {
         description: `Your challenge has been sent to ${playerName}.`,
       });
     } catch (error) {
-      // The useInvitePlayer hook should ideally handle and log the error
-      // but we can also show a toast here if needed.
+
     }
     setInvitingPlayerId(null);
   };

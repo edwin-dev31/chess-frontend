@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-
 import { useChessSocket } from '@/lib/hooks/socket/useChessSocket';
 import { CreateMoveDTO } from '@/lib/types/CreateMoveDTO';
 import { Board, Color, GameState, Piece } from '@/lib/types/Definitions';
@@ -57,25 +56,27 @@ const initialGameState: GameState = {
 };
 
 export const useChessGame = (gameCode?: string) => {
-    const [color, setColor] = useState<string | null>(null);
+    const { fen, moves, color, sendMove, setInGame } = useChessSocket();
     const [gameState, setGameState] = useState<GameState>(
         JSON.parse(JSON.stringify(initialGameState))
     );
 
-    const { sendMove, requestColor } = useChessSocket({
-        gameId: gameCode,
-        onFenUpdate: (fen) => {
-            console.log('FEN recibido vía socket:', fen); 
+    console.log('useChessGame: fen from useChessSocket:', fen);
+
+    useEffect(() => {
+        if (gameCode) {
+            console.log('useChessGame: Calling setInGame with gameCode:', gameCode);
+            setInGame(gameCode);
+        }
+    }, [gameCode, setInGame]);
+
+    useEffect(() => {
+        if (fen) {
+            console.log('useChessGame: useEffect triggered by fen change. Calling loadFen with fen:', fen);
             loadFen(fen);
-        },
-        onMove: (move) => {
-            console.log('♟️ Movimiento recibido vía socket:', move);
-           
-        },
-        onColor: (c) => {
-            setColor(c);
-        },
-    });
+        }
+    }, [fen]);
+
     const makeMove = (
         fromRow: number,
         fromCol: number,
@@ -83,7 +84,7 @@ export const useChessGame = (gameCode?: string) => {
         toCol: number
     ) => {
         const piece = gameState.board[fromRow][fromCol];
-        if (!piece || piece.color !== gameState.currentPlayer) {
+        if (!piece || piece.color !== color) {
             console.warn('Movimiento inválido: no hay pieza o no es tu turno');
             return;
         }
@@ -137,20 +138,19 @@ export const useChessGame = (gameCode?: string) => {
     };
 
     const loadFen = (fen: string) => {
+        console.log('useChessGame: loadFen called with fen:', fen);
         const newBoard = parseFenToBoard(fen);
         const currentPlayer: Color =
             fen.split(' ')[1] === 'w' ? Color.WHITE : Color.BLACK;
-        setGameState((prev) => ({
-            ...prev,
-            board: newBoard,
-            currentPlayer,
-        }));
+        setGameState((prev) => {
+            console.log('useChessGame: setGameState called. New board:', newBoard, 'Current player:', currentPlayer);
+            return {
+                ...prev,
+                board: newBoard,
+                currentPlayer,
+            };
+        });
     };
 
-    useEffect(() => {
-        requestColor();
-    }, []);
-
-    const getColor = () => color;
-    return { gameState, makeMove, loadFen, getColor };
+    return { gameState, makeMove, loadFen, color };
 };

@@ -22,8 +22,8 @@ export interface PlayerInfo {
 export interface GameState {
     board: Board;
     currentPlayer: Color;
-    moveHistory: any[]; // TODO: Define a proper type for move history
-    lastMove: any; // TODO: Define a proper type for last move
+    moveHistory: any[]; 
+    lastMove: any;
     players: {
         white: PlayerInfo;
         black: PlayerInfo;

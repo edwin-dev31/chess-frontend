@@ -101,11 +101,9 @@ export const usePlayerProfile = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        // Simular carga de datos de la API
         const fetchPlayerData = async () => {
             setLoading(true);
 
-            // Simular delay de red
             await new Promise((resolve) => setTimeout(resolve, 800));
 
             setProfile(mockPlayerProfile);

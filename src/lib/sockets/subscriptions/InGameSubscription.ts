@@ -1,12 +1,13 @@
 import { socketHelper } from '../../helpers/socketHelper';
 import { Subscription } from './Subscription';
+import { Color } from '@/lib/types/Definitions'; // Import Color
 
 export class InGameSubscription implements Subscription {
     constructor(
         private gameId: string,
         private onFenUpdate: (fen: string) => void,
         private onMove: (move: any) => void,
-        private onColor: (color: any) => void
+        private onCurrentTurnColor: (color: Color) => void 
     ) {}
 
     subscribe(): () => void {
@@ -24,7 +25,7 @@ export class InGameSubscription implements Subscription {
 
         const colorUnsubscribe = socketHelper.subscribe(`/topic/games/${this.gameId}/color`, (msg) => {
             const body = JSON.parse(msg.body);
-            this.onColor(body.color);
+            this.onCurrentTurnColor(body.color);
         });
 
         socketHelper.send(`/app/games/${this.gameId}/fen`, {});

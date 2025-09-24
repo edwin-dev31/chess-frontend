@@ -8,8 +8,10 @@ import PlayerProfile from '@/components/player/PlayerProfile';
 import GameHistory from '@/components/game/GameHistory';
 import Settings from '@/components/settings/Settings';
 import { useNavigate } from 'react-router-dom';
-import { useInitialColorSubscription } from '@/lib/hooks/socket/useGameStartSocket';
+
 import { usePlayerStatus } from '@/lib/contexts/PlayerStatusContext';
+import { PlayerStatus } from '@/lib/types/PlayerStatus'; // Import PlayerStatus enum
+
 export type ActiveView = 'game' | 'profile' | 'history' | 'settings';
 
 
@@ -17,12 +19,14 @@ const ChessApp = () => {
     const [activeView, setActiveView] = useState<ActiveView>('game');
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
     const { code } = useParams<{ code: string }>();
-    useInitialColorSubscription();
-    const { setOnline } = usePlayerStatus(); 
+
+    const { setOnline, status } = usePlayerStatus();
 
     useEffect(() => {
-        setOnline(); 
-    }, [setOnline]);
+        if (status !== PlayerStatus.IN_GAME) {
+            setOnline();
+        }
+    }, [setOnline, status]);
 
     const renderContent = () => {
         switch (activeView) {

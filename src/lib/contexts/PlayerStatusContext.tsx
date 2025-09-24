@@ -6,6 +6,9 @@ import { useProfile } from '../hooks/player/useProfile';
 import { socketHelper } from '../helpers/socketHelper';
 import { CreateMoveDTO } from '../types/CreateMoveDTO';
 import { InvitationDto } from '../types/InvitationDto';
+import { useRef } from 'react';
+import { useColorStorage } from '../hooks/common/useColorStorage';
+import { Color } from '../types/Definitions';
 
 interface PlayerStatusContextType {
     status: PlayerStatus;
@@ -13,7 +16,8 @@ interface PlayerStatusContextType {
     onlinePlayers: PlayerOnlineDTO[];
     fen: string | null;
     moves: any[];
-    color: string | null;
+    color: string | null; 
+    currentTurnColor: Color | null;
     lastInvitation: InvitationDto | null;
     setOnline: () => void;
     setInGame: (gameId: string) => void;
@@ -24,15 +28,25 @@ interface PlayerStatusContextType {
 const PlayerStatusContext = createContext<PlayerStatusContextType | undefined>(undefined);
 
 export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-    const [status, setStatus] = useState<PlayerStatus>(PlayerStatus.OFFLINE);
-    const [gameId, setGameId] = useState<string | null>(null);
+    const getInitialGameId = () => localStorage.getItem('currentGameId');
+    const getInitialStatus = () => (getInitialGameId() ? PlayerStatus.IN_GAME : PlayerStatus.OFFLINE);
+
+    const [status, setStatus] = useState<PlayerStatus>(getInitialStatus);
+    const [gameId, setGameId] = useState<string | null>(getInitialGameId);
     const [onlinePlayers, setOnlinePlayers] = useState<PlayerOnlineDTO[]>([]);
     const [fen, setFen] = useState<string | null>(null);
     const [moves, setMoves] = useState<any[]>([]);
-    const [color, setColor] = useState<string | null>(null);
+    const { color, saveColor } = useColorStorage(); 
+    const [currentTurnColor, setCurrentTurnColor] = useState<Color | null>(null);
     const [lastInvitation, setLastInvitation] = useState<InvitationDto | null>(null);
 
     const { profile } = useProfile();
+
+    const gameIdRef = useRef<string | null>(null);
+
+    useEffect(() => {
+        gameIdRef.current = gameId;
+    }, [gameId]);
 
     const filteredOnlinePlayers = useMemo(() => {
         if (!profile) {
@@ -41,37 +55,57 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
         return onlinePlayers.filter(player => player.id !== profile.id);
     }, [onlinePlayers, profile]);
 
+    const setInGame = (newGameId: string) => {
+        console.log('PlayerStatusContext: setInGame called with gameId:', newGameId);
+        gameIdRef.current = newGameId;
+        setGameId(newGameId);
+        setStatus(PlayerStatus.IN_GAME);
+        localStorage.setItem('currentGameId', newGameId);
+        console.log('PlayerStatusContext: Status set to IN_GAME for gameId:', newGameId);
+    };
+
     useEffect(() => {
-        const handleConnect = () => {
+        console.log('PlayerStatusContext: Main useEffect re-running. Status:', status, 'GameId:', gameId);
+        let unsubscribeFromSocket: (() => void) | undefined;
+
+        const createAndSubscribe = () => {
+            if (status === PlayerStatus.OFFLINE) {
+                console.log('PlayerStatusContext: Not creating subscriptions for OFFLINE status.');
+                return;
+            }
+
             const factoryParams: FactoryParams = {
                 onOnlinePlayers: setOnlinePlayers,
-                onFenUpdate: setFen,
+                onFenUpdate: (fen) => {
+                    console.log('PlayerStatusContext: onFenUpdate received fen:', fen);
+                    setFen(fen);
+                },
                 onMove: (move: any) => setMoves(prev => [...prev, move]),
-                onColor: setColor,
+                onCurrentTurnColor: setCurrentTurnColor, 
+                onPlayerColor: saveColor,
                 onNotification: setLastInvitation,
-                gameId: gameId || undefined,
+                onGameStart: setInGame,
+                gameId: gameIdRef.current || undefined,
             };
 
+            console.log('PlayerStatusContext: Calling SubscriptionFactory.create with status:', status, 'and gameId:', gameIdRef.current, 'Current fen state:', fen);
             const subscription = SubscriptionFactory.create(status, factoryParams);
-            const unsubscribe = subscription?.subscribe();
-
-            return () => {
-                unsubscribe?.();
-            };
+            return subscription?.subscribe();
         };
 
-        socketHelper.onConnect(handleConnect);
-
-        if (!socketHelper.isConnected()) {
-            socketHelper.connect();
+        if (socketHelper.isConnected()) {
+            unsubscribeFromSocket = createAndSubscribe();
         } else {
-            handleConnect();
+            socketHelper.connect(() => {
+                unsubscribeFromSocket = createAndSubscribe();
+            });
         }
 
         return () => {
-            socketHelper.offConnect(handleConnect);
-        }
-    }, [status, gameId]);
+            console.log('PlayerStatusContext: Cleaning up subscriptions.');
+            unsubscribeFromSocket?.();
+        };
+    }, [status, gameId, saveColor, fen]);
 
     const sendMove = (moveDto: CreateMoveDTO) => {
         if (gameId) {
@@ -88,12 +122,10 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
         fen,
         moves,
         color,
+        currentTurnColor,
         lastInvitation,
         setOnline: () => setStatus(PlayerStatus.ONLINE),
-        setInGame: (newGameId: string) => {
-            setGameId(newGameId);
-            setStatus(PlayerStatus.IN_GAME);
-        },
+        setInGame,
         setOffline: () => setStatus(PlayerStatus.OFFLINE),
         sendMove,
     };

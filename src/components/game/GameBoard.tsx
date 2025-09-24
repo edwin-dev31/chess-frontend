@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Clock, RefreshCw } from 'lucide-react';
 import ChessBoard from '@/components/game/ChessBoard';
 import PlayerInfo from '@/components/game/PlayerInfo';
 import GameTabs from '@/components/game/GameTabs';
-import { GameState, Piece, Color } from '@/lib/types/Definitions';
+import {  Color } from '@/lib/types/Definitions';
 import { useChessGame } from '@/lib/hooks/game/useChessGame';
 
 import { Button } from '@/components/ui/button';
@@ -21,7 +21,15 @@ interface GameBoardProps {
 }
 
 const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
-    const { gameState, makeMove, getColor, loadFen } = useChessGame(gameCode);
+    useEffect(() => {
+        console.log('GameBoard: Mounted with gameCode:', gameCode);
+        return () => {
+            console.log('GameBoard: Unmounted.');
+        };
+    }, [gameCode]);
+
+    const { gameState, makeMove, color } = useChessGame(gameCode);
+    console.log('GameBoard: gameState.board received:', gameState.board);
     const [selectedSquare, setSelectedSquare] = useState<SelectedSquare | null>(
         null
     );
@@ -33,7 +41,6 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
             const fromRow = selectedSquare.row;
             const fromCol = selectedSquare.col;
             makeMove(fromRow, fromCol, row, col);
-            getColor();
             setSelectedSquare(null);
         } else if (gameState.board[row][col]) {
             setSelectedSquare({ row, col });
@@ -46,7 +53,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
                 <div className="xl:col-span-2 flex flex-col justify-between items-center xl:items-start p-4 bg-slate-800 rounded-lg">
                     <PlayerInfo
                         player={gameState.players.black}
-                        isCurrentTurn={gameState.currentPlayer ===  Color.BLACK}
+                        isCurrentTurn={gameState.currentPlayer === Color.BLACK}
                         capturedPieces={gameState.captured.white}
                     />
 
@@ -56,7 +63,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
                         capturedPieces={gameState.captured.black}
                     />
                     <span className="px-3 py-1 rounded-full text-white font-bold">
-                        {getColor()?.toUpperCase()}
+                        {color?.toUpperCase()}
                     </span>
                 </div>
 
@@ -72,6 +79,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
                             onSquareClick={handleSquareClick}
                             selectedSquare={selectedSquare}
                             lastMove={gameState.lastMove}
+                            playerColor={color}
                         />
                     </motion.div>
                     <div className="flex items-center justify-between w-full max-w-[70vh] mt-2">

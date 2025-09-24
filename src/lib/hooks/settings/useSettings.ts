@@ -69,11 +69,9 @@ export const useSettings = () => {
     const [loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
-        // Simular carga de configuración desde localStorage o API
         const loadSettings = async () => {
             setLoading(true);
 
-            // Intentar cargar desde localStorage
             const savedSettings = localStorage.getItem('chessSettings');
             if (savedSettings) {
                 try {
@@ -96,8 +94,6 @@ export const useSettings = () => {
 
     const updateSettings = (newSettings: AppSettings) => {
         setSettings(newSettings);
-
-        // Guardar en localStorage
         try {
             localStorage.setItem('chessSettings', JSON.stringify(newSettings));
         } catch (error) {
