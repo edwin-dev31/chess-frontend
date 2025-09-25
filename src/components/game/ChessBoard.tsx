@@ -28,6 +28,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     lastMove,
     playerColor, 
 }) => {
+    //alert("hola"+ playerColor)
     const isBlack = playerColor === Color.BLACK;
 
     const orientedBoard = isBlack

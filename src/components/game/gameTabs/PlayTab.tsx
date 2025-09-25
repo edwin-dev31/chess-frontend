@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Clock, Play, Puzzle, Bot } from 'lucide-react';
+import { Clock, Puzzle, Bot } from 'lucide-react';
 import { useStartGame } from '@/lib/hooks/game/useStartGame';
 
 interface PlayTabProps {

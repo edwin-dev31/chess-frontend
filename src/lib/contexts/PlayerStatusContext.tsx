@@ -20,7 +20,7 @@ interface PlayerStatusContextType {
     currentTurnColor: Color | null;
     lastInvitation: InvitationDto | null;
     setOnline: () => void;
-    setInGame: (gameId: string) => void;
+    setInGame: (gameId: string, color?: Color) => void;
     setOffline: () => void;
     sendMove: (moveDto: CreateMoveDTO) => void;
 }
@@ -36,7 +36,7 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const [onlinePlayers, setOnlinePlayers] = useState<PlayerOnlineDTO[]>([]);
     const [fen, setFen] = useState<string | null>(null);
     const [moves, setMoves] = useState<any[]>([]);
-    const { color, saveColor } = useColorStorage(); 
+    const {color, saveColor } = useColorStorage(); 
     const [currentTurnColor, setCurrentTurnColor] = useState<Color | null>(null);
     const [lastInvitation, setLastInvitation] = useState<InvitationDto | null>(null);
 
@@ -55,12 +55,15 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
         return onlinePlayers.filter(player => player.id !== profile.id);
     }, [onlinePlayers, profile]);
 
-    const setInGame = (newGameId: string) => {
-        console.log('PlayerStatusContext: setInGame called with gameId:', newGameId);
+    const setInGame = (newGameId: string, newColor?: Color) => {
+        console.log('PlayerStatusContext: setInGame called with gameId:', newGameId, 'and color:', newColor);
         gameIdRef.current = newGameId;
         setGameId(newGameId);
         setStatus(PlayerStatus.IN_GAME);
         localStorage.setItem('currentGameId', newGameId);
+        if (newColor) {
+            saveColor(newColor);
+        }
         console.log('PlayerStatusContext: Status set to IN_GAME for gameId:', newGameId);
     };
 
@@ -82,9 +85,8 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 },
                 onMove: (move: any) => setMoves(prev => [...prev, move]),
                 onCurrentTurnColor: setCurrentTurnColor, 
-                onPlayerColor: saveColor,
                 onNotification: setLastInvitation,
-                onGameStart: setInGame,
+                onGameStart: (gameId, color) => setInGame(gameId, color),
                 gameId: gameIdRef.current || undefined,
             };
 

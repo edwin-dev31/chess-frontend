@@ -16,26 +16,17 @@ interface SelectedSquare {
     col: number;
 }
 
-interface GameBoardProps {
-    gameCode?: string;
-}
+interface GameBoardProps {}
 
-const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
-    useEffect(() => {
-        console.log('GameBoard: Mounted with gameCode:', gameCode);
-        return () => {
-            console.log('GameBoard: Unmounted.');
-        };
-    }, [gameCode]);
+const GameBoard: React.FC<GameBoardProps> = () => {
 
-    const { gameState, makeMove, color } = useChessGame(gameCode);
+    const { gameState, makeMove, color, currentTurnColor } = useChessGame();
     console.log('GameBoard: gameState.board received:', gameState.board);
     const [selectedSquare, setSelectedSquare] = useState<SelectedSquare | null>(
         null
     );
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-    const { toast } = useToast();
-
+  
     const handleSquareClick = (row: number, col: number) => {
         if (selectedSquare) {
             const fromRow = selectedSquare.row;
@@ -63,7 +54,7 @@ const GameBoard: React.FC<GameBoardProps> = ({ gameCode }) => {
                         capturedPieces={gameState.captured.black}
                     />
                     <span className="px-3 py-1 rounded-full text-white font-bold">
-                        {color?.toUpperCase()}
+                        Current turn: {currentTurnColor?.toUpperCase()}
                     </span>
                 </div>
 

@@ -13,8 +13,7 @@ export class OnlineStatusSubscription implements Subscription {
     constructor(
         private onOnlinePlayers: (players: PlayerOnlineDTO[]) => void,
         private onNotification: (invitation: InvitationDto) => void,
-        private onGameStart: (gameId: string) => void,
-        private onPlayerColor: (color: Color) => void
+        private onGameStart: (gameId: string, color: Color) => void
     ) {}
 
     subscribe(): () => void {
@@ -39,9 +38,8 @@ export class OnlineStatusSubscription implements Subscription {
         const gameStartUnsubscribe = socketHelper.subscribe('/user/queue/start', (message) => {
             try {
                 const gameStartData: GameStartDTO = JSON.parse(message.body);
-                this.onPlayerColor(gameStartData.color); 
                 if (gameStartData.code) {
-                    this.onGameStart(gameStartData.code);
+                    this.onGameStart(gameStartData.code, gameStartData.color);
                 } else {
                     console.warn('OnlineStatusSubscription: Received game start data with undefined gameCode.', gameStartData);
                 }

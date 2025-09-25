@@ -12,9 +12,8 @@ export interface FactoryParams {
     onFenUpdate: (fen: string) => void;
     onMove: (move: any) => void;
     onCurrentTurnColor: (color: Color) => void;
-    onPlayerColor: (color: Color) => void; 
     onNotification: (invitation: InvitationDto) => void;
-    onGameStart: (gameId: string) => void;
+    onGameStart: (gameId: string, color: Color) => void;
     gameId?: string;
 }
 
@@ -30,19 +29,22 @@ export class SubscriptionFactory {
                 return new OnlineStatusSubscription(
                     params.onOnlinePlayers,
                     params.onNotification,
-                    params.onGameStart,
-                    params.onCurrentTurnColor
+                    params.onGameStart
                 );
             case PlayerStatus.IN_GAME:
                 if (params.gameId) {
                     console.log('SubscriptionFactory: Returning CompositeSubscription for IN_GAME' + params.gameId);
                     return new CompositeSubscription([
-                        new InGameSubscription(params.gameId, params.onFenUpdate, params.onMove, params.onCurrentTurnColor),
+                        new InGameSubscription(
+                            params.gameId, 
+                            params.onFenUpdate, 
+                            params.onMove, 
+                            params.onCurrentTurnColor
+                        ),
                         new OnlineStatusSubscription(
                             params.onOnlinePlayers,
                             params.onNotification,
-                            params.onGameStart,
-                            params.onCurrentTurnColor
+                            params.onGameStart
                         ),
                     ]);
                 }

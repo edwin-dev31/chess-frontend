@@ -55,8 +55,8 @@ const initialGameState: GameState = {
     },
 };
 
-export const useChessGame = (gameCode?: string) => {
-    const { fen, moves, color, sendMove, setInGame } = useChessSocket();
+export const useChessGame = () => {
+    const { fen, moves, color, currentTurnColor, sendMove, setInGame, gameId } = useChessSocket();
     const [gameState, setGameState] = useState<GameState>(
         JSON.parse(JSON.stringify(initialGameState))
     );
@@ -64,11 +64,11 @@ export const useChessGame = (gameCode?: string) => {
     console.log('useChessGame: fen from useChessSocket:', fen);
 
     useEffect(() => {
-        if (gameCode) {
-            console.log('useChessGame: Calling setInGame with gameCode:', gameCode);
-            setInGame(gameCode);
+        if (gameId) {
+            console.log('useChessGame: Calling setInGame with gameId:', gameId);
+            setInGame(gameId);
         }
-    }, [gameCode, setInGame]);
+    }, [gameId, setInGame]);
 
     useEffect(() => {
         if (fen) {
@@ -152,5 +152,5 @@ export const useChessGame = (gameCode?: string) => {
         });
     };
 
-    return { gameState, makeMove, loadFen, color };
+    return { gameState, makeMove, loadFen, color, currentTurnColor };
 };

@@ -20,18 +20,20 @@ const ChessApp = () => {
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false);
     const { code } = useParams<{ code: string }>();
 
-    const { setOnline, status } = usePlayerStatus();
+    const { setOnline, status: playerStatus, setInGame } = usePlayerStatus();
 
     useEffect(() => {
-        if (status !== PlayerStatus.IN_GAME) {
+        if (code) {
+            setInGame(code);
+        } else if (playerStatus !== PlayerStatus.IN_GAME) {
             setOnline();
         }
-    }, [setOnline, status]);
+    }, [code, setInGame, setOnline, playerStatus]);
 
     const renderContent = () => {
         switch (activeView) {
             case 'game':
-                return <GameBoard gameCode={code} />;
+                return <GameBoard />;
             case 'profile':
                 return <PlayerProfile />;
             case 'history':
@@ -39,7 +41,7 @@ const ChessApp = () => {
             case 'settings':
                 return <Settings />;
             default:
-                return <GameBoard gameCode={code} />;
+                return <GameBoard />;
         }
     };
 
