@@ -7,7 +7,7 @@ import PlayTab from './gameTabs/PlayTab';
 import MovesTab from './gameTabs/MovesTab';
 import GameInfoTab from './gameTabs/GameInfoTab';
 import DebugTab from './gameTabs/DebugTab';
-
+import ChatTab from './gameTabs/ChatTab';
 interface GameTabsProps {
     gameState: GameState;
     resetGame: () => void;
@@ -36,7 +36,7 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
                     <TabsTrigger value="game">
                         <Info className="w-4 h-4" />
                     </TabsTrigger>
-                    <TabsTrigger value="analysis" onClick={handleNotImplemented}>
+                    <TabsTrigger value="chat">
                         <Puzzle className="w-4 h-4" />
                     </TabsTrigger>
                     <TabsTrigger value="debug">
@@ -54,6 +54,10 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
 
                 <TabsContent value="game" className="flex-grow p-2">
                     <GameInfoTab gameState={gameState} />
+                </TabsContent>
+
+                <TabsContent value="chat" className="flex-grow p-2">
+                    <ChatTab gameState={gameState} />
                 </TabsContent>
 
                 <TabsContent value="debug" className="flex-grow p-2">

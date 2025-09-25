@@ -1,7 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
 import { PlayerStatus } from '../types/PlayerStatus';
 import { PlayerOnlineDTO } from '../types/PlayerOnlineDTO';
-import { SubscriptionFactory, FactoryParams } from '../sockets/SubscriptionFactory';
+import { SubscriptionFactory, FactoryParams } from '@/lib/hooks/sockets/SubscriptionFactory';
 import { useProfile } from '../hooks/player/useProfile';
 import { socketHelper } from '../helpers/socketHelper';
 import { CreateMoveDTO } from '../types/CreateMoveDTO';
@@ -67,48 +67,58 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
         console.log('PlayerStatusContext: Status set to IN_GAME for gameId:', newGameId);
     };
 
-    useEffect(() => {
-        console.log('PlayerStatusContext: Main useEffect re-running. Status:', status, 'GameId:', gameId);
-        let unsubscribeFromSocket: (() => void) | undefined;
-
-        const createAndSubscribe = () => {
-            if (status === PlayerStatus.OFFLINE) {
-                console.log('PlayerStatusContext: Not creating subscriptions for OFFLINE status.');
-                return;
-            }
-
-            const factoryParams: FactoryParams = {
-                onOnlinePlayers: setOnlinePlayers,
-                onFenUpdate: (fen) => {
-                    console.log('PlayerStatusContext: onFenUpdate received fen:', fen);
-                    setFen(fen);
-                },
-                onMove: (move: any) => setMoves(prev => [...prev, move]),
-                onCurrentTurnColor: setCurrentTurnColor, 
-                onNotification: setLastInvitation,
-                onGameStart: (gameId, color) => setInGame(gameId, color),
-                gameId: gameIdRef.current || undefined,
+        useEffect(() => {
+            console.log('PlayerStatusContext: Main useEffect re-running. Status:', status, 'GameId:', gameId);
+            let unsubscribeFromSocket: (() => void) | undefined;
+    
+            const createAndSubscribe = () => {
+                if (status === PlayerStatus.OFFLINE) {
+                    console.log('PlayerStatusContext: Not creating subscriptions for OFFLINE status.');
+                    return;
+                }
+    
+                const factoryParams: FactoryParams = {
+                    onOnlinePlayers: setOnlinePlayers,
+                    onFenUpdate: (fen) => {
+                        console.log('PlayerStatusContext: onFenUpdate received fen:', fen);
+                        setFen(fen);
+                    },
+                    onMove: (move: any) => setMoves(prev => [...prev, move]),
+                    onCurrentTurnColor: setCurrentTurnColor,
+                    onNotification: setLastInvitation,
+                    onGameStart: (gameId, color) => setInGame(gameId, color),
+                    gameId: gameIdRef.current || undefined,
+                };
+    
+                console.log('PlayerStatusContext: Calling SubscriptionFactory.create with status:', status, 'and gameId:', gameIdRef.current, 'Current fen state:', fen);
+                const subscription = SubscriptionFactory.create(status, factoryParams);
+                console.log('PlayerStatusContext: SubscriptionFactory.create returned:', subscription); // NEW LOG
+    
+                if (subscription) { // NEW CHECK
+                    console.log('PlayerStatusContext: Calling subscription.subscribe()'); // NEW LOG
+                    return subscription.subscribe();
+                } else {
+                    console.log('PlayerStatusContext: No subscription created, returning undefined.'); // NEW LOG
+                    return undefined;
+                }
             };
-
-            console.log('PlayerStatusContext: Calling SubscriptionFactory.create with status:', status, 'and gameId:', gameIdRef.current, 'Current fen state:', fen);
-            const subscription = SubscriptionFactory.create(status, factoryParams);
-            return subscription?.subscribe();
-        };
-
-        if (socketHelper.isConnected()) {
-            unsubscribeFromSocket = createAndSubscribe();
-        } else {
-            socketHelper.connect(() => {
+    
+            if (socketHelper.isConnected()) {
+                console.log('PlayerStatusContext: Socket is already connected, creating and subscribing.'); // NEW LOG
                 unsubscribeFromSocket = createAndSubscribe();
-            });
-        }
-
-        return () => {
-            console.log('PlayerStatusContext: Cleaning up subscriptions.');
-            unsubscribeFromSocket?.();
-        };
-    }, [status, gameId, saveColor, fen]);
-
+            } else {
+                console.log('PlayerStatusContext: Socket not connected, connecting now.'); // NEW LOG
+                socketHelper.connect(() => {
+                    console.log('PlayerStatusContext: Socket connected callback, creating and subscribing.'); // NEW LOG
+                    unsubscribeFromSocket = createAndSubscribe();
+                });
+            }
+    
+            return () => {
+                console.log('PlayerStatusContext: Cleaning up subscriptions.');
+                unsubscribeFromSocket?.();
+            };
+        }, [status, gameId, saveColor, fen]);
     const sendMove = (moveDto: CreateMoveDTO) => {
         if (gameId) {
             const token = localStorage.getItem('token');

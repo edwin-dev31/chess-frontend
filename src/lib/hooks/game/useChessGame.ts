@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useChessSocket } from '@/lib/hooks/socket/useChessSocket';
+import { useChessSocket } from '@/lib/hooks/sockets/useChessSocket';
 import { CreateMoveDTO } from '@/lib/types/CreateMoveDTO';
 import { Board, Color, GameState, Piece } from '@/lib/types/Definitions';
 

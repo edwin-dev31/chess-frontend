@@ -1,6 +1,6 @@
-import { socketHelper } from '../../helpers/socketHelper';
-import { PlayerOnlineDTO } from '../../types/PlayerOnlineDTO';
-import { InvitationDto } from '../../types/InvitationDto';
+import { socketHelper } from '@/lib/helpers/socketHelper';
+import { PlayerOnlineDTO } from '@/lib/types/PlayerOnlineDTO';
+import { InvitationDto } from '@/lib/types/InvitationDto';
 import { Subscription } from './Subscription';
 import { Color } from '@/lib/types/Definitions';
 
@@ -26,6 +26,15 @@ export class OnlineStatusSubscription implements Subscription {
             }
         });
 
+        const initialOnlinePlayersUnsubscribe = socketHelper.subscribe('/user/queue/online-players', (message) => {
+            try {
+                const players: PlayerOnlineDTO[] = JSON.parse(message.body);
+                this.onOnlinePlayers(players);
+            } catch (err) {
+                console.error('Error parsing initial online players message:', err);
+            }
+        });
+
         const notificationUnsubscribe = socketHelper.subscribe('/user/queue/invitations', (message) => {
             try {
                 const invitation: InvitationDto = JSON.parse(message.body);
@@ -47,9 +56,10 @@ export class OnlineStatusSubscription implements Subscription {
                 console.error('Error parsing game start message:', err);
             }
         });
-
+        
         return () => {
             onlinePlayersUnsubscribe();
+            initialOnlinePlayersUnsubscribe();
             notificationUnsubscribe();
             gameStartUnsubscribe();
         };

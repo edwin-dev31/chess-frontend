@@ -1,6 +1,6 @@
-import { socketHelper } from '../../helpers/socketHelper';
+import { socketHelper } from '@/lib/helpers/socketHelper';
 import { Subscription } from './Subscription';
-import { Color } from '@/lib/types/Definitions'; // Import Color
+import { Color } from '@/lib/types/Definitions';
 
 export class InGameSubscription implements Subscription {
     constructor(

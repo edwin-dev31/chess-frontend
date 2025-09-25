@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Clock, RefreshCw } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import ChessBoard from '@/components/game/ChessBoard';
 import PlayerInfo from '@/components/game/PlayerInfo';
 import GameTabs from '@/components/game/GameTabs';
@@ -8,7 +8,6 @@ import {  Color } from '@/lib/types/Definitions';
 import { useChessGame } from '@/lib/hooks/game/useChessGame';
 
 import { Button } from '@/components/ui/button';
-import { useToast } from '@/components/ui/use-toast';
 import ChangePieceModal from '@/components/game/ChangePieceModal';
 
 interface SelectedSquare {

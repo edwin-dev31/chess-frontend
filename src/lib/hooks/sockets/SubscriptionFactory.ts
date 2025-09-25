@@ -1,7 +1,7 @@
-import { Color } from '../types/Definitions';
-import { InvitationDto } from '../types/InvitationDto';
-import { PlayerStatus } from '../types/PlayerStatus';
-import { PlayerOnlineDTO } from '../types/PlayerOnlineDTO';
+import { Color } from '@/lib/types/Definitions';
+import { InvitationDto } from '@/lib/types/InvitationDto';
+import { PlayerStatus } from '@/lib/types/PlayerStatus';
+import { PlayerOnlineDTO } from '@/lib/types/PlayerOnlineDTO';
 import { CompositeSubscription } from './subscriptions/CompositeSubscription';
 import { InGameSubscription } from './subscriptions/InGameSubscription';
 import { OnlineStatusSubscription } from './subscriptions/OnlineStatusSubscription';
