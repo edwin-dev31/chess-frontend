@@ -1,13 +1,15 @@
 import { socketHelper } from '@/lib/helpers/socketHelper';
 import { Subscription } from './Subscription';
 import { Color } from '@/lib/types/Definitions';
+import { ChatMessage } from '@/lib/types/ChatMessageDTO';
 
 export class InGameSubscription implements Subscription {
     constructor(
         private gameId: string,
         private onFenUpdate: (fen: string) => void,
         private onMove: (move: any) => void,
-        private onCurrentTurnColor: (color: Color) => void 
+        private onCurrentTurnColor: (color: Color) => void,
+        private onChatMessage: (message: ChatMessage) => void
     ) {}
 
     subscribe(): () => void {
@@ -28,6 +30,11 @@ export class InGameSubscription implements Subscription {
             this.onCurrentTurnColor(body.color);
         });
 
+        const chatUnsubscribe = socketHelper.subscribe(`/user/queue/messages`, (msg) => {
+            const body = JSON.parse(msg.body);
+            this.onChatMessage(body);
+        });
+
         socketHelper.send(`/app/games/${this.gameId}/fen`, {});
         socketHelper.send(`/app/games/${this.gameId}/color`, {});
 
@@ -35,6 +42,7 @@ export class InGameSubscription implements Subscription {
             fenUnsubscribe();
             movesUnsubscribe();
             colorUnsubscribe();
+            chatUnsubscribe();
         };
     }
 }

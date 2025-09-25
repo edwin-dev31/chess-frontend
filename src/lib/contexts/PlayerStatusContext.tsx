@@ -9,6 +9,8 @@ import { InvitationDto } from '../types/InvitationDto';
 import { useRef } from 'react';
 import { useColorStorage } from '../hooks/common/useColorStorage';
 import { Color } from '../types/Definitions';
+import { ChatMessage } from '../types/ChatMessageDTO';
+import md5 from 'md5';
 
 interface PlayerStatusContextType {
     status: PlayerStatus;
@@ -19,10 +21,12 @@ interface PlayerStatusContextType {
     color: string | null; 
     currentTurnColor: Color | null;
     lastInvitation: InvitationDto | null;
+    chatMessages: ChatMessage[];
     setOnline: () => void;
     setInGame: (gameId: string, color?: Color) => void;
     setOffline: () => void;
     sendMove: (moveDto: CreateMoveDTO) => void;
+    sendChatMessage: (message: string) => void;
 }
 
 const PlayerStatusContext = createContext<PlayerStatusContextType | undefined>(undefined);
@@ -39,6 +43,7 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const {color, saveColor } = useColorStorage(); 
     const [currentTurnColor, setCurrentTurnColor] = useState<Color | null>(null);
     const [lastInvitation, setLastInvitation] = useState<InvitationDto | null>(null);
+    const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
 
     const { profile } = useProfile();
 
@@ -87,6 +92,7 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
                     onCurrentTurnColor: setCurrentTurnColor,
                     onNotification: setLastInvitation,
                     onGameStart: (gameId, color) => setInGame(gameId, color),
+                    onChatMessage: (message) => setChatMessages(prev => [...prev, message]),
                     gameId: gameIdRef.current || undefined,
                 };
     
@@ -119,11 +125,31 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 unsubscribeFromSocket?.();
             };
         }, [status, gameId, saveColor, fen]);
+
     const sendMove = (moveDto: CreateMoveDTO) => {
         if (gameId) {
             const token = localStorage.getItem('token');
             const headers = token ? { Authorization: `Bearer ${token}` } : {};
             socketHelper.send(`/app/moves/${gameId}`, moveDto, headers);
+        }
+    };
+
+    const sendChatMessage = (message: string) => {
+        if (gameId && profile) {
+            const opponent = onlinePlayers.find(p => p.id !== profile?.id);
+            const payload = {
+                content: message,
+                md5: md5(message),
+            };
+            socketHelper.send(`/app/${gameId}/chat`, payload);
+
+            const newMessage: ChatMessage = {
+                from: profile.id,
+                to: opponent?.id || 0,
+                content: message,
+            };
+
+            setChatMessages(prev => [...prev, newMessage]);
         }
     };
 
@@ -136,10 +162,12 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
         color,
         currentTurnColor,
         lastInvitation,
+        chatMessages,
         setOnline: () => setStatus(PlayerStatus.ONLINE),
         setInGame,
         setOffline: () => setStatus(PlayerStatus.OFFLINE),
         sendMove,
+        sendChatMessage,
     };
 
     return (

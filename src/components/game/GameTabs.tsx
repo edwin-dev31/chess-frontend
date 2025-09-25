@@ -57,7 +57,7 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
                 </TabsContent>
 
                 <TabsContent value="chat" className="flex-grow p-2">
-                    <ChatTab gameState={gameState} />
+                    <ChatTab />
                 </TabsContent>
 
                 <TabsContent value="debug" className="flex-grow p-2">

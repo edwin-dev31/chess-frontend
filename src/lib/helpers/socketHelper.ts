@@ -98,15 +98,15 @@ export const socketHelper = {
         };
     },
 
-    send: (destination: string, body: any, headers: Stomp.Headers = {}) => {
+    send: (destination: string, body: any, headers: { [key: string]: any } = {}) => {
         if (!stompClient || !stompClient.connected) {
             console.warn('⚠️ Not connected to WebSocket, cannot send message.');
             return;
         }
-        const token = localStorage.getItem('token');
+
         stompClient.send(
             destination,
-            { Authorization: `Bearer ${token}`, ...headers },
+            { ...headers },
             JSON.stringify(body)
         );
     },
