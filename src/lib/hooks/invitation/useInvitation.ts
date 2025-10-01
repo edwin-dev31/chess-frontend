@@ -41,8 +41,20 @@ const useInvitationAction = (action: InvitationAction) => {
                 token: token,
             });
 
-            // Optional: Add success toast here if needed
-            // toast({ title: '✅ Success', description: `Invitation ${action}ed successfully.` });
+            let successMessage = '';
+            switch (action) {
+                case 'invite':
+                    successMessage = 'Invitation sent successfully.';
+                    break;
+                case 'accept':
+                    successMessage = 'Invitation accepted successfully.';
+                    break;
+                case 'reject':
+                    successMessage = 'Invitation rejected successfully.';
+                    break;
+            }
+
+            toast({ title: '✅ Success', description: successMessage });
 
         } catch (err: any) {
             const errorMessage = err.message || `Failed to ${action} invitation.`;

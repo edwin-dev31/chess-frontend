@@ -1,7 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
 import { motion } from 'framer-motion';
-import { Toaster } from './components/ui/toaster';
+import { Toaster as SonnerToaster } from 'sonner';
+import { Toaster as ShadcnToaster } from './components/ui/toaster';
 import ChessApp from './components/chess/ChessApp';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/auth/Login';
@@ -10,6 +11,7 @@ import LandingPage from './components/auth/LandingPage';
 import ProtectedRoute from './components/auth/ProtectedRoute';
 import { PlayerStatusProvider } from '@/lib/contexts/PlayerStatusContext';
 import OAuthSuccess from './components/auth/OAuthSuccess';
+
 const App: React.FC = () => {
     return (
         <Router>
@@ -56,7 +58,8 @@ const App: React.FC = () => {
                     </PlayerStatusProvider>
 
                 </motion.div>
-                <Toaster />
+                <SonnerToaster theme="dark" />
+                <ShadcnToaster />
             </div>
         </Router>
     );

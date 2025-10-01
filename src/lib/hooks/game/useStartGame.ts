@@ -1,48 +1,43 @@
 import { useState } from 'react';
 import { apiRoutes } from '@/lib/constants/apiRoutes';
-import { useToast } from '@/components/ui/use-toast';
+import { toast } from 'sonner';
 import { apiHelper } from '@/lib/helpers/apiHelper';
 import { useAuthStorage } from '@/lib/hooks/auth/useAuthStorage';
 
 export const useStartGame = () => {
     const [loading, setLoading] = useState(false);
-    const { toast } = useToast();
     const { token } = useAuthStorage();
 
     const startGame = async () => {
-        const gameId = localStorage.getItem("currentGameId")
-
-        setLoading(true);
-
-        if (!token) {
-            const msg = 'Authentication token not found.';
-            toast({ title: '❌ Error', description: msg });
-            setLoading(false);
-            return;
-        }
-
-        try {
-            const url = apiRoutes.game.start(gameId);
-            alert(url)
-            await apiHelper(url, {
-                method: 'POST',
-                token: token,
-            });
-
-            toast({
-                title: '✅ Game Started',
-                description: 'The game has started!',
-            });
-
-        } catch (err: any) {
-            const errorMessage = err.message || 'Error starting the game';
-            toast({
-                title: '❌ Error',
-                description: errorMessage,
-            });
-        } finally {
-            setLoading(false);
-        }
+        toast('Are you sure you want to start the game?', {
+            action: {
+                label: 'Start Game',
+                onClick: async () => {
+                    setLoading(true);
+                    try {
+                        const gameId = localStorage.getItem("currentGameId");
+                        if (!token) {
+                            throw new Error('Authentication token not found.');
+                        }
+                        const url = apiRoutes.game.start(gameId);
+                        await apiHelper(url, {
+                            method: 'POST',
+                            token: token,
+                        });
+                        toast.success('The game has started!');
+                    } catch (err: any) {
+                        const errorMessage = err.message || 'Error starting the game';
+                        toast.error(errorMessage);
+                    } finally {
+                        setLoading(false);
+                    }
+                }
+            },
+            cancel: {
+                label: 'Cancel',
+                onClick: () => { /* Do nothing */ }
+            }
+        });
     };
 
     return { startGame, loading };
