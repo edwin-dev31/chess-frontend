@@ -61,7 +61,6 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
     }, [onlinePlayers, profile]);
 
     const setInGame = (newGameId: string, newColor?: Color) => {
-        console.log('PlayerStatusContext: setInGame called with gameId:', newGameId, 'and color:', newColor);
         gameIdRef.current = newGameId;
         setGameId(newGameId);
         setStatus(PlayerStatus.IN_GAME);
@@ -69,23 +68,19 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
         if (newColor) {
             saveColor(newColor);
         }
-        console.log('PlayerStatusContext: Status set to IN_GAME for gameId:', newGameId);
     };
 
         useEffect(() => {
-            console.log('PlayerStatusContext: Main useEffect re-running. Status:', status, 'GameId:', gameId);
             let unsubscribeFromSocket: (() => void) | undefined;
     
             const createAndSubscribe = () => {
                 if (status === PlayerStatus.OFFLINE) {
-                    console.log('PlayerStatusContext: Not creating subscriptions for OFFLINE status.');
                     return;
                 }
     
                 const factoryParams: FactoryParams = {
                     onOnlinePlayers: setOnlinePlayers,
                     onFenUpdate: (fen) => {
-                        console.log('PlayerStatusContext: onFenUpdate received fen:', fen);
                         setFen(fen);
                     },
                     onMove: (move: any) => setMoves(prev => [...prev, move]),
@@ -96,32 +91,24 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
                     gameId: gameIdRef.current || undefined,
                 };
     
-                console.log('PlayerStatusContext: Calling SubscriptionFactory.create with status:', status, 'and gameId:', gameIdRef.current, 'Current fen state:', fen);
                 const subscription = SubscriptionFactory.create(status, factoryParams);
-                console.log('PlayerStatusContext: SubscriptionFactory.create returned:', subscription); // NEW LOG
     
-                if (subscription) { // NEW CHECK
-                    console.log('PlayerStatusContext: Calling subscription.subscribe()'); // NEW LOG
+                if (subscription) { 
                     return subscription.subscribe();
                 } else {
-                    console.log('PlayerStatusContext: No subscription created, returning undefined.'); // NEW LOG
                     return undefined;
                 }
             };
     
             if (socketHelper.isConnected()) {
-                console.log('PlayerStatusContext: Socket is already connected, creating and subscribing.'); // NEW LOG
                 unsubscribeFromSocket = createAndSubscribe();
             } else {
-                console.log('PlayerStatusContext: Socket not connected, connecting now.'); // NEW LOG
                 socketHelper.connect(() => {
-                    console.log('PlayerStatusContext: Socket connected callback, creating and subscribing.'); // NEW LOG
                     unsubscribeFromSocket = createAndSubscribe();
                 });
             }
     
             return () => {
-                console.log('PlayerStatusContext: Cleaning up subscriptions.');
                 unsubscribeFromSocket?.();
             };
         }, [status, gameId, saveColor, fen]);

@@ -61,18 +61,14 @@ export const useChessGame = () => {
         JSON.parse(JSON.stringify(initialGameState))
     );
 
-    console.log('useChessGame: fen from useChessSocket:', fen);
-
     useEffect(() => {
         if (gameId) {
-            console.log('useChessGame: Calling setInGame with gameId:', gameId);
             setInGame(gameId);
         }
     }, [gameId, setInGame]);
 
     useEffect(() => {
         if (fen) {
-            console.log('useChessGame: useEffect triggered by fen change. Calling loadFen with fen:', fen);
             loadFen(fen);
         }
     }, [fen]);
@@ -138,12 +134,10 @@ export const useChessGame = () => {
     };
 
     const loadFen = (fen: string) => {
-        console.log('useChessGame: loadFen called with fen:', fen);
         const newBoard = parseFenToBoard(fen);
         const currentPlayer: Color =
             fen.split(' ')[1] === 'w' ? Color.WHITE : Color.BLACK;
         setGameState((prev) => {
-            console.log('useChessGame: setGameState called. New board:', newBoard, 'Current player:', currentPlayer);
             return {
                 ...prev,
                 board: newBoard,

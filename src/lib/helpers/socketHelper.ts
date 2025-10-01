@@ -19,9 +19,6 @@ const scheduleReconnect = () => {
     if (reconnectTimeout) clearTimeout(reconnectTimeout);
 
     reconnectTimeout = setTimeout(() => {
-        console.log(
-            `Attempting to reconnect in ${currentReconnectInterval / 1000}s...`
-        );
         socketHelper.connect();
         currentReconnectInterval = Math.min(
             currentReconnectInterval * RECONNECT_MULTIPLIER,
@@ -33,7 +30,6 @@ const scheduleReconnect = () => {
 export const socketHelper = {
     connect: (onConnected?: () => void) => {
         if (stompClient && stompClient.connected) {
-            console.log('✅ WebSocket already connected.');
             if (onConnected) onConnected();
             onConnectCallbacks.forEach(cb => cb());
             resetReconnectInterval();
@@ -43,9 +39,6 @@ export const socketHelper = {
         if (stompClient) {
             try {
                 stompClient.disconnect(() => {
-                    console.log(
-                        '🔌 Disconnected existing client before reconnecting.'
-                    );
                     stompClient = null;
                     onDisconnectCallbacks.forEach(cb => cb());
                 });
@@ -66,7 +59,6 @@ export const socketHelper = {
         stompClient.connect(
             { Authorization: `Bearer ${token}` },
             () => {
-                console.log('✅ WebSocket Connected');
                 if (onConnected) onConnected();
                 onConnectCallbacks.forEach(cb => cb());
                 resetReconnectInterval();
@@ -115,7 +107,6 @@ export const socketHelper = {
         if (reconnectTimeout) clearTimeout(reconnectTimeout);
         if (stompClient && stompClient.connected) {
             stompClient.disconnect(() => {
-                console.log('🔌 Disconnected');
                 stompClient = null;
                 onDisconnectCallbacks.forEach(cb => cb());
             });

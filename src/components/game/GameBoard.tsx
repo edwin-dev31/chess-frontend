@@ -20,7 +20,6 @@ interface GameBoardProps {}
 const GameBoard: React.FC<GameBoardProps> = () => {
 
     const { gameState, makeMove, color, currentTurnColor } = useChessGame();
-    console.log('GameBoard: gameState.board received:', gameState.board);
     const [selectedSquare, setSelectedSquare] = useState<SelectedSquare | null>(
         null
     );

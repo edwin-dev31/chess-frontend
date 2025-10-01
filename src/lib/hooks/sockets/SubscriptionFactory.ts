@@ -24,10 +24,8 @@ export class SubscriptionFactory {
         status: PlayerStatus,
         params: FactoryParams
     ): Subscription | null {
-        console.log('SubscriptionFactory: Creating subscription for status:', status, 'gameId:', params.gameId);
         switch (status) {
             case PlayerStatus.ONLINE:
-                console.log('SubscriptionFactory: Returning OnlineStatusSubscription');
                 return new OnlineStatusSubscription(
                     params.onOnlinePlayers,
                     params.onNotification,
@@ -35,7 +33,6 @@ export class SubscriptionFactory {
                 );
             case PlayerStatus.IN_GAME:
                 if (params.gameId) {
-                    console.log('SubscriptionFactory: Returning CompositeSubscription for IN_GAME' + params.gameId);
                     return new CompositeSubscription([
                         new InGameSubscription(
                             params.gameId, 
@@ -51,11 +48,9 @@ export class SubscriptionFactory {
                         ),
                     ]);
                 }
-                console.log('SubscriptionFactory: gameId is missing for IN_GAME status, returning null');
                 return null;
             case PlayerStatus.OFFLINE:
             default:
-                console.log('SubscriptionFactory: Returning null for OFFLINE or default status');
                 return null;
         }
     }

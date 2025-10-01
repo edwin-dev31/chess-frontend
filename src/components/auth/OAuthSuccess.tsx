@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 const OAuthSuccess = () => {
-  console.log("✅ Componente OAuthSuccess montado");
   const navigate = useNavigate();
   const alreadyHandled = useRef(false); 
 
@@ -18,11 +17,9 @@ const OAuthSuccess = () => {
       localStorage.setItem("token", token); 
 
       toast.success("Login with OAuth successful!");
-      console.log("Login with OAuth successful!")
       setTimeout(() => navigate("/app"), 300);
     } else {
       toast.error("No token received from OAuth");
-      console.log("No token received from OAuth")
       setTimeout(() => navigate("/login"), 300);
     }
   }, [navigate]);

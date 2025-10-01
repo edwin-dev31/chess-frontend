@@ -86,7 +86,6 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
 
     const handleSquareClick = (row: number, col: number) => {
         const { row: normRow, col: normCol } = getOriginalCoordinates(row, col);
-        console.log(`Square clicked: row=${normRow}, col=${normCol}`);
         onSquareClick(normRow, normCol);
     };
 
