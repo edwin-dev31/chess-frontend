@@ -1,15 +1,14 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Menu, Bell, User, RockingChair as ChessRook } from 'lucide-react';
-import { Button } from '../ui/button';
-import { useToast } from '../ui/use-toast';
-import { ActiveView } from '../chess/ChessApp';
+import { Button } from '@/components/ui/button';
+import { ActiveView } from '@/components/chess/ChessApp';
 
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 
-import { useNotificationsSocket } from '../../lib/hooks/invitation/useNotificationsSocket';
-import { InvitationNotification } from '../notifications/InvitationNotification';
-import { OnlinePlayersDropdown } from '../player/OnlinePlayersDropdown';
+import { useNotificationsSocket } from '@/lib/hooks/sockets/useNotificationsSocket';
+import { InvitationNotification } from '@/components/notifications/InvitationNotification';
+import { OnlinePlayersDropdown } from '@/components/player/OnlinePlayersDropdown';
 
 import { useProfile } from '@/lib/hooks/player/useProfile';
 
@@ -101,12 +100,17 @@ const Header: React.FC<HeaderProps> = ({ onMenuToggle, activeView }) => {
                         <div className="w-8 h-8 bg-gradient-to-br from-slate-600 to-slate-800 rounded-full flex items-center justify-center ring-2 ring-slate-500">
                             {loading ? (
                                 <User className="h-4 w-4 text-white" />
-                            ) : profile ? (
-                                <img src={profile.imageUrl} alt={profile.username} className="w-full h-full rounded-full object-cover" />
+                            ) : profile && profile.imageUrl ? (
+                                <img
+                                    src={profile.imageUrl}
+                                    alt={profile.username}
+                                    className="w-full h-full rounded-full object-cover"
+                                />
                             ) : (
                                 <User className="h-4 w-4 text-white" />
                             )}
                         </div>
+
                         <div className="text-sm hidden sm:block w-28">
                             {loading ? (
                                 <p className="text-white font-medium">Loading...</p>

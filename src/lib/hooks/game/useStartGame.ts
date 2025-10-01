@@ -31,7 +31,7 @@ export const useStartGame = () => {
 
             toast({
                 title: '✅ Game Started',
-                description: 'The game has started! Colors have been assigned.',
+                description: 'The game has started!',
             });
 
         } catch (err: any) {
