@@ -39,7 +39,7 @@ const initialGameState: GameState = {
     lastMove: null,
     players: {
         white: {
-            name: 'edwin_zdev',
+            name: 'edwin_dev',
             rating: 1200,
             timeLeft: '10:00',
         },
@@ -93,7 +93,6 @@ export const useChessGame = () => {
         const moveDto: CreateMoveDTO = { fromSquare, toSquare };
 
         try {
-            console.log('📤 Enviando movimiento:', moveDto);
             sendMove(moveDto);
         } catch (error) {
             console.error('❌ Error enviando movimiento:', error);

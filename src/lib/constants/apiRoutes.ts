@@ -1,9 +1,13 @@
 export const apiRoutes = {
-    login: '/auth/login',
-    register: '/auth/register',
+    auth: {
+        login: '/auth/login',
+        register: '/auth/register',
+        logout: '/auth/logout'
+    },
 
     player: {
         profile: () => `api/players/profile`,
+        online: 'api/players/online',
     },
     game: {
         fen: (gameId: string) => `api/games/${gameId}/fen`,

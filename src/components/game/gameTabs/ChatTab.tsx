@@ -1,13 +1,16 @@
 import { usePlayerStatus } from "@/lib/contexts/PlayerStatusContext";
 import { useProfile } from "@/lib/hooks/player/useProfile";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 const ChatTab: React.FC = () => {
   const { chatMessages, sendChatMessage, onlinePlayers } = usePlayerStatus();
   const { profile } = useProfile();
   const [message, setMessage] = useState("");
+  const chatEndRef = useRef<HTMLDivElement>(null);
 
-  const opponent = onlinePlayers.find((p) => p.id !== profile?.id);
+  useEffect(() => {
+    chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [chatMessages]);
 
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,17 +25,20 @@ const ChatTab: React.FC = () => {
     return d.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
   };
 
-  let opponentName = "Opponent";
+  
+const myId = Number(profile?.id);
+let opponentName = "Opponent";
 
-  if (chatMessages.length > 0) {
-    const msg = chatMessages[0];
-    if (msg.from === profile?.id) {
-      opponentName = msg.toUsername;
-    } else {
-      opponentName = msg.fromUsername;
-    }
-  }
-
+if (onlinePlayers?.length) {
+  opponentName = onlinePlayers.find(p => Number(p.id) !== myId)?.username ?? "Opponent";
+} else if (chatMessages?.length) {
+  const lastMsg = [...chatMessages].reverse().find(m => Number(m.from) !== myId);
+  const refMsg = lastMsg ?? chatMessages[0];
+  opponentName =
+    Number(refMsg.from) === myId
+      ? refMsg.toUsername || "Opponent"
+      : refMsg.fromUsername || "Opponent";
+}
 
   return (
     <div className="bg-indigo-600 shadow-2xl rounded-2xl p-2">
@@ -44,56 +50,60 @@ const ChatTab: React.FC = () => {
           </h2>
         </div>
 
-        <div className="flex-grow p-4 overflow-y-auto space-y-6 bg-slate-800/90">
-        {chatMessages.map((chatMessage, index) => {
-          const isMine = chatMessage.from === profile?.id;
-          const username = isMine ? chatMessage.fromUsername : chatMessage.fromUsername;
-          const profileImage = isMine
-            ? profile?.profileImage
-            : opponent?.profileImage;
+        <div className="flex-grow p-4 space-y-6 bg-slate-800/90 overflow-y-auto max-h-[400px] scrollbar-hidden">
+          {chatMessages.map((chatMessage, index) => {
+            const isMine = chatMessage.from === profile?.id;
 
-          return (
-            <div
-              key={index}
-              className={`flex items-start space-x-3 ${
-                isMine ? "justify-end space-x-reverse" : ""
-              }`}
-            >
-              {!isMine && (
-                <img
-                  src={profileImage || "/icon.png"}
-                  alt={username}
-                  className="w-8 h-8 rounded-full"
-                />
-              )}
+            const sender = onlinePlayers.find(
+              (p) => p.id == chatMessage.from
+            );
 
-              <div className="max-w-xs">
-                <div
-                  className={`rounded-2xl px-4 py-2 shadow-sm text-sm ${
-                    isMine
-                      ? "bg-indigo-600 text-white rounded-br-none"
-                      : "bg-slate-700 text-slate-300 rounded-bl-none"
-                  }`}
-                >
-                  <p className="font-semibold mb-1">{username}</p>
-                  <p>{chatMessage.content}</p>
+            const profileImage = sender?.imageUrl || "/icon.png";
+            const username = chatMessage.fromUsername;
+
+            return (
+              <div
+                key={index}
+                className={`flex items-start space-x-3 ${
+                  isMine ? "justify-end space-x-reverse" : ""
+                }`}
+              >
+                {!isMine && (
+                  <img
+                    src={profileImage}
+                    alt={username}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                )}
+
+                <div className="max-w-xs">
+                  <div
+                    className={`rounded-2xl px-4 py-2 shadow-sm text-sm ${
+                      isMine
+                        ? "bg-indigo-600 text-white rounded-br-none"
+                        : "bg-slate-700 text-slate-300 rounded-bl-none"
+                    }`}
+                  >
+                    <p className="font-semibold mb-1">{username}</p>
+                    <p>{chatMessage.content}</p>
+                  </div>
+                  <span className="block mt-1 text-xs text-slate-400 text-right">
+                    {formatTime(new Date())}
+                  </span>
                 </div>
-                <span className="block mt-1 text-xs text-slate-400 text-right">
-                  {formatTime(new Date())}
-                </span>
+
+                {isMine && (
+                  <img
+                    src={profile?.imageUrl || "/icon.png"}
+                    alt={profile?.username}
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                )}
               </div>
+            );
+          })}
 
-              {isMine && (
-                <img
-                  src={profileImage || "/icon.png"}
-                  alt={username}
-                  className="w-8 h-8 rounded-full"
-                />
-              )}
-            </div>
-          );
-        })}
-
+          <div ref={chatEndRef} />
         </div>
 
         <form

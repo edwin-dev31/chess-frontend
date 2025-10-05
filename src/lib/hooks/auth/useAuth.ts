@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { apiHelper } from '@/lib/helpers/apiHelper';
 import { useAuthStorage } from '@/lib/hooks/auth/useAuthStorage';
 import { useToast } from '@/components/ui/use-toast';
+import { apiRoutes } from '@/lib/constants/apiRoutes';
 
 interface AuthResponse {
     token: string;
@@ -9,7 +10,6 @@ interface AuthResponse {
 
 interface AuthError {
     message: string;
-    // Add other error properties if available from your API
 }
 
 const useAuth = () => {
@@ -25,7 +25,7 @@ const useAuth = () => {
     ): Promise<string | null> => {
         setLoading(true);
         try {
-            const response = await apiHelper<AuthResponse>('/auth/login', {
+            const response = await apiHelper<AuthResponse>(apiRoutes.auth.login, {
                 method: 'POST',
                 body: { email, password },
             });
@@ -52,7 +52,7 @@ const useAuth = () => {
         setLoading(true);
         try {
             const response = await apiHelper<AuthResponse>(
-                '/auth/register',
+                apiRoutes.auth.register,
                 { method: 'POST', body: { username, email, password } }
             );
             setAuth(response.token);
@@ -70,8 +70,34 @@ const useAuth = () => {
         }
     };
 
-    const logout = () => {
-        clearAuth();
+    const logout = async () => {
+        if (!token) {
+            clearAuth();
+            return;
+        }
+
+        setLoading(true);
+        try {
+            await apiHelper(apiRoutes.auth.logout, {
+                method: 'POST',
+                token: token,
+                
+            });
+
+            toast({
+                title: '👋 Logout successful',
+                description: 'You have been disconnected.',
+            });
+        } catch (err: any) {
+            const errorMessage = err?.message || 'Logout failed. Please try again.';
+            toast({
+                title: '❌ Error',
+                description: errorMessage,
+            });
+        } finally {
+            clearAuth();
+            setLoading(false);
+        }
     };
 
     return { login, register, logout, loading, token, isAuthenticated };

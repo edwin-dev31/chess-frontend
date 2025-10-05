@@ -17,7 +17,6 @@ export const useColorStorage = () => {
   const saveColor = (newColor: Color | null) => {
     try {
       if (newColor) {
-      alert("guardar el color" + color)
         localStorage.setItem(COLOR_STORAGE_KEY, newColor);
       } else {
         localStorage.removeItem(COLOR_STORAGE_KEY);
