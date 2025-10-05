@@ -9,7 +9,8 @@ export class InGameSubscription implements Subscription {
         private onFenUpdate: (fen: string) => void,
         private onMove: (move: any) => void,
         private onCurrentTurnColor: (color: Color) => void,
-        private onChatMessage: (message: ChatMessage) => void
+        private onChatMessage: (message: ChatMessage) => void,
+        private onError: (error: any) => void
     ) {}
 
     subscribe(): () => void {
@@ -35,6 +36,11 @@ export class InGameSubscription implements Subscription {
             this.onChatMessage(body);
         });
 
+        const errorUnsubscribe = socketHelper.subscribe(`/user/queue/errors`, (msg) => {
+            const body = JSON.parse(msg.body);
+            this.onError(body);
+        });
+
         socketHelper.send(`/app/games/${this.gameId}/fen`, {});
         socketHelper.send(`/app/games/${this.gameId}/color`, {});
 
@@ -43,6 +49,7 @@ export class InGameSubscription implements Subscription {
             movesUnsubscribe();
             colorUnsubscribe();
             chatUnsubscribe();
+            errorUnsubscribe();
         };
     }
 }

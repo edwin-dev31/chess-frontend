@@ -16,6 +16,7 @@ export interface FactoryParams {
     onNotification: (invitation: InvitationDto) => void;
     onGameStart: (gameId: string, color: Color) => void;
     onChatMessage: (message: ChatMessage) => void;
+    onError: (error: any) => void;
     gameId?: string;
 }
 
@@ -39,7 +40,8 @@ export class SubscriptionFactory {
                             params.onFenUpdate, 
                             params.onMove, 
                             params.onCurrentTurnColor,
-                            params.onChatMessage
+                            params.onChatMessage,
+                            params.onError
                         ),
                         new OnlineStatusSubscription(
                             params.onOnlinePlayers,

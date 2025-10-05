@@ -10,6 +10,7 @@ import { useRef } from 'react';
 import { useColorStorage } from '../hooks/common/useColorStorage';
 import { Color } from '../types/Definitions';
 import { ChatMessage } from '../types/ChatMessageDTO';
+import { toast } from '@/components/ui/use-toast';  
 import md5 from 'md5';
 
 interface PlayerStatusContextType {
@@ -89,8 +90,13 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
                     onGameStart: (gameId, color) => setInGame(gameId, color),
                     onChatMessage: (message) => setChatMessages(prev => [...prev, message]),
                     gameId: gameIdRef.current || undefined,
-                };
-    
+                    onError: (error) => { 
+                        toast({        
+                            title: "Error",        
+                            description: error.message || "An unknown error occurred.",                         
+                    }) }
+                
+                 };
                 const subscription = SubscriptionFactory.create(status, factoryParams);
     
                 if (subscription) { 
