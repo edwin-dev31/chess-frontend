@@ -4,11 +4,12 @@ import { toast } from 'sonner';
 import { apiHelper } from '@/lib/helpers/apiHelper';
 import { useAuthStorage } from '@/lib/hooks/auth/useAuthStorage';
 
+
 export const useStartGame = () => {
     const [loading, setLoading] = useState(false);
     const { token } = useAuthStorage();
 
-    const startGame = async () => {
+    const startGame = async ( time:string) => {
         toast('Are you sure you want to start the game?', {
             action: {
                 label: 'Start Game',
@@ -19,7 +20,7 @@ export const useStartGame = () => {
                         if (!token) {
                             throw new Error('Authentication token not found.');
                         }
-                        const url = apiRoutes.game.start(gameId);
+                        const url = apiRoutes.game.start(gameId, time);
                         await apiHelper(url, {
                             method: 'POST',
                             token: token,

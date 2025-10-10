@@ -2,6 +2,7 @@ import { socketHelper } from '@/lib/helpers/socketHelper';
 import { Subscription } from './Subscription';
 import { Color } from '@/lib/types/Definitions';
 import { ChatMessage } from '@/lib/types/ChatMessageDTO';
+import { GameStatusDTO } from '@/lib/types/GameStatusDTO';
 
 export class InGameSubscription implements Subscription {
     constructor(
@@ -10,7 +11,8 @@ export class InGameSubscription implements Subscription {
         private onMove: (move: any) => void,
         private onCurrentTurnColor: (color: Color) => void,
         private onChatMessage: (message: ChatMessage) => void,
-        private onError: (error: any) => void
+        private onError: (error: any) => void,
+        private onStatusGame: (status: GameStatusDTO) => void
     ) {}
 
     subscribe(): () => void {
@@ -31,6 +33,10 @@ export class InGameSubscription implements Subscription {
             this.onCurrentTurnColor(body.color);
         });
 
+        const statusGame = socketHelper.subscribe(`/topic/games/${this.gameId}/status`, (msg) => {
+            const body = JSON.parse(msg.body);
+            this.onStatusGame(body);
+        });
         const chatUnsubscribe = socketHelper.subscribe(`/user/queue/messages`, (msg) => {
             const body = JSON.parse(msg.body);
             this.onChatMessage(body);
@@ -50,6 +56,7 @@ export class InGameSubscription implements Subscription {
             colorUnsubscribe();
             chatUnsubscribe();
             errorUnsubscribe();
+            statusGame()
         };
     }
 }

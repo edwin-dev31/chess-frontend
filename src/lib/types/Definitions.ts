@@ -44,3 +44,10 @@ export enum PlayerStatus {
     OFFLINE,
     IN_GAME
 }
+
+export enum MoveStatus {
+    CONTINUES = "CONTINUES",
+    CHECK = "CHECK",
+    CHECKMATE = "CHECKMATE",
+    STALEMATE = "STALEMATE"
+}

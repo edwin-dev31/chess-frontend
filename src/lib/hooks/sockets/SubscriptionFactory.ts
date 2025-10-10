@@ -7,6 +7,7 @@ import { InGameSubscription } from './subscriptions/InGameSubscription';
 import { OnlineStatusSubscription } from './subscriptions/OnlineStatusSubscription';
 import { Subscription } from './subscriptions/Subscription';
 import { ChatMessage } from '@/lib/types/ChatMessageDTO';
+import { GameStatusDTO } from '@/lib/types/GameStatusDTO';
 
 export interface FactoryParams {
     onOnlinePlayers: (players: PlayerOnlineDTO[]) => void;
@@ -18,6 +19,7 @@ export interface FactoryParams {
     onChatMessage: (message: ChatMessage) => void;
     onError: (error: any) => void;
     gameId?: string;
+    onStatusGame: (status: GameStatusDTO) => void
 }
 
 export class SubscriptionFactory {
@@ -41,7 +43,8 @@ export class SubscriptionFactory {
                             params.onMove, 
                             params.onCurrentTurnColor,
                             params.onChatMessage,
-                            params.onError
+                            params.onError,
+                            params.onStatusGame
                         ),
                         new OnlineStatusSubscription(
                             params.onOnlinePlayers,

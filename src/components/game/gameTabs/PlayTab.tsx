@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Clock, Puzzle, Bot } from 'lucide-react';
 import { useStartGame } from '@/lib/hooks/game/useStartGame';
@@ -10,13 +10,17 @@ interface PlayTabProps {
 const PlayTab: React.FC<PlayTabProps> = ({ handleNotImplemented }) => {
     const { startGame } = useStartGame();
 
+    const [selectedTime, setSelectedTime] = useState<string>('10 min');
+
+    const timeOptions = ['1 min', '3 min', '5 min', '10 min', '15 | 10', '30 min'];
+
     return (
         <div className="space-y-4">
             <h3 className="text-lg font-semibold text-white">Nueva Partida</h3>
 
             <div className="bg-slate-700/50 p-4 rounded-lg">
                 <div className="flex items-center justify-between">
-                    <p className="text-white font-medium">10 Min (Rápida)</p>
+                    <p className="text-white font-medium">{selectedTime} (Rápida)</p>
                     <Button size="sm" variant="ghost" onClick={handleNotImplemented}>
                         Cambiar
                     </Button>
@@ -36,12 +40,16 @@ const PlayTab: React.FC<PlayTabProps> = ({ handleNotImplemented }) => {
             <div>
                 <p className="text-slate-300 font-medium mb-2">Elegir Tiempo</p>
                 <div className="grid grid-cols-3 gap-2">
-                    {['1 min', '3 min', '5 min', '10 min', '15 | 10', '30 min'].map(time => (
+                    {timeOptions.map(time => (
                         <Button
                             key={time}
-                            variant={time === '10 min' ? 'secondary' : 'outline'}
-                            className={`w-full border-slate-600 ${time === '10 min' ? 'bg-blue-600/20 text-blue-300 border-blue-500' : 'bg-slate-700/50'}`}
-                            onClick={handleNotImplemented}
+                            variant={selectedTime === time ? 'secondary' : 'outline'}
+                            className={`w-full border-slate-600 transition-colors ${
+                                selectedTime === time
+                                    ? 'bg-blue-600/20 text-blue-300 border-blue-500'
+                                    : 'bg-slate-700/50 hover:bg-slate-700 text-slate-300'
+                            }`}
+                            onClick={() => setSelectedTime(time)}
                         >
                             <Clock className="w-3 h-3 mr-1.5" /> {time}
                         </Button>
@@ -51,11 +59,10 @@ const PlayTab: React.FC<PlayTabProps> = ({ handleNotImplemented }) => {
 
             <Button
                 className="w-full bg-blue-600 hover:bg-blue-700"
-                onClick={() => startGame()}
+                onClick={() => startGame(selectedTime)}
             >
                 Start game
             </Button>
-           
 
             <div className="space-y-2 pt-4 border-t border-slate-700">
                 <Button className="w-full justify-start" variant="ghost" onClick={handleNotImplemented}>

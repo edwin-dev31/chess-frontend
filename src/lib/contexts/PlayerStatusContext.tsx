@@ -11,6 +11,7 @@ import { useColorStorage } from '../hooks/common/useColorStorage';
 import { Color } from '../types/Definitions';
 import { ChatMessage } from '../types/ChatMessageDTO';
 import { toast } from '@/components/ui/use-toast';  
+import { MoveStatus } from '../types/Definitions';
 import md5 from 'md5';
 
 interface PlayerStatusContextType {
@@ -94,7 +95,19 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
                         toast({        
                             title: "Error",        
                             description: error.message || "An unknown error occurred.",                         
-                    }) }
+                    }) },
+
+                    onStatusGame: (statusGame) => {
+                        let winnerMsg = ""
+                        if(statusGame.status == MoveStatus.CHECKMATE){
+                            winnerMsg = " The winner is: " + statusGame.winnerName
+                        }
+                        
+                        toast({
+                            title: statusGame.status.toString(),
+                            description: statusGame.message + winnerMsg
+                        })
+                    }
                 
                  };
                 const subscription = SubscriptionFactory.create(status, factoryParams);

@@ -6,7 +6,6 @@ import { GameState } from '../../lib/types/Definitions';
 import PlayTab from './gameTabs/PlayTab';
 import MovesTab from './gameTabs/MovesTab';
 import GameInfoTab from './gameTabs/GameInfoTab';
-import DebugTab from './gameTabs/DebugTab';
 import ChatTab from './gameTabs/ChatTab';
 interface GameTabsProps {
     gameState: GameState;
@@ -18,15 +17,14 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
 
     const handleNotImplemented = () => {
         toast({
-            title: '🚧 Esta función aún no está implementada',
-            description: '¡Pero no te preocupes! Puedes solicitarla en tu próximo prompt! 🚀',
+            title: '🚧 Dont bother me'
         });
     };
 
     return (
         <div className="h-full flex flex-col p-2">
             <Tabs defaultValue="play" className="w-full flex flex-col flex-grow">
-                <TabsList className="grid w-full grid-cols-5 bg-slate-900/50">
+                <TabsList className="grid w-full grid-cols-4 bg-slate-900/50">
                     <TabsTrigger value="play">
                         <Play className="w-4 h-4" />
                     </TabsTrigger>
@@ -38,9 +36,6 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
                     </TabsTrigger>
                     <TabsTrigger value="chat">
                         <Puzzle className="w-4 h-4" />
-                    </TabsTrigger>
-                    <TabsTrigger value="debug">
-                        <Bug className="w-4 h-4" />
                     </TabsTrigger>
                 </TabsList>
 
@@ -58,10 +53,6 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
 
                 <TabsContent value="chat" className="flex-grow p-2">
                     <ChatTab />
-                </TabsContent>
-
-                <TabsContent value="debug" className="flex-grow p-2">
-                    <DebugTab gameState={gameState} resetGame={resetGame} />
                 </TabsContent>
             </Tabs>
         </div>

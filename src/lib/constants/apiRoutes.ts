@@ -12,7 +12,7 @@ export const apiRoutes = {
     game: {
         fen: (gameId: string) => `api/games/${gameId}/fen`,
         makeMove: (gameId: string) => `api/moves/${gameId}`,
-        start: (gameId: string) => `api/games/${gameId}/start`,
+        start: (gameId: string, time: string) => `api/games/${gameId}/start?time=${time}`,
     },
     
     invitation: {
