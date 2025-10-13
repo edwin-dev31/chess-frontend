@@ -15,10 +15,16 @@ export function useAuthStorage() {
     localStorage.setItem("token", token);
   };
 
+  const setClearGame = () => {
+    localStorage.removeItem("currentGameId");
+    localStorage.removeItem("color")
+  }
+
   return {
     token,
     authHeaders,
     clearAuth,
     setAuth,
+    setClearGame
   };
 }

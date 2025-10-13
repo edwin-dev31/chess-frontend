@@ -1,24 +1,23 @@
 import React from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '../ui/tabs';
 import { Play, History, Info, Puzzle, Bug } from 'lucide-react';
-import { useToast } from '../ui/use-toast';
 import { GameState } from '../../lib/types/Definitions';
 import PlayTab from './gameTabs/PlayTab';
 import MovesTab from './gameTabs/MovesTab';
 import GameInfoTab from './gameTabs/GameInfoTab';
 import ChatTab from './gameTabs/ChatTab';
+import { useLeaveGame } from '@/lib/hooks/game/useLeaveGame';
+
 interface GameTabsProps {
     gameState: GameState;
     resetGame: () => void;
 }
 
 const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
-    const { toast } = useToast();
+    const {leaveGame} = useLeaveGame();
 
     const handleNotImplemented = () => {
-        toast({
-            title: '🚧 Dont bother me'
-        });
+        leaveGame()
     };
 
     return (

@@ -49,5 +49,6 @@ export enum MoveStatus {
     CONTINUES = "CONTINUES",
     CHECK = "CHECK",
     CHECKMATE = "CHECKMATE",
-    STALEMATE = "STALEMATE"
+    STALEMATE = "STALEMATE",
+    LEFT = "LEFT"
 }
