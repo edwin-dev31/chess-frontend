@@ -7,3 +7,4 @@ export interface PlayerProfileDTO {
     imageUrl: string;
     status: PlayerStatus;
 }
+

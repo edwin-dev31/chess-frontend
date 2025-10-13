@@ -40,17 +40,34 @@ const GameBoard: React.FC<GameBoardProps> = () => {
         <>
             <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 h-full">
                 <div className="xl:col-span-2 flex flex-col justify-between items-center xl:items-start p-4 bg-slate-800 rounded-lg">
-                    <PlayerInfo
+                   {color === Color.WHITE ? (
+                    <>
+                        <PlayerInfo
                         player={gameState.players.black}
                         isCurrentTurn={gameState.currentPlayer === Color.BLACK}
                         capturedPieces={gameState.captured.white}
-                    />
-
-                    <PlayerInfo
+                        />
+                        <PlayerInfo
                         player={gameState.players.white}
                         isCurrentTurn={gameState.currentPlayer === Color.WHITE}
                         capturedPieces={gameState.captured.black}
-                    />
+                        />
+                    </>
+                    ) : (
+                    <>
+                        <PlayerInfo
+                        player={gameState.players.white}
+                        isCurrentTurn={gameState.currentPlayer === Color.WHITE}
+                        capturedPieces={gameState.captured.black}
+                        />
+                        <PlayerInfo
+                        player={gameState.players.black}
+                        isCurrentTurn={gameState.currentPlayer === Color.BLACK}
+                        capturedPieces={gameState.captured.white}
+                        />
+                    </>
+                    )}
+
                     <span className="px-3 py-1 rounded-full text-white font-bold">
                         Current turn: {currentTurnColor?.toUpperCase()}
                     </span>

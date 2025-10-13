@@ -8,6 +8,7 @@ import { OnlineStatusSubscription } from './subscriptions/OnlineStatusSubscripti
 import { Subscription } from './subscriptions/Subscription';
 import { ChatMessage } from '@/lib/types/ChatMessageDTO';
 import { GameStatusDTO } from '@/lib/types/GameStatusDTO';
+import { GameStartDTO } from '@/lib/types/GameStartDTO';
 
 export interface FactoryParams {
     onOnlinePlayers: (players: PlayerOnlineDTO[]) => void;
@@ -15,7 +16,7 @@ export interface FactoryParams {
     onMove: (move: any) => void;
     onCurrentTurnColor: (color: Color) => void;
     onNotification: (invitation: InvitationDto) => void;
-    onGameStart: (gameId: string, color: Color) => void;
+    onGameStart: (gameStartData: GameStartDTO) => void;
     onChatMessage: (message: ChatMessage) => void;
     onError: (error: any) => void;
     gameId?: string;

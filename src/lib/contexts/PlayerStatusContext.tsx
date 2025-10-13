@@ -13,6 +13,7 @@ import { ChatMessage } from '../types/ChatMessageDTO';
 import { toast } from '@/components/ui/use-toast';  
 import { MoveStatus } from '../types/Definitions';
 import md5 from 'md5';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 interface PlayerStatusContextType {
     status: PlayerStatus;
@@ -20,15 +21,17 @@ interface PlayerStatusContextType {
     onlinePlayers: PlayerOnlineDTO[];
     fen: string | null;
     moves: any[];
-    color: string | null; 
+    color: Color | null; 
     currentTurnColor: Color | null;
     lastInvitation: InvitationDto | null;
     chatMessages: ChatMessage[];
     setOnline: () => void;
-    setInGame: (gameId: string, color?: Color) => void;
+    setInGame: (gameId: string, color?: Color, persist?: boolean) => void;
     setOffline: () => void;
+    clearGame: () => void;
     sendMove: (moveDto: CreateMoveDTO) => void;
     sendChatMessage: (message: string) => void;
+    gameStart: any | null;
 }
 
 const PlayerStatusContext = createContext<PlayerStatusContextType | undefined>(undefined);
@@ -36,13 +39,15 @@ const PlayerStatusContext = createContext<PlayerStatusContextType | undefined>(u
 export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const getInitialGameId = () => localStorage.getItem('currentGameId');
     const getInitialStatus = () => (getInitialGameId() ? PlayerStatus.IN_GAME : PlayerStatus.OFFLINE);
-
+    const location = useLocation();
+    const navigate = useNavigate();
     const [status, setStatus] = useState<PlayerStatus>(getInitialStatus);
     const [gameId, setGameId] = useState<string | null>(getInitialGameId);
+    const [gameStart, setGameStart] = useState<any | null>(null);
     const [onlinePlayers, setOnlinePlayers] = useState<PlayerOnlineDTO[]>([]);
     const [fen, setFen] = useState<string | null>(null);
     const [moves, setMoves] = useState<any[]>([]);
-    const {color, saveColor } = useColorStorage(); 
+    const {color, saveColor, removeColor } = useColorStorage(); 
     const [currentTurnColor, setCurrentTurnColor] = useState<Color | null>(null);
     const [lastInvitation, setLastInvitation] = useState<InvitationDto | null>(null);
     const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
@@ -50,6 +55,19 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const { profile } = useProfile();
 
     const gameIdRef = useRef<string | null>(null);
+    const justLeftGameRef = useRef<boolean>(false);
+
+    useEffect(() => {
+        const pathParts = location.pathname.split('/');
+        const gameIdFromUrl = pathParts.length === 3 && pathParts[1] === 'game' ? pathParts[2] : null;
+        const gameIdFromLocalStorage = getInitialGameId();
+
+        if (gameIdFromUrl) {
+            if (!gameIdFromLocalStorage || gameIdFromUrl !== gameIdFromLocalStorage) {
+                navigate('/app');
+            }
+        }
+    }, [location, navigate]);
 
     useEffect(() => {
         gameIdRef.current = gameId;
@@ -62,14 +80,31 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
         return onlinePlayers.filter(player => player.id !== profile.id);
     }, [onlinePlayers, profile]);
 
-    const setInGame = (newGameId: string, newColor?: Color) => {
+    const setInGame = (newGameId: string, newColor?: Color, persist = false) => {
         gameIdRef.current = newGameId;
         setGameId(newGameId);
         setStatus(PlayerStatus.IN_GAME);
-        localStorage.setItem('currentGameId', newGameId);
+        if (persist) {
+            localStorage.setItem('currentGameId', newGameId);
+        }
         if (newColor) {
             saveColor(newColor);
         }
+    };
+
+    const clearGame = () => {
+        setGameId(null);
+        setFen(null);
+        setMoves([]);
+        setCurrentTurnColor(null);
+        removeColor(); 
+        localStorage.removeItem('currentGameId');
+        setStatus(PlayerStatus.ONLINE);
+
+        justLeftGameRef.current = true;
+        setTimeout(() => {
+            justLeftGameRef.current = false;
+        }, 2000); 
     };
 
         useEffect(() => {
@@ -88,7 +123,17 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
                     onMove: (move: any) => setMoves(prev => [...prev, move]),
                     onCurrentTurnColor: setCurrentTurnColor,
                     onNotification: setLastInvitation,
-                    onGameStart: (gameId, color) => setInGame(gameId, color),
+                    
+                    onGameStart: (gameData) => {
+                        if (justLeftGameRef.current) {
+                            justLeftGameRef.current = false;
+                            return;
+                        }
+
+                        setGameStart(gameData);
+
+                        setInGame(gameData.code, gameData.color, true);
+                    },
                     onChatMessage: (message) => setChatMessages(prev => [...prev, message]),
                     gameId: gameIdRef.current || undefined,
                     onError: (error) => { 
@@ -172,8 +217,10 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
         setOnline: () => setStatus(PlayerStatus.ONLINE),
         setInGame,
         setOffline: () => setStatus(PlayerStatus.OFFLINE),
+        clearGame,
         sendMove,
         sendChatMessage,
+        gameStart
     };
 
     return (

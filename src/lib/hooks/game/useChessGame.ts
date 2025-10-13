@@ -39,13 +39,13 @@ const initialGameState: GameState = {
     lastMove: null,
     players: {
         white: {
-            name: 'edwin_dev',
+            name: 'Oponente 1',
             rating: 1200,
             timeLeft: '10:00',
         },
         black: {
-            name: 'Oponente',
-            rating: 1150,
+            name: 'Oponente 2',
+            rating: 1200,
             timeLeft: '10:00',
         },
     },
@@ -56,7 +56,8 @@ const initialGameState: GameState = {
 };
 
 export const useChessGame = () => {
-    const { fen, moves, color, currentTurnColor, sendMove, setInGame, gameId } = useChessSocket();
+    const { fen, moves, color, currentTurnColor, gameStart, sendMove, setInGame, gameId } = useChessSocket();
+
     const [gameState, setGameState] = useState<GameState>(
         JSON.parse(JSON.stringify(initialGameState))
     );
@@ -72,6 +73,44 @@ export const useChessGame = () => {
             loadFen(fen);
         }
     }, [fen]);
+
+    useEffect(() => {
+        if (!gameStart) return;
+
+        const mapPlayerDtoToPlayerState = (dto: any) => {
+            if (!dto) {
+                return { name: 'Unknown', rating: 0, timeLeft: '00:00' };
+            }
+            const name = dto.username || 'Unknown';
+            const rating = dto.rating ?? 1200;
+            const timeLeft = dto.timeLeft || dto.clock || '10:00';
+            const imageUrl = dto.imageUrl;
+
+            return { name, rating, timeLeft, imageUrl };
+        };
+
+        const whiteDto = gameStart.whitePlayer;
+        const blackDto = gameStart.blackPlayer;
+
+        let players;
+        if (gameStart.color === Color.WHITE) {
+            players = {
+                white: mapPlayerDtoToPlayerState(whiteDto),
+                black: mapPlayerDtoToPlayerState(blackDto),
+            };
+        } else {
+            players = {
+                white: mapPlayerDtoToPlayerState(whiteDto),
+                black: mapPlayerDtoToPlayerState(blackDto),
+            };
+        }
+
+        setGameState((prev) => ({
+            ...prev,
+            players,
+        }));
+
+    }, [gameStart]);
 
     const makeMove = (
         fromRow: number,

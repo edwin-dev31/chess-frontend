@@ -28,7 +28,6 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     lastMove,
     playerColor, 
 }) => {
-    //alert("hola"+ playerColor)
     const isBlack = playerColor === Color.BLACK;
 
     const orientedBoard = isBlack
@@ -120,8 +119,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
                                 {pieceSymbols[piece.color][piece.type]}
                             </motion.span>
                         )}
-
-                        {/* Coordenadas del tablero */}
+                        
                         {colIndex === 0 && (
                             <span className="absolute left-1 top-1 text-xs font-bold opacity-60">
                                 {playerColor === Color.WHITE

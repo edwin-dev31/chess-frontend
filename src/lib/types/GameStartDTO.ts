@@ -1,10 +1,9 @@
-
+import { PlayerProfileDTO } from "./PlayerProfileDTO";
 import { Color } from "./Definitions";
 
 export interface GameStartDTO {
     color: Color;
     code: string;
-    opponentId: number;
-    opponentUsername: string;
-    opponentProfileImage: string;
+    whitePlayer: PlayerProfileDTO;
+    blackPlayer: PlayerProfileDTO;
 }

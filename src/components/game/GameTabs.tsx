@@ -7,6 +7,7 @@ import MovesTab from './gameTabs/MovesTab';
 import GameInfoTab from './gameTabs/GameInfoTab';
 import ChatTab from './gameTabs/ChatTab';
 import { useLeaveGame } from '@/lib/hooks/game/useLeaveGame';
+import { toast } from 'sonner';
 
 interface GameTabsProps {
     gameState: GameState;
@@ -17,9 +18,12 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
     const {leaveGame} = useLeaveGame();
 
     const handleNotImplemented = () => {
-        leaveGame()
+        toast("Don't bother me")
     };
 
+    const handleLeaveGame = () => {
+        leaveGame()
+    };
     return (
         <div className="h-full flex flex-col p-2">
             <Tabs defaultValue="play" className="w-full flex flex-col flex-grow">
@@ -43,7 +47,7 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
                 </TabsContent>
 
                 <TabsContent value="moves" className="flex-grow flex flex-col p-2">
-                    <MovesTab gameState={gameState} handleNotImplemented={handleNotImplemented} />
+                    <MovesTab gameState={gameState} handleNotImplemented={handleLeaveGame} />
                 </TabsContent>
 
                 <TabsContent value="game" className="flex-grow p-2">

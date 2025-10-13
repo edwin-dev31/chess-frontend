@@ -17,6 +17,7 @@ export interface PlayerInfo {
     name: string;
     rating: number;
     timeLeft: string;
+    imageUrl: string | null;
 }
 
 export interface GameState {

@@ -2,18 +2,13 @@ import { socketHelper } from '@/lib/helpers/socketHelper';
 import { PlayerOnlineDTO } from '@/lib/types/PlayerOnlineDTO';
 import { InvitationDto } from '@/lib/types/InvitationDto';
 import { Subscription } from './Subscription';
-import { Color } from '@/lib/types/Definitions';
-
-interface GameStartDTO {
-    code: string;
-    color: Color;
-}
+import { GameStartDTO } from '@/lib/types/GameStartDTO';
 
 export class OnlineStatusSubscription implements Subscription {
     constructor(
         private onOnlinePlayers: (players: PlayerOnlineDTO[]) => void,
         private onNotification: (invitation: InvitationDto) => void,
-        private onGameStart: (gameId: string, color: Color) => void
+        private onGameStart: (gameStartData: GameStartDTO) => void
     ) {}
 
     subscribe(): () => void {
@@ -48,8 +43,8 @@ export class OnlineStatusSubscription implements Subscription {
             try {
                 const gameStartData: GameStartDTO = JSON.parse(message.body);
                 if (gameStartData.code) {
-                    this.onGameStart(gameStartData.code, gameStartData.color);
-                } else {
+                    this.onGameStart(gameStartData);
+                } else {    
                     console.warn('OnlineStatusSubscription: Received game start data with undefined gameCode.', gameStartData);
                 }
             } catch (err) {

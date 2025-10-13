@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { User } from 'lucide-react';
-import { cn } from '../../lib/utils';
+import { cn } from '@/lib/utils';
 import {
     PlayerInfo as PlayerInfoType,
     Piece,
     Color
-} from '../../lib/types/Definitions';
+} from '@/lib/types/Definitions';
 
 const pieceMap: Record<string, string> = {
     pawn: '♙',
@@ -39,9 +39,17 @@ const PlayerInfo: React.FC<PlayerInfoProps> = ({
             transition={{ delay: 0.2 }}
         >
             <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center ring-2 ring-slate-600">
-                    <User className="h-5 w-5 text-slate-300" />
-                </div>
+                {player.imageUrl ? (
+                    <img
+                        src={player.imageUrl}
+                        alt={player.name}
+                        className="w-10 h-10 rounded-full object-cover ring-2 ring-slate-600"
+                    />
+                ) : (
+                    <div className="w-10 h-10 bg-slate-700 rounded-full flex items-center justify-center ring-2 ring-slate-600">
+                        <User className="h-5 w-5 text-slate-300" />
+                    </div>
+                )}
 
                 <div className="flex-1">
                     <h3 className="text-white font-semibold">{player.name}</h3>
