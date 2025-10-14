@@ -28,15 +28,15 @@ const GameControls: React.FC<GameControlsProps> = ({
 
     const handlePause = () => {
         toast({
-            title: '🚧 Esta función aún no está implementada',
-            description: '¡Pero no te preocupes! 🚀',
+            title: 'Esta función aún no está implementada',
+            description: '¡ ! 🚀',
         });
     };
 
     const handleResign = () => {
         toast({
             title: '🚧 Esta función aún no está implementada',
-            description: '¡Pero no te preocupes! 🚀',
+            description: '¡ ! 🚀',
         });
     };
 

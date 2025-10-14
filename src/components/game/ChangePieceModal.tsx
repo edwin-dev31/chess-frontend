@@ -8,26 +8,7 @@ import {
 } from '../ui/dialog';
 import { motion } from 'framer-motion';
 import { useToast } from '../ui/use-toast';
-
-interface PieceSet {
-    name: string;
-    pieces: {
-        wK: string;
-        wQ: string;
-        wR: string;
-        wB: string;
-        wN: string;
-        wP: string;
-        bK: string;
-        bQ: string;
-        bR: string;
-        bB: string;
-        bN: string;
-        bP: string;
-    };
-    board: string;
-    square: string;
-}
+import { PieceSet } from '@/lib/types/PieceSet';
 
 const pieceSets: PieceSet[] = [
     {
@@ -71,18 +52,18 @@ const pieceSets: PieceSet[] = [
     {
         name: 'Neón',
         pieces: {
-            wK: 'x',
-            wQ: 'x',
-            wR: 'x',
-            wB: 'x',
-            wN: 'x',
-            wP: 'x',
-            bK: 'x',
-            bQ: 'x',    
-            bR: 'x',
-            bB: 'x',
-            bN: 'x',
-            bP: 'x',
+            wK: '♔',
+            wQ: '♕',
+            wR: '♖',
+            wB: '♗',
+            wN: '♘',
+            wP: '♙',
+            bK: '♚',
+            bQ: '♛',
+            bR: '♜',
+            bB: '♝',
+            bN: '♞',
+            bP: '♟',
         },
         board: 'bg-gray-800',
         square: 'bg-pink-500',
@@ -90,18 +71,18 @@ const pieceSets: PieceSet[] = [
     {
         name: 'Mármol',
         pieces: {
-            wK: 'o',
-            wQ: 'o',
-            wR: 'o',
-            wB: 'o',
-            wN: 'o',
-            wP: 'o',
-            bK: 'o',
-            bQ: 'o',
-            bR: 'o',  
-            bB: 'o',
-            bN: 'o',
-            bP: 'o',
+            wK: '♔',
+            wQ: '♕',
+            wR: '♖',
+            wB: '♗',
+            wN: '♘',
+            wP: '♙',
+            bK: '♚',
+            bQ: '♛',
+            bR: '♜',
+            bB: '♝',
+            bN: '♞',
+            bP: '♟',
         },
         board: 'bg-gray-200',
         square: 'bg-gray-500',
@@ -146,20 +127,21 @@ const PiecePreview: React.FC<PiecePreviewProps> = ({ set, onSelect }) => {
 interface ChangePieceModalProps {
     isOpen: boolean;
     onClose: () => void;
+    onSelectSet: (set: PieceSet) => void;
 }
 
 const ChangePieceModal: React.FC<ChangePieceModalProps> = ({
     isOpen,
     onClose,
+    onSelectSet,
 }) => {
     const { toast } = useToast();
 
     const handleSelect = (setName: string) => {
-        toast({
-            title: `Estilo "${setName}" seleccionado`,
-            description:
-                'Esta función es visual. ¡Puedes pedir la implementación completa!',
-        });
+        const selected = pieceSets.find((s) => s.name === setName);
+        if (selected) {
+            onSelectSet(selected); 
+        }
         onClose();
     };
 

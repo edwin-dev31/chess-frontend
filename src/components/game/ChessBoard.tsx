@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 import { Board, Piece, Color } from '../../lib/types/Definitions';
+import { PieceSet } from '@/lib/types/PieceSet';
 
 interface SelectedSquare {
     row: number;
@@ -19,6 +20,7 @@ interface ChessBoardProps {
     selectedSquare: SelectedSquare | null;
     lastMove: LastMove | null;
     playerColor: Color | null;
+    pieceSet?: PieceSet | null; 
 }
 
 const ChessBoard: React.FC<ChessBoardProps> = ({
@@ -27,6 +29,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     selectedSquare,
     lastMove,
     playerColor, 
+    pieceSet,
 }) => {
     const isBlack = playerColor === Color.BLACK;
 
@@ -49,7 +52,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
             rook: '♜',
             bishop: '♝',
             knight: '♞',
-            pawn: '♟️',
+            pawn: '♟',
         },
     };
 
@@ -60,7 +63,7 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
         return { row: rowIndex, col: colIndex };
     };
 
-    const isSquareSelected = (row: number, col: number): boolean => {
+    const isSquareSelected = (row: number, col: number): boolean | null => {
         const originalCoords = getOriginalCoordinates(row, col);
         return (
             selectedSquare &&
@@ -89,7 +92,10 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
     };
 
     return (
-        <div className="grid grid-cols-8 gap-0 w-full h-full aspect-square border-4 border-amber-800 rounded-lg overflow-hidden">
+        <div className={cn(
+                "grid grid-cols-8 gap-0 w-full h-full aspect-square border-4 rounded-lg overflow-hidden",
+                pieceSet?.board || "border-amber-800"
+            )}>
             {orientedBoard.map((row, rowIndex) =>
                 row.map((piece, colIndex) => (
                     <motion.div
@@ -97,12 +103,12 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
                         className={cn(
                             'chess-square flex items-center justify-center cursor-pointer relative aspect-square',
                             isLightSquare(rowIndex, colIndex)
-                                ? 'bg-amber-100'
-                                : 'bg-amber-800',
-                            isSquareSelected(rowIndex, colIndex) &&
-                                'ring-4 ring-blue-400 ring-inset',
+                                ? pieceSet?.board || 'bg-amber-100'
+                                : pieceSet?.square || 'bg-amber-800',
+                            isSquareSelected(rowIndex, colIndex) && 'ring-4 ring-blue-400 ring-inset',
                             isLastMove(rowIndex, colIndex) && 'bg-yellow-300'
                         )}
+
                         onClick={() => handleSquareClick(rowIndex, colIndex)}
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -110,16 +116,24 @@ const ChessBoard: React.FC<ChessBoardProps> = ({
                         {piece && (
                             <motion.span
                                 key={`${rowIndex}-${colIndex}-${piece.type}-${piece.color}`}
-                                className="chess-piece select-none"
+                                className={cn(
+                                    "chess-piece select-none text-4xl",
+                                    piece.color === Color.WHITE ? "text-white" : "text-black"
+                                )}
                                 layout
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
                                 transition={{ type: 'spring', stiffness: 300 }}
                             >
-                                {pieceSymbols[piece.color][piece.type]}
+                                {pieceSet
+                                    ? piece.color === Color.WHITE
+                                        ? pieceSet.pieces[`w${piece.type[0].toUpperCase()}` as keyof PieceSet["pieces"]]
+                                        : pieceSet.pieces[`b${piece.type[0].toUpperCase()}` as keyof PieceSet["pieces"]]
+                                    : pieceSymbols[piece.color][piece.type]}
                             </motion.span>
                         )}
-                        
+
+
                         {colIndex === 0 && (
                             <span className="absolute left-1 top-1 text-xs font-bold opacity-60">
                                 {playerColor === Color.WHITE

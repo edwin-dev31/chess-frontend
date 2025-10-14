@@ -7,6 +7,7 @@ import GameTabs from '@/components/game/GameTabs';
 import {  Color } from '@/lib/types/Definitions';
 import { useChessGame } from '@/lib/hooks/game/useChessGame';
 
+import { PieceSet } from '@/lib/types/PieceSet';
 import { Button } from '@/components/ui/button';
 import ChangePieceModal from '@/components/game/ChangePieceModal';
 
@@ -18,7 +19,7 @@ interface SelectedSquare {
 interface GameBoardProps {}
 
 const GameBoard: React.FC<GameBoardProps> = () => {
-
+    const [selectedSet, setSelectedSet] = useState<PieceSet | null>(null);
     const { gameState, makeMove, color, currentTurnColor } = useChessGame();
     const [selectedSquare, setSelectedSquare] = useState<SelectedSquare | null>(
         null
@@ -86,6 +87,7 @@ const GameBoard: React.FC<GameBoardProps> = () => {
                             selectedSquare={selectedSquare}
                             lastMove={gameState.lastMove}
                             playerColor={color}
+                            pieceSet={selectedSet}
                         />
                     </motion.div>
                     <div className="flex items-center justify-between w-full max-w-[70vh] mt-2">
@@ -100,7 +102,7 @@ const GameBoard: React.FC<GameBoardProps> = () => {
                             <Clock className="w-5 h-5" />
                             <span className="font-mono text-lg">
                                 {
-                                    gameState.players[gameState.currentPlayer]
+                                    gameState.players["white"]
                                         ?.timeLeft
                                 }
                             </span>
@@ -115,6 +117,7 @@ const GameBoard: React.FC<GameBoardProps> = () => {
             <ChangePieceModal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                onSelectSet={setSelectedSet}
             />
         </>
     );
