@@ -3,9 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { InvitationDto } from '@/lib/types/InvitationDto';
 import { usePlayerStatus } from '@/lib/contexts/PlayerStatusContext';
 import { useToast } from '@/components/ui/use-toast';
+import { useProfile } from '../player/useProfile';
 
 export const useNotificationsSocket = () => {
     const { lastInvitation } = usePlayerStatus();
+    const { profile } = useProfile();
     const [pendingInvitations, setPendingInvitations] = useState<InvitationDto[]>([]);
     const navigate = useNavigate();
     const { toast } = useToast();
@@ -21,10 +23,13 @@ export const useNotificationsSocket = () => {
             });
 
             if (lastInvitation.status === 'ACCEPTED') {
-                toast({
-                    title: '✅ Invitation Accepted',
-                    description: `${lastInvitation.fromUsername} accepted your invitation.`,
-                });
+                if(profile?.id === lastInvitation.fromUserId){
+                    toast({
+                        title: '✅ Invitation Accepted',
+                        description: `${lastInvitation.toUsername} accepted your invitation.`,
+                    });
+                }
+                
                 if (lastInvitation.code) {
                     localStorage.setItem('currentGameId', lastInvitation.code);
                     navigate(`/game/${lastInvitation.code}`);

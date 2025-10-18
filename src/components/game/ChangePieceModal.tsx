@@ -66,7 +66,7 @@ const pieceSets: PieceSet[] = [
             bP: '♟',
         },
         board: 'bg-gray-800',
-        square: 'bg-pink-500',
+        square: 'bg-[#90D1DB]',
     },
     {
         name: 'Mármol',

@@ -13,6 +13,7 @@ export const apiRoutes = {
     game: {
         fen: (gameId: string) => `api/games/${gameId}/fen`,
         pgn: (gameId: string) => `api/games/${gameId}/pgn`,
+        toFen: () =>  `api/games/pgn`,
         makeMove: (gameId: string) => `api/moves/${gameId}`,
         start: (gameId: string, time: string) => `api/games/${gameId}/start?time=${time}`,
         leave: (gameId: string) => `api/games/${gameId}/leave`,

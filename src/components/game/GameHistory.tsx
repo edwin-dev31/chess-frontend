@@ -67,17 +67,19 @@ const GameHistory = () => {
                                     className={`w-3 h-3 rounded-full ${
                                         game.result === 'win'
                                             ? 'bg-green-500'
-                                            : game.result === 'loss'
+                                            : game.result === 'lose'
                                             ? 'bg-red-500'
                                             : 'bg-yellow-500'
                                     }`}
                                 ></div>
                                 <span className="text-white font-semibold capitalize">
                                     {game.result === 'win'
+                                       
                                         ? 'Victoria'
-                                        : game.result === 'loss'
+                                        : game.result === 'lose'
                                         ? 'Derrota'
-                                        : 'Empate'}
+                                        : 'Empate'
+                                        }
                                 </span>
                             </div>
 

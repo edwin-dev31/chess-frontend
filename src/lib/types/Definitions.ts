@@ -59,7 +59,7 @@ export interface GameRecord {
     playerId: number;
     opponent: string;
     opponentRating: number;
-    result: 'win' | 'loss' | 'draw';
+    result: 'win' | 'lose' | 'draw';
     date: string;
     timeControl: string;
     moves: number;
