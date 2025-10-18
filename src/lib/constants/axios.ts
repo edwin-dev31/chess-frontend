@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const BACKEND_URL = 'http://localhost:8085/chess';
+export const BACKEND_URL = 'https://chess-hub.up.railway.app/chess';
 
 const javaAPI = axios.create({
     baseURL: BACKEND_URL,

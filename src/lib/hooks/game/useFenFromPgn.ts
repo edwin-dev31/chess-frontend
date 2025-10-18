@@ -28,7 +28,7 @@ export const useFenFromPgn = () => {
             const response = await apiHelper(apiRoutes.game.toFen(), {
                 method: 'POST',
                 token: token,
-                body: pgn, // se envía como texto, no JSON
+                body: pgn,
                 headers: {
                     'Content-Type': 'text/plain',
                 },
