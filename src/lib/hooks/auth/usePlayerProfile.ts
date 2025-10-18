@@ -68,7 +68,7 @@ const mockPlayerProfile: PlayerProfile = {
 };
 
 const mockPlayerStats: PlayerStats = {
-    currentRating: 1200,
+    currentRating: 12500,
     ratingChange: +25,
     gamesPlayed: 47,
     winRate: 64,

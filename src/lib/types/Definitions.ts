@@ -53,3 +53,14 @@ export enum MoveStatus {
     STALEMATE = "STALEMATE",
     LEFT = "LEFT"
 }
+
+export interface GameRecord {
+    gameId: number;
+    playerId: number;
+    opponent: string;
+    opponentRating: number;
+    result: 'win' | 'loss' | 'draw';
+    date: string;
+    timeControl: string;
+    moves: number;
+}

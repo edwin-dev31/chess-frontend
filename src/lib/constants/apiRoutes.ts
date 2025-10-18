@@ -8,9 +8,11 @@ export const apiRoutes = {
     player: {
         profile: () => `api/players/profile`,
         online: 'api/players/online',
+        summary:  `api/players/summary`,
     },
     game: {
         fen: (gameId: string) => `api/games/${gameId}/fen`,
+        pgn: (gameId: string) => `api/games/${gameId}/pgn`,
         makeMove: (gameId: string) => `api/moves/${gameId}`,
         start: (gameId: string, time: string) => `api/games/${gameId}/start?time=${time}`,
         leave: (gameId: string) => `api/games/${gameId}/leave`,

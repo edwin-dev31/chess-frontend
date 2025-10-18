@@ -25,8 +25,7 @@ export const useGameSummary = () => {
                 token: token,
             });
 
-            // ✅ Verificamos que la respuesta sea un arreglo
-            const data: GameRecord[] = Array.isArray(response) ? response : [];
+            const data = Array.isArray(response) ? response : [];
 
             setSummary(data);
             setLoading(false);

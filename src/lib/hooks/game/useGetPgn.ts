@@ -1,43 +1,41 @@
 import { useState, useCallback } from 'react';
 import { apiHelper } from '@/lib/helpers/apiHelper';
 import { apiRoutes } from '@/lib/constants/apiRoutes';
-import useAuth from '../auth/useAuth';
-import { GameRecord } from '@/lib/types/Definitions';
+import  useAuth  from '../auth/useAuth';
 
-export const useGameSummary = () => {
+export const useGetPgn = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const [summary, setSummary] = useState<GameRecord[]>([]);
     const { token } = useAuth();
 
-    const fetchSummary = useCallback(async (): Promise<GameRecord[]> => {
+    const fetchPgn = useCallback(async () => {
         if (!token) {
             setError("No authentication token found.");
-            return [];
+            return null;
         }
 
+        const gameId = localStorage.getItem("currentGameId")
+            if (!gameId) {
+            setError("No authentication token found.");
+            return null;
+        }
         setLoading(true);
         setError(null);
 
         try {
-            const response = await apiHelper(apiRoutes.player.summary, {
+            const response = await apiHelper(apiRoutes.game.pgn(gameId), {
                 method: 'GET',
                 token: token,
             });
-
-            // ✅ Verificamos que la respuesta sea un arreglo
-            const data: GameRecord[] = Array.isArray(response) ? response : [];
-
-            setSummary(data);
             setLoading(false);
-            return data;
+            return response;
         } catch (err: any) {
             setLoading(false);
             const errorMessage = err?.message || 'An unknown error occurred.';
             setError(errorMessage);
-            return [];
+            return null;
         }
     }, [token]);
 
-    return { loading, error, summary, fetchSummary };
+    return { loading, error, fetchPgn };
 };
