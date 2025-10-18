@@ -33,7 +33,7 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
 
     return (
         <div className="h-full flex flex-col p-2">
-            <Tabs defaultValue="play" className="w-full flex flex-col flex-grow">
+            <Tabs defaultValue="play" className="w-full flex flex-col flex-grow ">
                 <TabsList className="grid w-full grid-cols-4 bg-slate-900/50">
                     <TabsTrigger value="play"><Play className="w-4 h-4" /></TabsTrigger>
                     <TabsTrigger value="moves"><History className="w-4 h-4" /></TabsTrigger>
@@ -41,11 +41,11 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
                     <TabsTrigger value="chat"><Puzzle className="w-4 h-4" /></TabsTrigger>
                 </TabsList>
 
-                <TabsContent value="play" className="flex-grow overflow-y-auto p-2">
+                <TabsContent value="play" className="mt-2 flex-grow overflow-y-auto p-2">
                     <PlayTab handleNotImplemented={() => toast("Don't bother me")} />
                 </TabsContent>
 
-                <TabsContent value="moves" className="flex-grow flex flex-col p-2">
+                <TabsContent value="moves" className="mt-2 flex-grow flex flex-col p-2">
                     <MovesTab 
                         gameState={gameState} 
                         pgn={pgn}
@@ -57,7 +57,7 @@ const GameTabs: React.FC<GameTabsProps> = ({ gameState, resetGame }) => {
                     <GameInfoTab gameState={gameState} />
                 </TabsContent>
 
-                <TabsContent value="chat" className="flex-grow p-2">
+                <TabsContent value="chat" className="flex-grow p-0 m-0 mt-0">
                     <ChatTab />
                 </TabsContent>
             </Tabs>

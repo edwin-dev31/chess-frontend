@@ -42,6 +42,7 @@ if (onlinePlayers?.length) {
 
   return (
     <div className="bg-indigo-600 shadow-2xl rounded-2xl p-2">
+      
       <div className="flex flex-col h-full bg-slate-800/70 backdrop-blur-md rounded-xl overflow-hidden border border-slate-700">
         {/* Cabecera */}
         <div className="px-4 py-2 border-b border-slate-700 shadow-sm">
@@ -50,7 +51,7 @@ if (onlinePlayers?.length) {
           </h2>
         </div>
 
-        <div className="flex-grow p-4 space-y-6 bg-slate-800/90 overflow-y-auto max-h-[400px] scrollbar-hidden">
+        <div className="flex-grow p-4 space-y-6 bg-slate-800/90 overflow-y-auto h-[450px] max-h-[450px] scrollbar-hidden">
           {chatMessages.map((chatMessage, index) => {
             const isMine = chatMessage.from === profile?.id;
 
