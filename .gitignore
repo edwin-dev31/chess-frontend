@@ -4,6 +4,8 @@ node_modules/
 .env
 # Logs
 logs/
+
+dist/
 # Cobertura de codigo
 coverage/
 # Archivos del sistema operativo
