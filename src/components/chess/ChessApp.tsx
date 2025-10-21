@@ -10,7 +10,7 @@ import Settings from '@/components/settings/Settings';
 import { useNavigate } from 'react-router-dom';
 
 import { usePlayerStatus } from '@/lib/contexts/PlayerStatusContext';
-import { PlayerStatus } from '@/lib/types/PlayerStatus'; // Import PlayerStatus enum
+import { PlayerStatus } from '@/lib/types/PlayerStatus'; 
 
 export type ActiveView = 'game' | 'profile' | 'history' | 'settings';
 

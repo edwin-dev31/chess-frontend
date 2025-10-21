@@ -11,8 +11,8 @@ export default function LandingPage() {
       <aside className="w-64 bg-slate-900/30 backdrop-blur-md flex flex-col p-4 justify-between border-r border-slate-700">
         <div>
           <div className="flex items-center gap-2 mb-8">
-            <img src="/icon.png" alt="Logo" className="w-8 h-8" />
-            <span className="font-bold text-xl">Chess</span>
+            <img src="/hourse.png" alt="Logo" className="w-8 h-8" />
+            <span className="font-bold text-xl">Chess Hub</span>
           </div>
           <nav className="flex flex-col gap-4">
             <button className="flex items-center gap-2 hover:text-indigo-400">
@@ -57,7 +57,7 @@ export default function LandingPage() {
           <img
             src="/icon.png"
             alt="Chess Icon"
-            className="w-64 h-64 md:w-80 md:h-80"
+            className="w-95 h-95 md:w-120 md:h-120"
           />
 
           <div className="text-center md:text-left space-y-6">
