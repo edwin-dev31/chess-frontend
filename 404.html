@@ -3,8 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <title>Redirecting...</title>
-    <script>
-      const redirectTo = '/chess-frontend' + window.location.pathname.replace(/^\/chess-frontend/, '');
+    <script type="text/javascript">
+      const repo = "/chess-frontend";
+      const path = window.location.pathname.replace(repo, "");
+      const redirectTo = repo + "/index.html?redirect=" + path;
       window.location.replace(redirectTo);
     </script>
   </head>
