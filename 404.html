@@ -1,7 +1,12 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <meta http-equiv="refresh" content="0; url=/chess-frontend/" />
+    <meta charset="utf-8" />
+    <title>Redirecting...</title>
+    <script>
+      const redirectTo = '/chess-frontend' + window.location.pathname.replace(/^\/chess-frontend/, '');
+      window.location.replace(redirectTo);
+    </script>
   </head>
   <body></body>
 </html>
