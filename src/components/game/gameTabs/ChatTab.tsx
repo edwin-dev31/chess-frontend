@@ -59,7 +59,7 @@ if (onlinePlayers?.length) {
               (p) => p.id == chatMessage.from
             );
 
-            const profileImage = sender?.imageUrl || "/icon.png";
+            const profileImage = sender?.imageUrl || "./icon.png";
             const username = chatMessage.fromUsername;
 
             return (
@@ -95,7 +95,7 @@ if (onlinePlayers?.length) {
 
                 {isMine && (
                   <img
-                    src={profile?.imageUrl || "/icon.png"}
+                    src={profile?.imageUrl || "./icon.png"}
                     alt={profile?.username}
                     className="w-8 h-8 rounded-full object-cover"
                   />

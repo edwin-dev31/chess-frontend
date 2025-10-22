@@ -1,8 +1,8 @@
 import SockJS from 'sockjs-client';
-import Stomp from 'stompjs';
+import { Client, IMessage, StompSubscription } from '@stomp/stompjs';
 import { BACKEND_URL } from '../constants/axios';
 
-let stompClient: Stomp.Client | null = null;
+let stompClient: Client | null = null;
 let reconnectTimeout: NodeJS.Timeout | null = null;
 let currentReconnectInterval = 1000;
 const MAX_RECONNECT_INTERVAL = 30000;
@@ -12,133 +12,130 @@ const onConnectCallbacks: (() => void)[] = [];
 const onDisconnectCallbacks: (() => void)[] = [];
 
 const resetReconnectInterval = () => {
-    currentReconnectInterval = 1000;
+  currentReconnectInterval = 1000;
 };
 
 const scheduleReconnect = () => {
-    if (reconnectTimeout) clearTimeout(reconnectTimeout);
+  if (reconnectTimeout) clearTimeout(reconnectTimeout);
 
-    reconnectTimeout = setTimeout(() => {
-        socketHelper.connect();
-        currentReconnectInterval = Math.min(
-            currentReconnectInterval * RECONNECT_MULTIPLIER,
-            MAX_RECONNECT_INTERVAL
-        );
-    }, currentReconnectInterval);
+  reconnectTimeout = setTimeout(() => {
+    socketHelper.connect();
+    currentReconnectInterval = Math.min(
+      currentReconnectInterval * RECONNECT_MULTIPLIER,
+      MAX_RECONNECT_INTERVAL
+    );
+  }, currentReconnectInterval);
 };
 
 export const socketHelper = {
-    connect: (onConnected?: () => void) => {
-        if (stompClient && stompClient.connected) {
-            if (onConnected) onConnected();
-            onConnectCallbacks.forEach(cb => cb());
-            resetReconnectInterval();
-            return;
-        }
+  connect: (onConnected?: () => void) => {
+    if (stompClient && stompClient.connected) {
+      if (onConnected) onConnected();
+      onConnectCallbacks.forEach(cb => cb());
+      resetReconnectInterval();
+      return;
+    }
 
-        if (stompClient) {
-            try {
-                stompClient.disconnect(() => {
-                    stompClient = null;
-                    onDisconnectCallbacks.forEach(cb => cb());
-                });
-            } catch (e) {
-                console.warn(
-                    'Could not disconnect existing client, it might be stale:',
-                    e
-                );
-                stompClient = null;
-                onDisconnectCallbacks.forEach(cb => cb());
-            }
-        }
+    if (stompClient) {
+      try {
+        stompClient.deactivate();
+        stompClient = null;
+        onDisconnectCallbacks.forEach(cb => cb());
+      } catch (e) {
+        console.warn('Could not deactivate existing client:', e);
+        stompClient = null;
+        onDisconnectCallbacks.forEach(cb => cb());
+      }
+    }
 
-        const socket = new SockJS(`${BACKEND_URL}/ws`);
-        stompClient = Stomp.over(socket);
-        const token = localStorage.getItem('token');
+    const socket = new SockJS(`${BACKEND_URL}/ws`);
+    const token = localStorage.getItem('token');
 
-        stompClient.connect(
-            { Authorization: `Bearer ${token}` },
-            () => {
-                if (onConnected) onConnected();
-                onConnectCallbacks.forEach(cb => cb());
-                resetReconnectInterval();
-                if (reconnectTimeout) clearTimeout(reconnectTimeout); 
-            },
-            (error: any) => {
-                console.error('❌ WebSocket connection error:', error);
-                stompClient = null;
-                onDisconnectCallbacks.forEach(cb => cb());
-                scheduleReconnect();
-            }
-        );
-    },
-
-    subscribe: (topic: string, callback: (msg: any) => void) => {
-        if (!stompClient || !stompClient.connected) {
-            console.warn(
-                `⚠️ Not connected to WebSocket, cannot subscribe to ${topic}`
-            );
-            return () => {};
-        }
-
-        const subscription = stompClient.subscribe(topic, (msg) => {
-            callback(msg);
-        });
-
-        return () => {
-            subscription.unsubscribe();
-        };
-    },
-
-    send: (destination: string, body: any, headers: { [key: string]: any } = {}) => {
-        if (!stompClient || !stompClient.connected) {
-            console.warn('⚠️ Not connected to WebSocket, cannot send message.');
-            return;
-        }
-
-        stompClient.send(
-            destination,
-            { ...headers },
-            JSON.stringify(body)
-        );
-    },
-
-    disconnect: () => {
-        if (reconnectTimeout) clearTimeout(reconnectTimeout);
-        if (stompClient && stompClient.connected) {
-            stompClient.disconnect(() => {
-                stompClient = null;
-                onDisconnectCallbacks.forEach(cb => cb());
-            });
-        } else {
-            console.log('⚠️ No active WebSocket connection to disconnect.');
-        }
+    stompClient = new Client({
+      webSocketFactory: () => socket,
+      connectHeaders: { Authorization: `Bearer ${token}` },
+      reconnectDelay: 0, // usamos nuestro sistema de reconexión manual
+      onConnect: () => {
+        if (onConnected) onConnected();
+        onConnectCallbacks.forEach(cb => cb());
         resetReconnectInterval();
-    },
+        if (reconnectTimeout) clearTimeout(reconnectTimeout);
+        console.log('✅ WebSocket connected');
+      },
+      onDisconnect: () => {
+        console.log('⚠️ Disconnected');
+        onDisconnectCallbacks.forEach(cb => cb());
+        scheduleReconnect();
+      },
+      onStompError: (frame) => {
+        console.error('❌ STOMP error:', frame.headers['message']);
+        scheduleReconnect();
+      },
+      onWebSocketClose: () => {
+        console.warn('🔌 WebSocket closed');
+        scheduleReconnect();
+      },
+      debug: (str) => console.log(str),
+    });
 
-    isConnected: () => {
-        return stompClient && stompClient.connected;
-    },
+    stompClient.activate();
+  },
 
-    onConnect: (callback: () => void) => {
-        onConnectCallbacks.push(callback);
-    },
+  subscribe: (topic: string, callback: (msg: IMessage) => void) => {
+    if (!stompClient || !stompClient.connected) {
+      console.warn(`⚠️ Not connected to WebSocket, cannot subscribe to ${topic}`);
+      return () => {};
+    }
 
-    offConnect: (callback: () => void) => {
-        const index = onConnectCallbacks.indexOf(callback);
-        if (index > -1) {
-            onConnectCallbacks.splice(index, 1);
-        }
-    },
+    const subscription: StompSubscription = stompClient.subscribe(topic, callback);
+    return () => subscription.unsubscribe();
+  },
 
-    onDisconnect: (callback: () => void) => {
-        onDisconnectCallbacks.push(callback);
-    },
+  send: (destination: string, body: any, headers: { [key: string]: any } = {}) => {
+    if (!stompClient || !stompClient.connected) {
+      console.warn('⚠️ Not connected to WebSocket, cannot send message.');
+      return;
+    }
 
-    offDisconnect: (callback: () => void) => {
-        const index = onDisconnectCallbacks.indexOf(callback);
-        if (index > -1) {
-            onDisconnectCallbacks.splice(index, 1);
-        }
-    },
+    stompClient.publish({
+      destination,
+      headers,
+      body: JSON.stringify(body),
+    });
+  },
+
+  disconnect: () => {
+    if (reconnectTimeout) clearTimeout(reconnectTimeout);
+    if (stompClient && stompClient.active) {
+      stompClient.deactivate();
+      stompClient = null;
+      onDisconnectCallbacks.forEach(cb => cb());
+      console.log('🔌 WebSocket disconnected');
+    } else {
+      console.log('⚠️ No active WebSocket connection to disconnect.');
+    }
+    resetReconnectInterval();
+  },
+
+  isConnected: () => {
+    return stompClient?.connected || false;
+  },
+
+  onConnect: (callback: () => void) => {
+    onConnectCallbacks.push(callback);
+  },
+
+  offConnect: (callback: () => void) => {
+    const index = onConnectCallbacks.indexOf(callback);
+    if (index > -1) onConnectCallbacks.splice(index, 1);
+  },
+
+  onDisconnect: (callback: () => void) => {
+    onDisconnectCallbacks.push(callback);
+  },
+
+  offDisconnect: (callback: () => void) => {
+    const index = onDisconnectCallbacks.indexOf(callback);
+    if (index > -1) onDisconnectCallbacks.splice(index, 1);
+  },
 };

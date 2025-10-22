@@ -11,7 +11,7 @@ export default function LandingPage() {
       <aside className="w-64 bg-slate-900/30 backdrop-blur-md flex flex-col p-4 justify-between border-r border-slate-700">
         <div>
           <div className="flex items-center gap-2 mb-8">
-            <img src="/hourse.png" alt="Logo" className="w-8 h-8" />
+            <img src="./hourse.png" alt="Logo" className="w-8 h-8" />
             <span className="font-bold text-xl">Chess Hub</span>
           </div>
           <nav className="flex flex-col gap-4">
@@ -55,7 +55,7 @@ export default function LandingPage() {
           className="flex flex-col md:flex-row items-center gap-12"
         >
           <img
-            src="/icon.png"
+            src="./icon.png"
             alt="Chess Icon"
             className="w-95 h-95 md:w-120 md:h-120"
           />

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { Toaster as SonnerToaster } from 'sonner';
 import { Toaster as ShadcnToaster } from './components/ui/toaster';
 import ChessApp from './components/chess/ChessApp';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {Routes, Route } from 'react-router-dom';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import LandingPage from './components/auth/LandingPage';
@@ -14,7 +14,7 @@ import OAuthSuccess from './components/auth/OAuthSuccess';
 
 const App: React.FC = () => {
     return (
-        <Router>
+        <>
             <Helmet>
                 <title>ChessHub - Master Your Chess Game</title>
                 <meta
@@ -61,7 +61,7 @@ const App: React.FC = () => {
                 <SonnerToaster theme="dark" />
                 <ShadcnToaster />
             </div>
-        </Router>
+        </>
     );
 };
 

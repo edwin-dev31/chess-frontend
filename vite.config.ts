@@ -1,16 +1,16 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import nodePolyfills from 'vite-plugin-node-stdlib-browser';
 import path from 'path';
 
 export default defineConfig({
-    plugins: [react(), nodePolyfills()],
-    define: {
-        global: 'globalThis',
+  plugins: [react()],
+  base: '/chess-frontend/',
+  resolve: {
+    alias: {
+      '@': path.resolve(__dirname, './src'),
     },
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, './src'),
-        },
-    },
+  },
+  build: {
+    outDir: 'dist',
+  },
 });

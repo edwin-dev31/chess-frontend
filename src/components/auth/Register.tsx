@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { User, Mail, Lock } from 'lucide-react';
 import useAuth from '@/lib/hooks/auth/useAuth';
 
@@ -113,12 +114,12 @@ const Register: React.FC = () => {
                 {/* Footer */}
                 <p className="mt-6 text-center text-sm text-slate-400">
                     Already have an account?{' '}
-                    <a
-                        href="/login"
-                        className="text-indigo-400 hover:underline"
-                    >
-                        Login
-                    </a>
+                        <Link
+                            to="/login"
+                            className="text-indigo-400 hover:underline"
+                        >
+                            Login
+                        </Link>
                 </p>
             </motion.div>
         </div>

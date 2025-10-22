@@ -6,6 +6,8 @@ import useAuth from '@/lib/hooks/auth/useAuth';
 import { Button } from '../ui/button';
 import { FcGoogle } from "react-icons/fc";
 import { javaOauth } from '@/lib/constants/axios';
+import { Link } from 'react-router-dom';
+
 
 const Login: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -114,12 +116,12 @@ const Login: React.FC = () => {
                 {/* Footer */}
                 <p className="mt-6 text-center text-sm text-slate-400">
                     Don’t have an account?{' '}
-                    <a
-                        href="/register"
+                    <Link
+                        to="/register"
                         className="text-indigo-400 hover:underline"
                     >
                         Register
-                    </a>
+                    </Link>
                 </p>
             </motion.div>
         </div>
