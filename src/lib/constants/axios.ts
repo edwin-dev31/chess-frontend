@@ -1,5 +1,5 @@
 import axios from 'axios';
-export const BACKEND_URL = 'https://chess-hub.up.railway.app/chess';
+export const BACKEND_URL = 'https://chess.dev-ka.duckdns.org/chess';
 
 const javaAPI = axios.create({
     baseURL: BACKEND_URL,
