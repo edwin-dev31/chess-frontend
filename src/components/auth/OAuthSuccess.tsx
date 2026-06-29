@@ -10,7 +10,7 @@ const OAuthSuccess = () => {
     if (alreadyHandled.current) return;
     alreadyHandled.current = true;
 
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(window.location.hash.split("?")[1] || "");
     const token = params.get("token");
 
     if (token) {
