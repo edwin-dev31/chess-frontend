@@ -1,64 +1,91 @@
-# Chess Frontend
+<p align="center">
+  <img src="https://img.shields.io/badge/React-19-61DAFB?style=for-the-badge&logo=react&logoColor=black" alt="React">
+  <img src="https://img.shields.io/badge/Vite-6-646CFF?style=for-the-badge&logo=vite&logoColor=white" alt="Vite">
+  <img src="https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?style=for-the-badge&logo=tailwindcss&logoColor=white" alt="Tailwind CSS">
+  <img src="https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white" alt="TypeScript">
+  <img src="https://img.shields.io/badge/STOMP-WebSocket-010101?style=for-the-badge&logo=socketdotio&logoColor=white" alt="WebSocket">
+  <img src="https://img.shields.io/badge/MIT-License-green?style=for-the-badge" alt="MIT License">
+</p>
 
-This project is a web-based chess application that allows users to play chess against each other. It provides a user-friendly interface with features like move history, player information, and game controls.
+# ♟ Chess Frontend
 
-## Getting Started
+A modern web-based chess application that lets you play real-time chess against other players. Built with **React 19** and **Vite**, it connects to the backend via **STOMP WebSockets** for live gameplay.
 
-To get started with the project, you need to have Node.js and npm installed on your machine.
+## ✨ Features
 
-1.  **Clone the repository:**
+| Feature | Description |
+|---------|-------------|
+| **Real-Time Play** | Live chess games via WebSocket communication |
+| **Move History** | Full move log with algebraic notation |
+| **Player Info** | See opponent details and game status |
+| **Game Controls** | Resign, draw offers, and more |
+| **Responsive UI** | Works on desktop and mobile |
+| **Modern Design** | Tailwind CSS + Radix UI + Framer Motion |
 
-    ```bash
-    git clone https://github.com/your-username/chess-frontend.git
-    ```
+## 🛠 Tech Stack
 
-2.  **Install the dependencies:**
+| Technology | Purpose |
+|------------|---------|
+| **React 19** | UI framework |
+| **TypeScript** | Type-safe JavaScript |
+| **Vite 6** | Build tool & dev server |
+| **Tailwind CSS 4** | Utility-first styling |
+| **Radix UI** | Accessible headless components |
+| **Framer Motion** | Declarative animations |
+| **Lucide React** | Icon library |
+| **SockJS + STOMP.js** | WebSocket communication |
+| **Axios** | REST API client |
 
-    ```bash
-    npm install
-    ```
-
-3.  **Run the development server:**
-
-    ```bash
-    npm run dev
-    ```
-
-    This will start the development server and open the application in your default browser at `http://localhost:5173`.
-
-## Folder Structure
-
-The project has the following folder structure:
+## 📁 Folder Structure
 
 ```
-├── src
-│   ├── components
-│   │   ├── chess
-│   │   ├── game
-│   │   ├── layout
-│   │   ├── player
-│   │   ├── settings
-│   │   └── ui
-│   ├── data
-│   ├── hooks
-│   └── lib
-├── public
-└── ...
+src/
+├── components/
+│   ├── chess/       # Chess board & pieces
+│   ├── game/        # Game logic & controls
+│   ├── layout/      # Layout components
+│   ├── player/      # Player info & profiles
+│   ├── settings/    # Settings panels
+│   └── ui/          # Reusable UI primitives
+├── data/            # Mock & static data
+├── hooks/           # Custom React hooks
+└── lib/             # Utility functions
 ```
 
-- `src/components`: Contains the React components used in the application.
-- `src/data`: Contains mock data used in the application.
-- `src/hooks`: Contains custom React hooks.
-- `src/lib`: Contains utility functions.
-- `public`: Contains the public assets of the application.
+## 📋 Prerequisites
 
-## Technologies Used
+- Node.js 18+
+- npm / pnpm / yarn
 
-The project is built using the following technologies:
+## ⚙️ Getting Started
 
-- [React](https://reactjs.org/)
-- [Vite](https://vitejs.dev/)
-- [Tailwind CSS](https://tailwindcss.com/)
-- [Radix UI](https://www.radix-ui.com/)
-- [Framer Motion](https://www.framer.com/motion/)
-- [Lucide React](https://lucide.dev/guide/packages/lucide-react)
+### 1. Clone & install
+
+```bash
+git clone https://github.com/edwin-dev31/chess-frontend.git
+cd chess-frontend
+npm install
+```
+
+### 2. Run development server
+
+```bash
+npm run dev
+```
+
+The app will open at **`http://localhost:5173`**.
+
+### 3. Connect to backend
+
+Make sure [chess-backend](https://github.com/edwin-dev31/chess-backend) is running for full real-time functionality.
+
+## 📄 License
+
+Distributed under the **MIT License**. See [LICENSE](./LICENSE) for more information.
+
+---
+
+<p align="center">
+  <a href="https://github.com/edwin-dev31/chess-frontend/issues">Report a bug</a> ·
+  <a href="https://github.com/edwin-dev31/chess-frontend/pulls">Request a feature</a>
+</p>
