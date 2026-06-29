@@ -7,14 +7,14 @@
   <img src="https://img.shields.io/badge/MIT-License-green?style=for-the-badge" alt="MIT License">
 </p>
 
-# 🎟 Chess Frontend
+# Chess Frontend
 
 A modern web-based chess application that lets you play real-time chess against other players. Built with **React 19** and **Vite**, it connects to the backend via **STOMP WebSockets** for live gameplay.
 
-## 🊨 Features
+## Features
 
 | Feature | Description |
-|---------|--------------|
+|---------|-------------|
 | **Real-Time Play** | Live chess games via WebSocket communication |
 | **Move History** | Full move log with algebraic notation |
 | **Player Info** | See opponent details and game status |
@@ -22,13 +22,13 @@ A modern web-based chess application that lets you play real-time chess against 
 | **Responsive UI** | Works on desktop and mobile |
 | **Modern Design** | Tailwind CSS + Radix UI + Framer Motion |
 
-## 🛨 Tech Stack
+## Tech Stack
 
 | Technology | Purpose |
 |------------|---------|
 | **React 19** | UI framework |
 | **TypeScript** | Type-safe JavaScript |
-| **Vite 6** | Build tool & dev server |
+| **Vite 6** | Build tool and dev server |
 | **Tailwind CSS 4** | Utility-first styling |
 | **Radix UI** | Accessible headless components |
 | **Framer Motion** | Declarative animations |
@@ -36,60 +36,60 @@ A modern web-based chess application that lets you play real-time chess against 
 | **SockJS + STOMP.js** | WebSocket communication |
 | **Axios** | REST API client |
 
-## 📁 Folder Structure
+## Folder Structure
 
-```
+`
 src/
-├── components/
-│   ├── chess/       # Chess board & pieces
-│   ├── game/        # Game logic & controls
-│   ├── layout/      # Layout components
-│   ├── player/      # Player info & profiles
-│   ├── settings/    # Settings panels
-│   └── ui/          # Reusable UI primitives
-├── data/            # Mock & static data
-├── hooks/           # Custom React hooks
-└── lib/             # Utility functions
-```
+  components/
+    chess/       # Chess board and pieces
+    game/        # Game logic and controls
+    layout/      # Layout components
+    player/      # Player info and profiles
+    settings/    # Settings panels
+    ui/          # Reusable UI primitives
+  data/            # Mock and static data
+  hooks/           # Custom React hooks
+  lib/             # Utility functions
+`
 
-## 📋 Prerequisites
+## Prerequisites
 
 - Node.js 18+
 - npm / pnpm / yarn
 
-## ⚙️ Getting Started
+## Getting Started
 
-### 1. Clone & install
+### 1. Clone and install
 
-```bash
+`ash
 git clone https://github.com/edwin-dev31/chess-frontend.git
 cd chess-frontend
 npm install
-```
+`
 
 ### 2. Run development server
 
-```bash
+`ash
 npm run dev
-```
+`
 
-The app will open at **`http://localhost:5173`**.
+The app will open at **http://localhost:5173**.
 
 ### 3. Connect to backend
 
 Make sure [chess-backend](https://github.com/edwin-dev31/chess-backend) is running for full real-time functionality.
 
-## 🌐 Backend
+## Backend
 
-This frontend connects to the [**Chess Backend**](https://github.com/edwin-dev31/chess-backend) — a Spring Boot 3 API with WebSocket support, JWT auth, and PostgreSQL (fully functional gameplay requires both running).
+This frontend connects to the [**Chess Backend**](https://github.com/edwin-dev31/chess-backend) - a Spring Boot 3 API with WebSocket support, JWT auth, and PostgreSQL (fully functional gameplay requires both running).
 
-## 🔄 License
+## License
 
-Distributed under the **MIT Licenee**. See [LICENSE](./LICENSE) for more information.
+Distributed under the **MIT License**. See [LICENSE](./LICENSE) for more information.
 
 ---
 
 <p align="center">
-  <a href="https://github.com/edwin-dev31/chess-frontend/issues">Report a bug</a> .·
+  <a href="https://github.com/edwin-dev31/chess-frontend/issues">Report a bug</a> .
   <a href="https://github.com/edwin-dev31/chess-frontend/pulls">Request a feature</a>
 </p>
