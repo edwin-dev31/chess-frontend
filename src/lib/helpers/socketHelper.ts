@@ -29,6 +29,12 @@ const scheduleReconnect = () => {
 
 export const socketHelper = {
   connect: (onConnected?: () => void) => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.warn('⚠️ No token, skipping WebSocket connection');
+      return;
+    }
+
     if (stompClient && stompClient.connected) {
       if (onConnected) onConnected();
       onConnectCallbacks.forEach(cb => cb());
@@ -49,7 +55,6 @@ export const socketHelper = {
     }
 
     const socket = new SockJS(`${BACKEND_URL}/ws`);
-    const token = localStorage.getItem('token');
 
     stompClient = new Client({
       webSocketFactory: () => socket,
