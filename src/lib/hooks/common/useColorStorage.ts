@@ -5,7 +5,6 @@ const COLOR_STORAGE_KEY = 'color';
 export const useColorStorage = () => {
   const [color, setColor] = useState<Color | null>(() => {
     try {
-      alert("aqui esta el color" + color)
       const storedColor = localStorage.getItem(COLOR_STORAGE_KEY);
       return storedColor as Color | null;
     } catch (error) {
