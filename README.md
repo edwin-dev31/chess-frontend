@@ -38,7 +38,7 @@ A modern web-based chess application that lets you play real-time chess against 
 
 ## Folder Structure
 
-`
+```
 src/
   components/
     chess/       # Chess board and pieces
@@ -50,7 +50,7 @@ src/
   data/            # Mock and static data
   hooks/           # Custom React hooks
   lib/             # Utility functions
-`
+```
 
 ## Prerequisites
 
@@ -61,17 +61,17 @@ src/
 
 ### 1. Clone and install
 
-`ash
+```bash
 git clone https://github.com/edwin-dev31/chess-frontend.git
 cd chess-frontend
 npm install
-`
+```
 
 ### 2. Run development server
 
-`ash
+```bash
 npm run dev
-`
+```
 
 The app will open at **http://localhost:5173**.
 
@@ -81,7 +81,7 @@ Make sure [chess-backend](https://github.com/edwin-dev31/chess-backend) is runni
 
 ## Backend
 
-This frontend connects to the [**Chess Backend**](https://github.com/edwin-dev31/chess-backend) - a Spring Boot 3 API with WebSocket support, JWT auth, and PostgreSQL (fully functional gameplay requires both running).
+This frontend connects to the [**Chess Backend**](https://github.com/edwin-dev31/chess-backend) — a Spring Boot 3 API with WebSocket support, JWT auth, and PostgreSQL (fully functional gameplay requires both running).
 
 ## License
 
@@ -90,6 +90,6 @@ Distributed under the **MIT License**. See [LICENSE](./LICENSE) for more informa
 ---
 
 <p align="center">
-  <a href="https://github.com/edwin-dev31/chess-frontend/issues">Report a bug</a> .
+  <a href="https://github.com/edwin-dev31/chess-frontend/issues">Report a bug</a> ·
   <a href="https://github.com/edwin-dev31/chess-frontend/pulls">Request a feature</a>
 </p>
