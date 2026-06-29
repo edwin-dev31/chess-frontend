@@ -79,7 +79,11 @@ The app will open at **`http://localhost:5173`**.
 
 Make sure [chess-backend](https://github.com/edwin-dev31/chess-backend) is running for full real-time functionality.
 
-## 📄 License
+## \ud83c\udf10 Backend
+
+This frontend connects to the [**Chess Backend**](https://github.com/edwin-dev31/chess-backend) — a Spring Boot 3 API with WebSocket support, JWT auth, and PostgreSQL.
+
+## \ud83d\udcc4 License
 
 Distributed under the **MIT License**. See [LICENSE](./LICENSE) for more information.
 
