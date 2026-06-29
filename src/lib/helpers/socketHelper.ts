@@ -29,12 +29,6 @@ const scheduleReconnect = () => {
 
 export const socketHelper = {
   connect: (onConnected?: () => void) => {
-    const token = localStorage.getItem('token');
-    if (!token) {
-      console.warn('⚠️ No token, skipping WebSocket connection');
-      return;
-    }
-
     if (stompClient && stompClient.connected) {
       if (onConnected) onConnected();
       onConnectCallbacks.forEach(cb => cb());
@@ -55,10 +49,15 @@ export const socketHelper = {
     }
 
     const socket = new SockJS(`${BACKEND_URL}/ws`);
+    const token = localStorage.getItem('token');
+    const connectHeaders: Record<string, string> = {};
+    if (token) {
+      connectHeaders.Authorization = `Bearer ${token}`;
+    }
 
     stompClient = new Client({
       webSocketFactory: () => socket,
-      connectHeaders: { Authorization: `Bearer ${token}` },
+      connectHeaders,
       reconnectDelay: 0, // usamos nuestro sistema de reconexión manual
       onConnect: () => {
         if (onConnected) onConnected();

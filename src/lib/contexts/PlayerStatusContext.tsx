@@ -108,11 +108,12 @@ export const PlayerStatusProvider: React.FC<{ children: React.ReactNode }> = ({ 
     };
 
         useEffect(() => {
-            if (status === PlayerStatus.OFFLINE) return;
-
             let unsubscribeFromSocket: (() => void) | undefined;
     
             const createAndSubscribe = () => {
+                if (status === PlayerStatus.OFFLINE) {
+                    return;
+                }
     
                 const factoryParams: FactoryParams = {
                     onOnlinePlayers: setOnlinePlayers,
