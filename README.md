@@ -7,14 +7,14 @@
   <img src="https://img.shields.io/badge/MIT-License-green?style=for-the-badge" alt="MIT License">
 </p>
 
-# ♟ Chess Frontend
+# 🎟 Chess Frontend
 
 A modern web-based chess application that lets you play real-time chess against other players. Built with **React 19** and **Vite**, it connects to the backend via **STOMP WebSockets** for live gameplay.
 
-## ✨ Features
+## 🊨 Features
 
 | Feature | Description |
-|---------|-------------|
+|---------|--------------|
 | **Real-Time Play** | Live chess games via WebSocket communication |
 | **Move History** | Full move log with algebraic notation |
 | **Player Info** | See opponent details and game status |
@@ -22,7 +22,7 @@ A modern web-based chess application that lets you play real-time chess against 
 | **Responsive UI** | Works on desktop and mobile |
 | **Modern Design** | Tailwind CSS + Radix UI + Framer Motion |
 
-## 🛠 Tech Stack
+## 🛨 Tech Stack
 
 | Technology | Purpose |
 |------------|---------|
@@ -79,17 +79,17 @@ The app will open at **`http://localhost:5173`**.
 
 Make sure [chess-backend](https://github.com/edwin-dev31/chess-backend) is running for full real-time functionality.
 
-## \ud83c\udf10 Backend
+## 🌐 Backend
 
-This frontend connects to the [**Chess Backend**](https://github.com/edwin-dev31/chess-backend) — a Spring Boot 3 API with WebSocket support, JWT auth, and PostgreSQL.
+This frontend connects to the [**Chess Backend**](https://github.com/edwin-dev31/chess-backend) — a Spring Boot 3 API with WebSocket support, JWT auth, and PostgreSQL (fully functional gameplay requires both running).
 
-## \ud83d\udcc4 License
+## 🔄 License
 
-Distributed under the **MIT License**. See [LICENSE](./LICENSE) for more information.
+Distributed under the **MIT Licenee**. See [LICENSE](./LICENSE) for more information.
 
 ---
 
 <p align="center">
-  <a href="https://github.com/edwin-dev31/chess-frontend/issues">Report a bug</a> ·
+  <a href="https://github.com/edwin-dev31/chess-frontend/issues">Report a bug</a> .·
   <a href="https://github.com/edwin-dev31/chess-frontend/pulls">Request a feature</a>
 </p>
